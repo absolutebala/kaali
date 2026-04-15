@@ -269,7 +269,7 @@
     panel.setAttribute('role', 'dialog')
     panel.setAttribute('aria-label', `Chat with ${nm}`)
     panel.innerHTML = `
-      <div class="kaali-hdr" style="flex-direction:row-reverse">
+      <div class="kaali-hdr">
         <div class="kaali-av">
           <span class="kaali-av-l">${letter}</span>
           <div class="kaali-av-dot"></div>
