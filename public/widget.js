@@ -76,13 +76,13 @@
       z-index: 2147483639;
       box-shadow: 0 24px 80px rgba(0,0,0,.75);
       overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif;
-      transform: scale(.94) translateY(12px);
+      transform: scale(.94) translateX(12px);
       transform-origin: bottom right;
       opacity: 0; pointer-events: none;
       transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .2s;
     }
     #kaali-panel.kaali-open {
-      transform: scale(1) translateY(0);
+      transform: scale(1) translateX(0);
       opacity: 1; pointer-events: all;
     }
     .kaali-hdr {
