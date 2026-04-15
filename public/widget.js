@@ -111,7 +111,7 @@
     .kaali-st { font-size: 10.5px; color: #22D17A; display: flex; align-items: center; gap: 4px; }
     .kaali-st::before { content:''; width:5px; height:5px; background:#22D17A; border-radius:50%; }
     .kaali-x {
-      width: 28px; height: 28px; border-radius: 7px;
+      width: 22px; height: 22px; border-radius: 6px;
       background: none; border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: #6E7E9E; margin-left: auto;
@@ -269,7 +269,7 @@
     panel.setAttribute('role', 'dialog')
     panel.setAttribute('aria-label', `Chat with ${nm}`)
     panel.innerHTML = `
-      <div class="kaali-hdr">
+      <div class="kaali-hdr" style="flex-direction:row-reverse">
         <div class="kaali-av">
           <span class="kaali-av-l">${letter}</span>
           <div class="kaali-av-dot"></div>
@@ -279,7 +279,7 @@
           <div class="kaali-st">Online</div>
         </div>
         <button class="kaali-x" id="kaali-close" aria-label="Close chat">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
