@@ -4,15 +4,18 @@ import { useRouter }   from 'next/navigation'
 import { useAuth }     from '@/lib/auth-context'
 import Link            from 'next/link'
 import { usePathname } from 'next/navigation'
+import dynamic         from 'next/dynamic'
+
+const KaaliWidget = dynamic(() => import('@/components/KaaliWidget'), { ssr: false })
 
 const NAV = [
-  { href:'/dashboard',              icon:'📊', label:'Overview'      },
-  { href:'/dashboard/leads',        icon:'👥', label:'Leads'         },
-  { href:'/dashboard/conversations',icon:'💬', label:'Conversations' },
-  { href:'/dashboard/knowledge',    icon:'📚', label:'Knowledge Base'},
-  { href:'/dashboard/api-usage',    icon:'🔑', label:'API & Usage'   },
-  { href:'/dashboard/embed',        icon:'🔧', label:'Embed Code'    },
-  { href:'/dashboard/settings',     icon:'⚙️', label:'Settings'      },
+  { href:'/dashboard',               icon:'📊', label:'Overview'      },
+  { href:'/dashboard/leads',         icon:'👥', label:'Leads'         },
+  { href:'/dashboard/conversations', icon:'💬', label:'Conversations' },
+  { href:'/dashboard/knowledge',     icon:'📚', label:'Knowledge Base'},
+  { href:'/dashboard/api-usage',     icon:'🔑', label:'API & Usage'   },
+  { href:'/dashboard/embed',         icon:'🔧', label:'Embed Code'    },
+  { href:'/dashboard/settings',      icon:'⚙️', label:'Settings'      },
 ]
 
 export default function DashboardLayout({ children }) {
@@ -34,7 +37,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div style={{ display:'flex', minHeight:'100vh' }}>
-      {/* Sidebar */}
       <aside style={{ width:224, background:'#060A14', borderRight:'0.5px solid rgba(255,255,255,.07)', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
         <div style={{ padding:'18px 16px 14px', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
           <div style={{ fontFamily:'var(--font-brand)', fontSize:14, color:'var(--tx)', letterSpacing:'-.3px' }}>
@@ -63,27 +65,24 @@ export default function DashboardLayout({ children }) {
               <div style={{ fontSize:11, color:'var(--td)' }}>{user.email}</div>
             </div>
           </div>
-          <button onClick={logout} style={{ width:'100%', fontSize:12, color:'var(--tm)', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left', marginTop:2, transition:'background .15s, color .15s' }}
-            onMouseOver={e=>e.currentTarget.style.background='var(--s2)'}
-            onMouseOut={e=>e.currentTarget.style.background='none'}>
+          <button onClick={logout} style={{ width:'100%', fontSize:12, color:'var(--tm)', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left', marginTop:2 }}>
             Sign out
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
       <div style={{ flex:1, overflowY:'auto' }}>
         {children}
       </div>
+
+      <KaaliWidget />
     </div>
   )
 }
 
 function NavItem({ href, icon, label, active }) {
   return (
-    <Link href={href} style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 10px', borderRadius:8, fontSize:13, color: active ? 'var(--tx)' : 'var(--tm)', background: active ? 'rgba(79,142,247,.12)' : 'none', marginBottom:1, transition:'background .15s, color .15s', textDecoration:'none' }}
-      onMouseOver={e=>{ if(!active){ e.currentTarget.style.background='var(--s2)'; e.currentTarget.style.color='var(--tx)'; }}}
-      onMouseOut={e=>{ if(!active){ e.currentTarget.style.background='none'; e.currentTarget.style.color='var(--tm)'; }}}>
+    <Link href={href} style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 10px', borderRadius:8, fontSize:13, color: active ? 'var(--tx)' : 'var(--tm)', background: active ? 'rgba(79,142,247,.12)' : 'none', marginBottom:1, transition:'background .15s, color .15s', textDecoration:'none' }}>
       <span style={{ width:16, textAlign:'center', fontSize:13, flexShrink:0 }}>{icon}</span>
       <span>{label}</span>
     </Link>
