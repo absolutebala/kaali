@@ -71,7 +71,7 @@
       width: 340px; height: 520px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
-      border-radius: 18px;
+      border-radius: 18px 4px 18px 18px;
       display: flex; flex-direction: column;
       z-index: 2147483639;
       box-shadow: 0 24px 80px rgba(0,0,0,.75);
