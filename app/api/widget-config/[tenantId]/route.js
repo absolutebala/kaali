@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
     botName:    tenant.bot_name,
     tone:       tenant.tone,
     calendly:   tenant.calendly_url,
-    apiUrl:     process.env.NEXT_PUBLIC_APP_URL.replace(//+$/, '') + '/api/chat',
+    apiUrl:     (process.env.NEXT_PUBLIC_APP_URL || '').replace(/\/+$/, '') + '/api/chat',
     limited:    tenant.conversations_used >= tenant.conversations_limit,
   }, {
     headers: {
