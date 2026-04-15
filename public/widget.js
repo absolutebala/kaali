@@ -68,10 +68,8 @@
     }
     #kaali-panel {
       position: fixed; bottom: 88px; right: 24px;
-      width: 340px; height: 520px;
-      background: #0C1220;
-      border: 0.5px solid rgba(79,142,247,.2);
-      border-radius: 18px 4px 18px 18px;
+position: fixed; bottom: 20px; right: 80px;      background: #0C1220;
+width: 300px; height: 420px;      border-radius: 18px 4px 18px 18px;
       display: flex; flex-direction: column;
       z-index: 2147483639;
       box-shadow: 0 24px 80px rgba(0,0,0,.75);
@@ -79,11 +77,9 @@
       transform: scale(.94) translateX(12px);
       transform-origin: bottom right;
       opacity: 0; pointer-events: none;
-      transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .2s;
-    }
+transform: scale(.94); transform-origin: bottom right;    }
     #kaali-panel.kaali-open {
-      transform: scale(1) translateX(0);
-      opacity: 1; pointer-events: all;
+transform: scale(1);      opacity: 1; pointer-events: all;
     }
     .kaali-hdr {
       display: flex; align-items: center; gap: 11px;
