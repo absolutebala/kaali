@@ -3,6 +3,7 @@ import { supabaseAdmin }                 from '@/lib/supabase'
 import { callAI, extractLead }           from '@/lib/ai'
 import { sendUsageAlert, sendLeadAlert } from '@/lib/email'
 import { pushLeadToHubSpot }             from '@/lib/hubspot'
+import { fireZapierWebhook }           from '@/lib/zapier'
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
@@ -107,9 +108,15 @@ export async function POST(request) {
           lead: { name: lead.name, email: lead.email, type: lead.type },
           summary,
         }),
-        pushLeadToHubSpot({
+        tenant.hubspot_token && pushLeadToHubSpot({
+          token: tenant.hubspot_token,
           name: lead.name, email: lead.email,
           type: lead.type, company: tenant.company, summary,
+        }),
+        tenant.zapier_webhook_url && fireZapierWebhook({
+          webhookUrl: tenant.zapier_webhook_url,
+          lead: { name: lead.name, email: lead.email, type: lead.type },
+          company: tenant.company, summary, conversationId: convoId,
         }),
       ])
     }

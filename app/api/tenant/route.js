@@ -13,7 +13,7 @@ export async function GET(request) {
 
   const { data, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url')
     .eq('id', payload.tenantId)
     .single()
 
@@ -39,7 +39,10 @@ export async function PATCH(request) {
   if (body.calendly   !== undefined) updates.calendly_url  = body.calendly.trim()
   if (body.aiProvider !== undefined) updates.ai_provider   = body.aiProvider
   if (body.aiModel    !== undefined) updates.ai_model      = body.aiModel
-  if (body.alertEmail !== undefined) updates.alert_email   = body.alertEmail.trim()
+  if (body.alertEmail       !== undefined) updates.alert_email        = body.alertEmail.trim()
+  if (body.companyName      !== undefined) updates.company             = body.companyName.trim()
+  if (body.hubspotToken     !== undefined) updates.hubspot_token       = body.hubspotToken.trim()
+  if (body.zapierWebhookUrl !== undefined) updates.zapier_webhook_url  = body.zapierWebhookUrl.trim()
   if (body.alertThreshold !== undefined) {
     updates.alert_threshold = parseInt(body.alertThreshold)
     updates.alert_sent      = false   // reset so alert fires again at new threshold
