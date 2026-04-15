@@ -37,7 +37,7 @@
   // ── CSS ───────────────────────────────────────────────────
   const CSS = `
     #kaali-bubble {
-      position: fixed; bottom: 26px; right: 26px;
+      position: fixed; bottom: 24px; right: 24px;
       width: 56px; height: 56px;
       background: linear-gradient(145deg, #1D4FD8, #4F8EF7);
       border-radius: 50%;
@@ -67,8 +67,8 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 94px; right: 26px;
-      width: 376px; height: 580px;
+      position: fixed; bottom: 88px; right: 24px;
+      width: 340px; height: 520px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
       border-radius: 18px;
@@ -134,7 +134,7 @@
     .kaali-msg.usr { align-self: flex-end; }
     .kaali-bbl {
       padding: 9px 12px; border-radius: 13px;
-      font-size: 13.5px; line-height: 1.55; word-break: break-word;
+      font-size: 13px; line-height: 1.5; word-break: break-word;
     }
     .kaali-msg.bot .kaali-bbl {
       background: #111A2E; color: #E5EBF8;
