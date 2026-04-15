@@ -69,7 +69,7 @@
     #kaali-panel {
       position: fixed; bottom: 88px; right: 24px;
 position: fixed; bottom: 20px; right: 80px;      background: #0C1220;
-width: 300px; height: 420px;      border-radius: 18px 4px 18px 18px;
+width: 330px; height: 462px;      border-radius: 18px 4px 18px 18px;
       display: flex; flex-direction: column;
       z-index: 2147483639;
       box-shadow: 0 24px 80px rgba(0,0,0,.75);
