@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }) {
               <div style={{ margin:'12px 4px 0', padding:'10px', background:'rgba(248,113,113,.08)', border:'0.5px solid rgba(248,113,113,.2)', borderRadius:8 }}>
                 <div style={{ fontSize:11, color:'#F87171', marginBottom:4 }}>👁 Super Admin View</div>
                 <div style={{ fontSize:10.5, color:'#6E7E9E', lineHeight:1.4, marginBottom:6 }}>Leads and chats are hidden.</div>
-                <button onClick={() => { localStorage.removeItem('kaali_token'); localStorage.removeItem('sa_impersonating'); window.location.href = '/superadmin/tenants' }}
+                <button onClick={() => { localStorage.removeItem('kaali_token'); localStorage.removeItem('sa_impersonating'); localStorage.removeItem('sa_token'); localStorage.removeItem('sa_token'); window.location.href = '/superadmin/tenants' }}
                   style={{ fontSize:11, color:'#F87171', background:'none', border:'none', cursor:'pointer', padding:0 }}>
                   ← Back to Super Admin
                 </button>
