@@ -17,7 +17,7 @@ export async function GET(request, { params }) {
 
   const { data: tenant, error } = await supabaseAdmin
     .from('tenants')
-    .select('id, company, bot_name, tone, calendly_url, plan, conversations_used, conversations_limit')
+    .select('id, company, bot_name, tone, calendly_url, plan, conversations_used, conversations_limit, avatar_url, bubble_color, widget_mode')
     .eq('id', tenantId)
     .single()
 
