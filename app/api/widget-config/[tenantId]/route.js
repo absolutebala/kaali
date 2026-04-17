@@ -33,7 +33,10 @@ export async function GET(request, { params }) {
     tone:       tenant.tone,
     calendly:   tenant.calendly_url,
     apiUrl:     (process.env.NEXT_PUBLIC_APP_URL || '').replace(/\/+$/, '') + '/api/chat',
-    limited:    tenant.conversations_used >= tenant.conversations_limit,
+    limited:     tenant.conversations_used >= tenant.conversations_limit,
+    avatarUrl:   tenant.avatar_url    || '',
+    bubbleColor: tenant.bubble_color  || '#4F8EF7',
+    widgetMode:  tenant.widget_mode   || 'bubble',
   }, {
     headers: {
       'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',
