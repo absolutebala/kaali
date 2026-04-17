@@ -12,7 +12,7 @@ export async function GET(request) {
 
   const { data: tenant, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, created_at')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode, created_at')
     .eq('id', payload.tenantId)
     .single()
 
@@ -50,6 +50,11 @@ export async function GET(request) {
       limit:             tenant.conversations_limit,
       alertEmail:        tenant.alert_email,
       alertThreshold:    tenant.alert_threshold,
+      hubspotToken:      tenant.hubspot_token      || '',
+      zapierWebhookUrl:  tenant.zapier_webhook_url  || '',
+      avatarUrl:         tenant.avatar_url         || '',
+      bubbleColor:       tenant.bubble_color        || '#4F8EF7',
+      widgetMode:        tenant.widget_mode         || 'bubble',
       createdAt:         tenant.created_at,
     },
     services:  services  || [],

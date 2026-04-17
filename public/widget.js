@@ -33,13 +33,16 @@
   let leadSaved    = false
   let calShown     = false
   let badgeShown   = false
+  let pagesVisited = [location.pathname]
+  let sessionCount = parseInt(localStorage.getItem('__kaali_sessions__') || '0') + 1
+  localStorage.setItem('__kaali_sessions__', sessionCount)
 
   // ── CSS ───────────────────────────────────────────────────
   const CSS = `
     #kaali-bubble {
-      position: fixed; bottom: 24px; right: 24px;
+      position: fixed; bottom: 26px; right: 26px;
       width: 56px; height: 56px;
-      background: linear-gradient(145deg, #1D4FD8, #4F8EF7);
+      background: linear-gradient(145deg, #1D4FD8, #4F8EF7); /* updated by applyConfig */
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; z-index: 2147483640;
@@ -67,19 +70,23 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 88px; right: 24px;
-position: fixed; bottom: 20px; right: 80px;      background: #0C1220;
-width: 330px; height: 462px;      border-radius: 18px 4px 18px 18px;
+      position: fixed; bottom: 94px; right: 26px;
+      width: 376px; height: 580px;
+      background: #0C1220;
+      border: 0.5px solid rgba(79,142,247,.2);
+      border-radius: 18px;
       display: flex; flex-direction: column;
       z-index: 2147483639;
       box-shadow: 0 24px 80px rgba(0,0,0,.75);
       overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif;
-      transform: scale(.94) translateX(12px);
+      transform: scale(.94) translateY(12px);
       transform-origin: bottom right;
       opacity: 0; pointer-events: none;
-transform: scale(.94); transform-origin: bottom right;    }
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+    }
     #kaali-panel.kaali-open {
-transform: scale(1);      opacity: 1; pointer-events: all;
+      transform: scale(1) translateY(0);
+      opacity: 1; pointer-events: all;
     }
     .kaali-hdr {
       display: flex; align-items: center; gap: 11px;
@@ -107,7 +114,7 @@ transform: scale(1);      opacity: 1; pointer-events: all;
     .kaali-st { font-size: 10.5px; color: #22D17A; display: flex; align-items: center; gap: 4px; }
     .kaali-st::before { content:''; width:5px; height:5px; background:#22D17A; border-radius:50%; }
     .kaali-x {
-      width: 22px; height: 22px; border-radius: 6px;
+      width: 28px; height: 28px; border-radius: 7px;
       background: none; border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: #6E7E9E; margin-left: auto;
@@ -130,7 +137,7 @@ transform: scale(1);      opacity: 1; pointer-events: all;
     .kaali-msg.usr { align-self: flex-end; }
     .kaali-bbl {
       padding: 9px 12px; border-radius: 13px;
-      font-size: 13px; line-height: 1.5; word-break: break-word;
+      font-size: 13.5px; line-height: 1.55; word-break: break-word;
     }
     .kaali-msg.bot .kaali-bbl {
       background: #111A2E; color: #E5EBF8;
@@ -275,7 +282,7 @@ transform: scale(1);      opacity: 1; pointer-events: all;
           <div class="kaali-st">Online</div>
         </div>
         <button class="kaali-x" id="kaali-close" aria-label="Close chat">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
@@ -313,6 +320,11 @@ transform: scale(1);      opacity: 1; pointer-events: all;
       this.style.height = Math.min(this.scrollHeight, 94) + 'px'
     })
   }
+
+  // Track page navigation
+  window.addEventListener('popstate', () => {
+    if (!pagesVisited.includes(location.pathname)) pagesVisited.push(location.pathname)
+  })
 
   // ── Panel open/close ──────────────────────────────────────
   function togglePanel()  { isOpen ? closePanel() : openPanel() }
@@ -434,6 +446,13 @@ transform: scale(1);      opacity: 1; pointer-events: all;
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          visitorData: {
+            country:      Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone?.split('/')[0] || '',
+            device:       /mobile/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+            pagesVisited: pagesVisited,
+            sessionCount: sessionCount,
+            ip:           '',
+          },
           tenantId:       tenantId,
           conversationId: convId,
           messages:       history,

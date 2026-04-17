@@ -14,12 +14,10 @@ export default function OverviewPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Handle Stripe redirect
     if (params.get('upgrade') === 'success') {
       refreshUser()
       toast('🎉 Plan upgraded successfully!')
     }
-
     async function load() {
       try {
         const [s, l] = await Promise.all([statsApi.get(), leadsApi.list({ limit: 5 })])
@@ -34,7 +32,7 @@ export default function OverviewPage() {
     try {
       const { url } = await stripeApi.createCheckout(plan)
       window.location.href = url
-    } catch(e) { toast('Stripe not configured yet — set STRIPE_SECRET_KEY in .env.local') }
+    } catch(e) { toast('Stripe not configured yet — set STRIPE_SECRET_KEY in Vercel env vars') }
   }
 
   if (loading) return <PageShell title="Overview"><div style={{ color:'var(--tm)', padding:40, textAlign:'center', fontSize:13 }}>Loading…</div></PageShell>
@@ -46,10 +44,10 @@ export default function OverviewPage() {
     <PageShell title="Overview">
       {/* Stats */}
       <div className="stats-grid">
-        <StatCard label="Conversations"   value={data?.totalConversations || 0} sub="All time" />
-        <StatCard label="Leads Captured"  value={data?.totalLeads || 0}         sub="With contact info" />
-        <StatCard label="Potential Clients" value={data?.clientLeads || 0}      sub="In pipeline" />
-        <StatCard label="This Week"       value={data?.weekConversations || 0}  sub="Conversations" />
+        <StatCard label="Total Chats"      value={data?.totalConversations || 0} sub="All time" />
+        <StatCard label="Leads Captured"   value={data?.totalLeads || 0}         sub="With contact info" />
+        <StatCard label="Potential Clients" value={data?.clientLeads || 0}       sub="In pipeline" />
+        <StatCard label="Chats This Week"  value={data?.weekConversations || 0}  sub="Last 7 days" />
       </div>
 
       {/* Usage */}
@@ -60,7 +58,8 @@ export default function OverviewPage() {
         </div>
         <div className="card-body">
           <div style={{ display:'flex', justifyContent:'space-between', fontSize:12, color:'var(--tm)', marginBottom:6 }}>
-            <span>{data?.used||0} used</span><span>{data?.limit||100} limit</span>
+            <span>{data?.used||0} Messages</span>
+            <span>{data?.limit||100} Messages Limit</span>
           </div>
           <div className="usage-bar-bg" style={{ height:9 }}>
             <div className={`usage-bar-fill ${barCls}`} style={{ width:`${pct}%` }} />
@@ -69,12 +68,12 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      {/* Upgrade CTA if on starter */}
+      {/* Upgrade CTA */}
       {user?.plan === 'starter' && (
         <div style={{ background:'linear-gradient(135deg,rgba(79,142,247,.15),rgba(79,142,247,.06))', border:'0.5px solid rgba(79,142,247,.3)', borderRadius:12, padding:'16px 20px', marginBottom:14, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
           <div>
             <div style={{ fontSize:14, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>You're on the free plan</div>
-            <div style={{ fontSize:13, color:'var(--tm)' }}>Upgrade to Growth for 2,000 conversations/mo and 10 PDFs.</div>
+            <div style={{ fontSize:13, color:'var(--tm)' }}>Upgrade to Growth for 2,000 messages/mo and 10 PDFs.</div>
           </div>
           <button className="btn-pri" onClick={() => handleUpgrade('growth')}>Upgrade to Growth — $29/mo →</button>
         </div>
@@ -102,7 +101,7 @@ export default function OverviewPage() {
             </tbody>
           </table>
         ) : (
-          <div className="empty-state"><div className="empty-ico">👥</div>No leads yet — start a conversation in the chat widget!</div>
+          <div className="empty-state"><div className="empty-ico">👥</div>No leads yet — start a chat on your website!</div>
         )}
       </div>
     </PageShell>

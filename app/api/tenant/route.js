@@ -13,7 +13,7 @@ export async function GET(request) {
 
   const { data, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode')
     .eq('id', payload.tenantId)
     .single()
 
@@ -32,8 +32,7 @@ export async function PATCH(request) {
   // Build the update object — only accept known fields
   const updates = {}
 
-  if (body.botName     !== undefined) updates.bot_name  = body.botName.trim() || 'Kaali'
-  if (body.companyName  !== undefined) updates.company   = body.companyName.trim()
+  if (body.botName    !== undefined) updates.bot_name     = body.botName.trim() || 'Kaali'
   if (body.description !== undefined) updates.description  = body.description
   if (body.tone       !== undefined) updates.tone          = body.tone
   if (body.calendly   !== undefined) updates.calendly_url  = body.calendly.trim()
@@ -43,6 +42,9 @@ export async function PATCH(request) {
   if (body.companyName      !== undefined) updates.company             = body.companyName.trim()
   if (body.hubspotToken     !== undefined) updates.hubspot_token       = body.hubspotToken.trim()
   if (body.zapierWebhookUrl !== undefined) updates.zapier_webhook_url  = body.zapierWebhookUrl.trim()
+  if (body.avatarUrl   !== undefined) updates.avatar_url   = body.avatarUrl.trim()
+  if (body.bubbleColor !== undefined) updates.bubble_color = body.bubbleColor.trim()
+  if (body.widgetMode  !== undefined) updates.widget_mode  = body.widgetMode.trim()
   if (body.alertThreshold !== undefined) {
     updates.alert_threshold = parseInt(body.alertThreshold)
     updates.alert_sent      = false   // reset so alert fires again at new threshold
