@@ -50,7 +50,6 @@ export default function SettingsPage() {
         bubbleColor:      form.bubbleColor,
         widgetMode:       form.widgetMode,
       })
-      await refreshUser()
       setSaved(true); setTimeout(() => setSaved(false), 2500)
     } catch(e) { showToast(e.message, true) }
     finally { setSaving(false) }
