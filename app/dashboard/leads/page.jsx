@@ -2,14 +2,25 @@
 import { useEffect, useState, useCallback } from 'react'
 import { leads as leadsApi, exportLeadsCSV } from '@/lib/api-client'
 import { PageShell, fmtDate } from '../page'
+import { useRouter } from 'next/navigation'
 
 const TYPES = ['all','client','investor','existing','general']
 
 export default function LeadsPage() {
+  const router = useRouter()
   const [data,    setData]    = useState([])
   const [counts,  setCounts]  = useState({})
   const [filter,  setFilter]  = useState('all')
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Block impersonating super admin
+    if (typeof window !== 'undefined' && localStorage.getItem('sa_token')) {
+      router.replace('/dashboard/knowledge')
+      return
+    }
+    load()
+  }, [])
 
   const load = useCallback(async (f = filter) => {
     setLoading(true)
@@ -17,8 +28,6 @@ export default function LeadsPage() {
       const params = f !== 'all' ? { type: f.toUpperCase(), limit: 100 } : { limit: 100 }
       const res    = await leadsApi.list(params)
       setData(res.leads || [])
-
-      // Load counts for all types
       const all = await leadsApi.list({ limit: 200 })
       const c   = { all: all.total || 0 }
       TYPES.slice(1).forEach(t => { c[t] = (all.leads||[]).filter(l => (l.visitor_type||'GENERAL').toLowerCase() === t).length })
@@ -26,8 +35,6 @@ export default function LeadsPage() {
     } catch(e) { console.error(e) }
     finally { setLoading(false) }
   }, [filter])
-
-  useEffect(() => { load() }, [])
 
   async function changeStatus(id, status) {
     await leadsApi.updateStatus(id, status)
@@ -49,7 +56,6 @@ export default function LeadsPage() {
           ))}
         </div>
       </div>
-
       <div className="card">
         {loading ? (
           <div style={{ padding:40, textAlign:'center', color:'var(--tm)', fontSize:13 }}>Loading…</div>

@@ -68,7 +68,7 @@ export default function SettingsPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      setAvatarUrl(data.avatarUrl)
+      setAvatarUrl(data.avatarUrl + "?t=" + Date.now())
       await refreshUser()
       showToast('Avatar updated!')
     } catch(e) { showToast(e.message, true) }

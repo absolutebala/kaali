@@ -49,6 +49,10 @@ export default function ConversationsPage() {
   const [view,  setView]  = useState('timeline') // timeline | category
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('sa_token')) {
+      window.location.href = '/dashboard/knowledge'
+      return
+    }
     convApi.list({ limit: 100 }).then(r => { setList(r.conversations || []); setL(false) }).catch(() => setL(false))
   }, [])
 
