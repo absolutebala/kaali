@@ -48,7 +48,7 @@ export default function SAtenants() {
   async function impersonate(id) {
     const d = await saFetch('/api/superadmin/impersonate', { method:'POST', body: JSON.stringify({ tenantId: id }) })
     if (d.token) {
-      localStorage.setItem('kaali_token', d.token)
+      localStorage.setItem('kaali_token', d.token); localStorage.setItem('sa_impersonating', '1')
       setImpMsg(`Logged in as ${d.tenant.company}. Go to /dashboard to view their account.`)
       showToast(`Impersonating ${d.tenant.company}!`)
     }
