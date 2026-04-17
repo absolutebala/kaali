@@ -533,7 +533,7 @@
     try {
       const res  = await fetch(`${API_BASE}/api/widget-config/${tenantId}`)
       if (!res.ok) throw new Error('Config not found')
-      config = await res.json()
+      config = await res.json(); setTimeout(() => applyTenantStyle(config), 50)
     } catch (e) {
       console.warn('[Kaali] Could not load widget config:', e.message)
       // Use minimal fallback so widget still appears
