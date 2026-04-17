@@ -61,7 +61,7 @@ export async function POST(request) {
     // Cap at 50k chars
     const extractedText = text.substring(0, 50000)
     const domain = parsedUrl.hostname
-    const docName = `Website: ${domain}`
+    const pagePath = parsedUrl.pathname === '/' ? '' : parsedUrl.pathname; const docName = 'Website: ' + domain + pagePath
 
     // Check if we already have a doc for this domain — update it
     const { data: existing } = await supabaseAdmin
