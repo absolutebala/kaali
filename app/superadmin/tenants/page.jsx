@@ -132,7 +132,7 @@ export default function SAtenants() {
                     </td>
                     <td style={{ padding:'10px 13px', fontSize:11, color:'#3A4A6A', borderBottom:'0.5px solid rgba(255,255,255,.05)', whiteSpace:'nowrap' }}>{fmtDate(t.created_at)}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
-                      <div style={{ display:'flex', gap:6' }}>
+                      <div style={{ display:'flex', gap:6 }}>
                         <button onClick={()=>impersonate(t.id)} title="Log in as this tenant"
                           style={{ fontSize:11, background:'rgba(79,142,247,.1)', border:'0.5px solid rgba(79,142,247,.25)', color:'#7EB3FF', padding:'3px 8px', borderRadius:6, cursor:'pointer' }}>
                           Login As

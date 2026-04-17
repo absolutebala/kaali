@@ -7,7 +7,7 @@ function saFetch(path) {
   return fetch(path, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json())
 }
 
-function fmtDate(d) { try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) } catch { return d||'' } }
+export function fmtDate(d) { try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) } catch { return d||'' } }
 
 export default function SADashboard() {
   const [data,    setData]    = useState(null)
@@ -125,4 +125,3 @@ export function PageShell({ title, action, children }) {
   )
 }
 
-export function fmtDate(d) { try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) } catch { return d||'' } }
