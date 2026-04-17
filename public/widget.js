@@ -242,6 +242,42 @@
     }
   `
 
+  // ── Apply tenant config to widget appearance ─────────────
+  function applyTenantStyle(cfg) {
+    const color = cfg.bubbleColor || '#4F8EF7'
+
+    // Update bubble color
+    const bubble = document.getElementById('kaali-bubble')
+    if (bubble) {
+      bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
+      bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
+    }
+
+    // Update avatar
+    if (cfg.avatarUrl) {
+      const avEl = document.querySelector('.kaali-av-l')
+      if (avEl) {
+        avEl.style.background = 'transparent'
+        avEl.innerHTML = '<img src="' + cfg.avatarUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />'
+      }
+    }
+
+    // Widget mode
+    if (cfg.widgetMode === 'always_open') {
+      setTimeout(openPanel, 500)
+    } else if (cfg.widgetMode === 'popup') {
+      const panel = document.getElementById('kaali-panel')
+      if (panel) {
+        panel.style.bottom = 'auto'
+        panel.style.right  = 'auto'
+        panel.style.top    = '50%'
+        panel.style.left   = '50%'
+        panel.style.transform = 'translate(-50%,-50%) scale(0.94)'
+        panel.style.transformOrigin = 'center'
+      }
+    }
+  }
+
   // ── Inject styles ─────────────────────────────────────────
   function injectStyles() {
     const style = document.createElement('style')
