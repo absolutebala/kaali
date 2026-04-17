@@ -1,6 +1,6 @@
 import { NextResponse }  from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { requireSA }     from '@/lib/superadmin-auth'
+import { requireSuperAdmin as requireSA }     from '@/lib/superadmin-auth'
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204 })
