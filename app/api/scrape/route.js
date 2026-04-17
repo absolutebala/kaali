@@ -68,8 +68,8 @@ export async function POST(request) {
       .from('documents')
       .select('id')
       .eq('tenant_id', tenant.tenantId)
-      .ilike('name', `Website: ${domain}%`)
-      .single()
+      .eq('file_path', parsedUrl.toString())
+      .maybeSingle()
 
     let doc
     if (existing) {

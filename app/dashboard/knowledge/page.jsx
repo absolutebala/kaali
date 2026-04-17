@@ -59,7 +59,7 @@ export default function KnowledgePage() {
       if (!res.ok) throw new Error(data.error)
       setScrapeMsg(`✓ ${data.message}`)
       setScrapeUrl('')
-      const r = await docApi.list(); setDocs(r.documents||[])
+      const r = await docApi.list(); setDocs(r.documents||[]); setScrapeUrl('')
       showToast('Website content indexed!')
     } catch(err) { setScrapeMsg(`✕ ${err.message}`) }
     finally { setScraping(false) }
