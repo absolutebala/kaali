@@ -49,7 +49,7 @@ export default function SuperAdminLayout({ children }) {
           <div style={{ display:'flex', alignItems:'center', gap:9, marginBottom:4 }}>
             <div style={{ width:30, height:30, background:'linear-gradient(145deg,#991B1B,#F87171)', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, flexShrink:0 }}>🔐</div>
             <div>
-              <div style={{ fontFamily:'system-ui', fontSize:13, fontWeight:700, color:'#E5EBF8' }}>Super Admin</div>
+              <div style={{ fontFamily:'system-ui', fontSize:13, fontWeight:700, color:'#E5EBF8' }}>Absolute AIChat</div>
               <div style={{ fontSize:10, color:'#F87171' }}>Absolute App Labs</div>
             </div>
           </div>
