@@ -70,7 +70,7 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 94px; right: 26px;
+      position: fixed; bottom: 20px; right: 80px;
       width: 376px; height: 580px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
@@ -274,7 +274,7 @@
     panel.innerHTML = `
       <div class="kaali-hdr">
         <div class="kaali-av">
-          <span class="kaali-av-l">${letter}</span>
+          ${config && config.avatarUrl ? '<img src="' + config.avatarUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" onerror="this.style.display='none';this.parentElement.textContent='' + letter + ''" />' : letter}
           <div class="kaali-av-dot"></div>
         </div>
         <div style="flex:1">
