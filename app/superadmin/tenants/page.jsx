@@ -40,7 +40,7 @@ export default function SAtenants() {
   }
 
   async function resetUsage(id) {
-    await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsUsed: 0 }) })
+    const planLimits = { starter: 100, growth: 2000, business: 999999 }; const tenant = tenants.find(t => t.id === id); const limit = planLimits[tenant?.plan || 'starter']; await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsUsed: 0, conversationsLimit: limit }) })
     showToast('Usage limit reset!')
     load()
   }
