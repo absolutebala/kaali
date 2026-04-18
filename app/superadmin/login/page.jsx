@@ -30,7 +30,7 @@ export default function SuperAdminLogin() {
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:28 }}>
           <div style={{ width:36, height:36, background:'linear-gradient(145deg,#991B1B,#F87171)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>🔐</div>
           <div>
-            <div style={{ fontFamily:'system-ui', fontSize:15, fontWeight:700, color:'#E5EBF8' }}>Kaali Super Admin</div>
+            <div style={{ fontFamily:'system-ui', fontSize:15, fontWeight:700, color:'#E5EBF8' }}>Absolute AIChat Admin</div>
             <div style={{ fontSize:11, color:'#6E7E9E' }}>Restricted access — Absolute App Labs</div>
           </div>
         </div>

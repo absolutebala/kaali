@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import styles from './landing.module.css'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -19,7 +20,7 @@ export default function LandingPage() {
         backdropFilter:'blur(14px)', background:'rgba(5,8,15,.82)' }}>
         <div style={{ fontFamily:'var(--font-brand)', fontSize:19, letterSpacing:'-.3px', display:'flex', alignItems:'center', gap:8 }}>
           <div style={{ width:8, height:8, background:'var(--ac)', borderRadius:'50%' }} />
-          Kaali
+          Absolute AIChat
         </div>
         <div style={{ display:'flex', gap:30, listStyle:'none' }}>
           {['Features','Pricing','Docs'].map(l => (
@@ -52,7 +53,7 @@ export default function LandingPage() {
             <span style={{ color:'var(--ac)' }}>Live in Minutes.</span>
           </h1>
           <p style={{ fontSize:15.5, color:'var(--tm)', lineHeight:1.72, maxWidth:420, marginBottom:32 }}>
-            Kaali gives your visitors instant, intelligent answers from your own content — and turns them into leads, bookings, and clients.
+            Absolute AIChat gives your visitors instant, intelligent answers from your own content — and turns them into leads, bookings, and clients.
           </p>
           <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginBottom:14 }}>
             <button className="btn-pri" style={{ padding:'11px 28px', fontSize:14 }}
@@ -130,7 +131,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer style={{ borderTop:'0.5px solid rgba(255,255,255,.07)', padding:'32px 56px', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:1160, margin:'0 auto' }}>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:15, color:'var(--tm)' }}>Kaali by <span style={{ color:'var(--ac)' }}>Absolute App Labs</span></div>
+        <div style={{ fontFamily:'var(--font-brand)', fontSize:15, color:'var(--tm)' }}>Absolute AIChat by <span style={{ color:'var(--ac)' }}>Absolute App Labs</span></div>
         <div style={{ display:'flex', gap:22 }}>
           {['Features','Pricing','Docs','Privacy'].map(l => (
             <a key={l} href="#" style={{ fontSize:13, color:'var(--td)', transition:'color .15s' }}
@@ -162,7 +163,7 @@ function MockBrowser() {
         <div style={{ position:'absolute', bottom:60, right:10, width:196, background:'var(--s1)', border:'0.5px solid rgba(255,255,255,.13)', borderRadius:12, overflow:'hidden', boxShadow:'0 12px 36px rgba(0,0,0,.6)' }}>
           <div style={{ background:'var(--s2)', padding:'8px 10px', display:'flex', alignItems:'center', gap:7, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
             <div style={{ width:22, height:22, background:'linear-gradient(145deg,#1D4FD8,#4F8EF7)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:9, fontWeight:700, color:'#fff', flexShrink:0 }}>K</div>
-            <div><div style={{ fontSize:11, fontWeight:500, color:'var(--tx)' }}>Kaali</div><div style={{ fontSize:9, color:'var(--gr)' }}>● Online</div></div>
+            <div><div style={{ fontSize:11, fontWeight:500, color:'var(--tx)' }}>Absolute AIChat</div><div style={{ fontSize:9, color:'var(--gr)' }}>● Online</div></div>
           </div>
           <div style={{ padding:8, display:'flex', flexDirection:'column', gap:5 }}>
             {[
