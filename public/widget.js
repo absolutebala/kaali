@@ -274,7 +274,7 @@
     panel.innerHTML = `
       <div class="kaali-hdr">
         <div class="kaali-av">
-          ${config && config.avatarUrl ? '<img src="' + config.avatarUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" onerror="this.style.display='none';this.parentElement.textContent='' + letter + ''" />' : letter}
+          <span class="kaali-av-l" id="kaali-av-letter">${letter}</span>
           <div class="kaali-av-dot"></div>
         </div>
         <div style="flex:1">
