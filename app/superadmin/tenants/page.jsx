@@ -40,7 +40,7 @@ export default function SAtenants() {
   }
 
   async function resetUsage(id) {
-    await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsLimit: 999999 }) })
+    await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsUsed: 0 }) })
     showToast('Usage limit reset!')
     load()
   }

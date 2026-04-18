@@ -32,13 +32,14 @@ export async function PATCH(request) {
   const { admin, error } = await requireSuperAdmin(request, ['superadmin', 'billing'])
   if (error) return error
 
-  const { id, plan, conversationsLimit } = await request.json()
+  const { id, plan, conversationsLimit, conversationsUsed } = await request.json()
   if (!id) return NextResponse.json({ error: 'id required.' }, { status: 400 })
 
   const planLimits = { starter: 100, growth: 2000, business: 999999 }
   const updates = {}
   if (plan !== undefined) { updates.plan = plan; updates.conversations_limit = planLimits[plan] || 100 }
   if (conversationsLimit !== undefined) updates.conversations_limit = conversationsLimit
+  if (body.conversationsUsed !== undefined) updates.conversations_used = body.conversationsUsed
 
   const { data, error: dbErr } = await supabaseAdmin.from('tenants').update(updates).eq('id', id).select('id, company, plan, conversations_limit').single()
   if (dbErr) return NextResponse.json({ error: 'Update failed.' }, { status: 500 })
