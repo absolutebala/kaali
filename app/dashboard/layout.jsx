@@ -31,6 +31,7 @@ export default function DashboardLayout({ children }) {
     if (!loading && !user) router.replace('/auth/login')
     if (typeof window !== 'undefined') {
       setIsImpersonating(!!localStorage.getItem('sa_impersonating'))
+      fetch('/api/platform-settings').then(r=>r.json()).then(d=>{ if(d.logoUrl) setLogoUrl(d.logoUrl) }).catch(()=>{})
     }
   }, [loading, user, router])
 
