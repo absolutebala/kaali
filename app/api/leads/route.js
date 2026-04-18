@@ -19,7 +19,7 @@ export async function GET(request) {
 
   let query = supabaseAdmin
     .from('leads')
-    .select('id, name, email, visitor_type, summary, status, conversation_id, created_at', { count: 'exact' })
+    .select('id, name, email, visitor_type, summary, status, conversation_id, created_at, company, designation, country, city, device, pages_visited, session_count', { count: 'exact' })
     .eq('tenant_id', tenant.tenantId)
     .order('created_at', { ascending: false })
     .range((page - 1) * limit, page * limit - 1)

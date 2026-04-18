@@ -25,11 +25,13 @@ export default function DashboardLayout({ children }) {
   const router  = useRouter()
   const path    = usePathname()
   const [isImpersonating, setIsImpersonating] = useState(false)
+  const [logoUrl, setLogoUrl] = useState('')
 
   useEffect(() => {
     if (!loading && !user) router.replace('/auth/login')
     if (typeof window !== 'undefined') {
       setIsImpersonating(!!localStorage.getItem('sa_impersonating'))
+      fetch('/api/platform-settings').then(r=>r.json()).then(d=>{ if(d.logoUrl) setLogoUrl(d.logoUrl) }).catch(()=>{})
     }
   }, [loading, user, router])
 
@@ -55,9 +57,13 @@ export default function DashboardLayout({ children }) {
     <div style={{ display:'flex', minHeight:'100vh' }}>
       <aside style={{ width:224, background:'#080C17', borderRight:'0.5px solid rgba(255,255,255,.07)', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
         <div style={{ padding:'20px 16px 16px', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-          <div style={{ fontFamily:'var(--font-brand)', fontSize:13, color:'var(--tx)', letterSpacing:'-.3px', marginBottom:4 }}>
-            Absolute <span style={{ color:'var(--ac)' }}>AIChat</span>
-          </div>
+          {logoUrl ? (
+            <img src={logoUrl} alt="Absolute AIChat" style={{ maxWidth:'160px', maxHeight:'36px', objectFit:'contain', marginBottom:4 }} />
+          ) : (
+            <div style={{ fontFamily:'var(--font-brand)', fontSize:13, color:'var(--tx)', letterSpacing:'-.3px', marginBottom:4 }}>
+              Absolute <span style={{ color:'var(--ac)' }}>AIChat</span>
+            </div>
+          )}
           <div style={{ fontSize:12, color:'var(--tm)', marginBottom:8 }}>{user.company}</div>
           <div style={{ display:'inline-block', fontSize:11, fontWeight:500, color:'var(--ac)', background:'rgba(79,142,247,.12)', border:'0.5px solid rgba(79,142,247,.25)', padding:'2px 10px', borderRadius:10 }}>
             {(user.plan||'starter').charAt(0).toUpperCase()+(user.plan||'starter').slice(1)}
