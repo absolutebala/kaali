@@ -70,7 +70,7 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 20px; right: 80px;
+      position: fixed; bottom: 94px; right: 26px;
       width: 376px; height: 580px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
@@ -241,101 +241,6 @@
       }
     }
   `
-
-  // ── Apply tenant config to widget appearance ─────────────
-  function applyTenantStyle(cfg) {
-    const color = cfg.bubbleColor || '#4F8EF7'
-
-    // ── Bubble color ──────────────────────────────────────
-    const bubble = document.getElementById('kaali-bubble')
-    if (bubble) {
-      bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
-      bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
-    }
-
-    // ── Theme entire widget with bubble color ─────────────
-    // Send button
-    const sendBtn = document.getElementById('kaali-send')
-    if (sendBtn) sendBtn.style.background = color
-
-    // Header bar
-    const hdr = document.querySelector('.kaali-hdr')
-    if (hdr) hdr.style.background = color + '22'
-
-    // Online dot
-    const dot = document.querySelector('.kaali-st')
-    if (dot) dot.style.color = color
-
-    // Inject dynamic CSS for visitor buttons and other themed elements
-    let styleEl = document.getElementById('kaali-theme-css')
-    if (!styleEl) {
-      styleEl = document.createElement('style')
-      styleEl.id = 'kaali-theme-css'
-      document.head.appendChild(styleEl)
-    }
-    styleEl.textContent = [
-      '.kaali-vbtn { border-color: ' + color + '44 !important; }',
-      '.kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + ' !important; }',
-      '#kaali-send { background: ' + color + ' !important; }',
-      '.kaali-msg-bot { border-left: 2px solid ' + color + '44; }',
-    ].join(' ')
-
-    // ── Avatar ─────────────────────────────────────────────
-    if (cfg.avatarUrl) {
-      const avEl = document.querySelector('.kaali-av-l')
-      if (avEl) {
-        avEl.style.background = 'transparent'
-        avEl.style.overflow = 'hidden'
-        avEl.style.padding = '0'
-        const img = document.createElement('img')
-        img.src = cfg.avatarUrl
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
-        img.onerror = function() { avEl.textContent = (cfg.botName||'K').charAt(0).toUpperCase() }
-        avEl.innerHTML = ''
-        avEl.appendChild(img)
-      }
-
-      // Also update bubble with avatar
-      const bubbleInner = bubble ? bubble.querySelector('svg, span') : null
-      if (bubbleInner) {
-        const img2 = document.createElement('img')
-        img2.src = cfg.avatarUrl
-        img2.style.cssText = 'width:38px;height:38px;object-fit:cover;border-radius:50%;display:block'
-        img2.onerror = function() { img2.style.display = 'none' }
-        bubbleInner.replaceWith(img2)
-      }
-    }
-
-    // ── Widget mode ───────────────────────────────────────
-    if (cfg.widgetMode === 'always_open') {
-      setTimeout(openPanel, 800)
-    } else if (cfg.widgetMode === 'popup') {
-      // Hide bubble, show panel as centered overlay
-      if (bubble) bubble.style.display = 'none'
-      const panel = document.getElementById('kaali-panel')
-      if (panel) {
-        panel.style.cssText = [
-          'position: fixed !important',
-          'top: 50% !important',
-          'left: 50% !important',
-          'right: auto !important',
-          'bottom: auto !important',
-          'transform: translate(-50%, -50%) !important',
-          'transform-origin: center !important',
-          'width: 380px !important',
-          'height: 520px !important',
-          'z-index: 2147483647 !important',
-        ].join(';')
-        // Add backdrop
-        const backdrop = document.createElement('div')
-        backdrop.id = 'kaali-backdrop'
-        backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2147483646'
-        backdrop.onclick = closePanel
-        document.body.appendChild(backdrop)
-        setTimeout(openPanel, 800)
-      }
-    }
-  }
 
   // ── Inject styles ─────────────────────────────────────────
   function injectStyles() {
@@ -542,11 +447,20 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           visitorData: {
-            country:      Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone?.split('/')[0] || '',
-            device:       /mobile/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+            country:      window.__kaali_geo?.country || '',
+            city:         window.__kaali_geo?.city    || '',
+            org:          window.__kaali_geo?.org     || '',
+            device:       /mobile/i.test(navigator.userAgent) ? 'mobile' : (/tablet/i.test(navigator.userAgent) ? 'tablet' : 'desktop'),
+            os:           /Mac/i.test(navigator.userAgent) ? 'Mac' : /Windows/i.test(navigator.userAgent) ? 'Windows' : /iPhone|iPad/i.test(navigator.userAgent) ? 'iOS' : /Android/i.test(navigator.userAgent) ? 'Android' : 'Other',
+            browser:      /Chrome/i.test(navigator.userAgent) && !/Edge/i.test(navigator.userAgent) ? 'Chrome' : /Safari/i.test(navigator.userAgent) ? 'Safari' : /Firefox/i.test(navigator.userAgent) ? 'Firefox' : /Edge/i.test(navigator.userAgent) ? 'Edge' : 'Other',
+            language:     navigator.language || '',
+            referrer:     document.referrer ? new URL(document.referrer).hostname : 'direct',
+            utmSource:    new URLSearchParams(location.search).get('utm_source') || '',
+            utmCampaign:  new URLSearchParams(location.search).get('utm_campaign') || '',
             pagesVisited: pagesVisited,
             sessionCount: sessionCount,
-            ip:           '',
+            screenWidth:  window.innerWidth,
+            ip:           window.__kaali_geo?.ip || '',
           },
           tenantId:       tenantId,
           conversationId: convId,
@@ -586,6 +500,10 @@
     isBusy = false
     document.getElementById('kaali-snd').disabled = false
   }
+
+  // ── Fetch IP geolocation non-blocking ───────────────────────
+  window.__kaali_geo = {}
+  fetch('https://ipapi.co/json/').then(r => r.json()).then(d => { window.__kaali_geo = d }).catch(() => {})
 
   // ── Load config and boot ──────────────────────────────────
   async function boot() {

@@ -107,6 +107,8 @@ export async function POST(request) {
           visitor_type:    lead.type || visitorType || 'GENERAL',
           summary,
           status:          'new',
+          company:         lead.company             || '',
+          designation:     lead.designation         || '',
           country:         visitorData?.country      || '',
           city:            visitorData?.city         || '',
           device:          visitorData?.device       || '',
