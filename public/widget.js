@@ -246,34 +246,93 @@
   function applyTenantStyle(cfg) {
     const color = cfg.bubbleColor || '#4F8EF7'
 
-    // Update bubble color
+    // ── Bubble color ──────────────────────────────────────
     const bubble = document.getElementById('kaali-bubble')
     if (bubble) {
       bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
       bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
     }
 
-    // Update avatar
+    // ── Theme entire widget with bubble color ─────────────
+    // Send button
+    const sendBtn = document.getElementById('kaali-send')
+    if (sendBtn) sendBtn.style.background = color
+
+    // Header bar
+    const hdr = document.querySelector('.kaali-hdr')
+    if (hdr) hdr.style.background = color + '22'
+
+    // Online dot
+    const dot = document.querySelector('.kaali-st')
+    if (dot) dot.style.color = color
+
+    // Inject dynamic CSS for visitor buttons and other themed elements
+    let styleEl = document.getElementById('kaali-theme-css')
+    if (!styleEl) {
+      styleEl = document.createElement('style')
+      styleEl.id = 'kaali-theme-css'
+      document.head.appendChild(styleEl)
+    }
+    styleEl.textContent = [
+      '.kaali-vbtn { border-color: ' + color + '44 !important; }',
+      '.kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + ' !important; }',
+      '#kaali-send { background: ' + color + ' !important; }',
+      '.kaali-msg-bot { border-left: 2px solid ' + color + '44; }',
+    ].join(' ')
+
+    // ── Avatar ─────────────────────────────────────────────
     if (cfg.avatarUrl) {
       const avEl = document.querySelector('.kaali-av-l')
       if (avEl) {
         avEl.style.background = 'transparent'
-        avEl.innerHTML = '<img src="' + cfg.avatarUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />'
+        avEl.style.overflow = 'hidden'
+        avEl.style.padding = '0'
+        const img = document.createElement('img')
+        img.src = cfg.avatarUrl
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
+        img.onerror = function() { avEl.textContent = (cfg.botName||'K').charAt(0).toUpperCase() }
+        avEl.innerHTML = ''
+        avEl.appendChild(img)
+      }
+
+      // Also update bubble with avatar
+      const bubbleInner = bubble ? bubble.querySelector('svg, span') : null
+      if (bubbleInner) {
+        const img2 = document.createElement('img')
+        img2.src = cfg.avatarUrl
+        img2.style.cssText = 'width:38px;height:38px;object-fit:cover;border-radius:50%;display:block'
+        img2.onerror = function() { img2.style.display = 'none' }
+        bubbleInner.replaceWith(img2)
       }
     }
 
-    // Widget mode
+    // ── Widget mode ───────────────────────────────────────
     if (cfg.widgetMode === 'always_open') {
-      setTimeout(openPanel, 500)
+      setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
+      // Hide bubble, show panel as centered overlay
+      if (bubble) bubble.style.display = 'none'
       const panel = document.getElementById('kaali-panel')
       if (panel) {
-        panel.style.bottom = 'auto'
-        panel.style.right  = 'auto'
-        panel.style.top    = '50%'
-        panel.style.left   = '50%'
-        panel.style.transform = 'translate(-50%,-50%) scale(0.94)'
-        panel.style.transformOrigin = 'center'
+        panel.style.cssText = [
+          'position: fixed !important',
+          'top: 50% !important',
+          'left: 50% !important',
+          'right: auto !important',
+          'bottom: auto !important',
+          'transform: translate(-50%, -50%) !important',
+          'transform-origin: center !important',
+          'width: 380px !important',
+          'height: 520px !important',
+          'z-index: 2147483647 !important',
+        ].join(';')
+        // Add backdrop
+        const backdrop = document.createElement('div')
+        backdrop.id = 'kaali-backdrop'
+        backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2147483646'
+        backdrop.onclick = closePanel
+        document.body.appendChild(backdrop)
+        setTimeout(openPanel, 800)
       }
     }
   }
