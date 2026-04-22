@@ -49,10 +49,6 @@ export default function ConversationsPage() {
   const [view,  setView]  = useState('timeline') // timeline | category
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('sa_token')) {
-      window.location.href = '/dashboard/knowledge'
-      return
-    }
     convApi.list({ limit: 100 }).then(r => { setList(r.conversations || []); setL(false) }).catch(() => setL(false))
   }, [])
 
@@ -145,10 +141,23 @@ export default function ConversationsPage() {
           ) : msgs.length ? (
             <>
               {meta && (
-                <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:4, paddingBottom:10, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-                  <span className={`badge badge-${(meta.visitor_type||'general').toLowerCase()}`}>{meta.visitor_type}</span>
-                  {meta.lead_captured && <span className="badge" style={{ background:'rgba(34,209,122,.12)', color:'#5EDFAC' }}>✓ Lead captured</span>}
-                  <span style={{ fontSize:11, color:'var(--td)', marginLeft:'auto' }}>{fmtDate(meta.started_at)}</span>
+                <div style={{ paddingBottom:10, borderBottom:'0.5px solid rgba(255,255,255,.07)', marginBottom:8 }}>
+                  <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:6 }}>
+                    <span className={`badge badge-${(meta.visitor_type||'general').toLowerCase()}`}>{meta.visitor_type}</span>
+                    {meta.lead_captured && <span className="badge" style={{ background:'rgba(34,209,122,.12)', color:'#5EDFAC' }}>✓ Lead captured</span>}
+                    <span style={{ fontSize:11, color:'var(--td)', marginLeft:'auto' }}>{fmtDate(meta.started_at)}</span>
+                  </div>
+                  {(meta.lead?.country || meta.lead?.city || meta.lead?.device) && (
+                    <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
+                      {(meta.lead?.city || meta.lead?.country) && (
+                        <span style={{ fontSize:11, color:'var(--tm)' }}>
+                          📍 {[meta.lead?.city, meta.lead?.country].filter(Boolean).join(', ')}
+                        </span>
+                      )}
+                      {meta.lead?.device && <span style={{ fontSize:11, color:'var(--tm)' }}>💻 {meta.lead.device}</span>}
+                      {meta.lead?.session_count > 1 && <span style={{ fontSize:11, color:'var(--tm)' }}>🔄 {meta.lead.session_count} visits</span>}
+                    </div>
+                  )}
                 </div>
               )}
               {msgs.map(m => (

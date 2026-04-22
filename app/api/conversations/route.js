@@ -21,7 +21,7 @@ export async function GET(request) {
     // Verify tenant owns it
     const { data: convo } = await supabaseAdmin
       .from('conversations')
-      .select('id, visitor_type, lead_captured, started_at, page_url')
+      .select('id, visitor_type, lead_captured, started_at, page_url, leads(country, city, device, session_count, pages_visited, name, email, company, designation)')
       .eq('id', convoId)
       .eq('tenant_id', tenant.tenantId)
       .single()
@@ -34,7 +34,9 @@ export async function GET(request) {
       .eq('conversation_id', convoId)
       .order('created_at', { ascending: true })
 
-    return NextResponse.json({ conversation: convo, messages: messages || [] })
+    const convoWithLead = { ...convo, lead: convo.leads?.[0] || null }
+    delete convoWithLead.leads
+    return NextResponse.json({ conversation: convoWithLead, messages: messages || [] })
   }
 
   // ── Conversation list ─────────────────────────────────────

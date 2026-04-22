@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import styles from './landing.module.css'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -104,9 +105,9 @@ export default function LandingPage() {
         <p style={{ fontSize:15, color:'var(--tm)', maxWidth:460, lineHeight:1.7, marginBottom:44 }}>You bring your own API key — we only charge for the platform.</p>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14 }}>
           {[
-            { plan:'Starter',  price:'$0',  sub:'Free forever', features:['100 conversations/mo','1 PDF upload','Leads dashboard','Claude or ChatGPT'], featured:false },
-            { plan:'Growth',   price:'$29', sub:'Per workspace', features:['2,000 conversations/mo','10 PDF uploads','Full analytics & export','Usage alerts at 80%'], featured:true },
-            { plan:'Business', price:'$79', sub:'Per workspace', features:['Unlimited conversations','Unlimited PDFs','Priority support','Advanced analytics'], featured:false },
+            { plan:'Starter',  price:'$0',  sub:'Free forever', features:['100 messages/mo','1 PDF upload','Leads dashboard','Claude or ChatGPT'], featured:false },
+            { plan:'Growth',   price:'$99', sub:'Per workspace', features:['2,000 messages/mo','10 PDF uploads','Full analytics & export','Usage alerts at 80%'], featured:true },
+            { plan:'Business', price:'$199', sub:'Per workspace', features:['Unlimited messages','Unlimited PDFs','Priority support','Advanced analytics'], featured:false },
           ].map(p => (
             <div key={p.plan} style={{ background:'var(--s1)', border:`0.5px solid ${p.featured ? 'rgba(79,142,247,.4)' : 'rgba(255,255,255,.07)'}`, borderRadius:16, padding:26, position:'relative' }}>
               {p.featured && <div style={{ position:'absolute', top:-11, left:'50%', transform:'translateX(-50%)', fontSize:10, fontWeight:500, color:'#fff', background:'var(--ac)', padding:'3px 12px', borderRadius:20, whiteSpace:'nowrap' }}>Most Popular</div>}

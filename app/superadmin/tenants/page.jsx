@@ -16,7 +16,7 @@ export default function SAtenants() {
   const [editId,   setEditId]   = useState(null)
   const [editPlan, setEditPlan] = useState('')
   const [editLimit,setEditLimit]= useState('')
-  const [impMsg,   setImpMsg]   = useState('')
+
 
   async function load() {
     setLoading(true)
@@ -40,7 +40,7 @@ export default function SAtenants() {
   }
 
   async function resetUsage(id) {
-    const planLimits = { starter: 100, growth: 2000, business: 999999 }; const tenant = tenants.find(t => t.id === id); const limit = planLimits[tenant?.plan || 'starter']; await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsUsed: 0, conversationsLimit: limit }) })
+    await saFetch('/api/superadmin/tenants', { method:'PATCH', body: JSON.stringify({ id, conversationsLimit: 999999 }) })
     showToast('Usage limit reset!')
     load()
   }
@@ -48,9 +48,9 @@ export default function SAtenants() {
   async function impersonate(id) {
     const d = await saFetch('/api/superadmin/impersonate', { method:'POST', body: JSON.stringify({ tenantId: id }) })
     if (d.token) {
-      localStorage.setItem('kaali_token', d.token); localStorage.setItem('sa_impersonating', '1')
-      setImpMsg(`Logged in as ${d.tenant.company}. Go to /dashboard to view their account.`)
-      showToast(`Impersonating ${d.tenant.company}!`)
+      localStorage.setItem('kaali_token', d.token)
+      localStorage.setItem('sa_impersonating', '1')
+      window.location.href = '/dashboard/knowledge'
     }
   }
 
@@ -76,8 +76,6 @@ export default function SAtenants() {
         <button onClick={load} style={{ background:'rgba(248,113,113,.12)', border:'0.5px solid rgba(248,113,113,.3)', color:'#F87171', padding:'7px 14px', borderRadius:8, fontSize:12.5, cursor:'pointer' }}>Search</button>
       </div>
     }>
-
-      {impMsg && <div style={{ background:'rgba(34,209,122,.1)', border:'0.5px solid rgba(34,209,122,.25)', color:'#22D17A', padding:'10px 14px', borderRadius:9, fontSize:13, marginBottom:14 }}>{impMsg}</div>}
 
       <div style={{ background:'#0C1220', border:'0.5px solid rgba(255,255,255,.07)', borderRadius:12, overflow:'hidden' }}>
         {loading ? (
@@ -132,7 +130,7 @@ export default function SAtenants() {
                     </td>
                     <td style={{ padding:'10px 13px', fontSize:11, color:'#3A4A6A', borderBottom:'0.5px solid rgba(255,255,255,.05)', whiteSpace:'nowrap' }}>{fmtDate(t.created_at)}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
-                      <div style={{ display:'flex', gap:6 }}>
+                      <div style={{ display:'flex', gap:6' }}>
                         <button onClick={()=>impersonate(t.id)} title="Log in as this tenant"
                           style={{ fontSize:11, background:'rgba(79,142,247,.1)', border:'0.5px solid rgba(79,142,247,.25)', color:'#7EB3FF', padding:'3px 8px', borderRadius:6, cursor:'pointer' }}>
                           Login As

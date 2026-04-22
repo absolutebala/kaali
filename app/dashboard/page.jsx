@@ -75,7 +75,7 @@ export default function OverviewPage() {
             <div style={{ fontSize:14, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>You're on the free plan</div>
             <div style={{ fontSize:13, color:'var(--tm)' }}>Upgrade to Growth for 2,000 messages/mo and 10 PDFs.</div>
           </div>
-          <button className="btn-pri" onClick={() => handleUpgrade('growth')}>Upgrade to Growth — $29/mo →</button>
+          <button className="btn-pri" onClick={() => handleUpgrade('growth')}>Upgrade to Growth — $99/mo →</button>
         </div>
       )}
 

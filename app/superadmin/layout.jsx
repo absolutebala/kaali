@@ -6,8 +6,6 @@ import Link from 'next/link'
 const NAV = [
   { href:'/superadmin/dashboard',      icon:'📊', label:'Overview'      },
   { href:'/superadmin/tenants',        icon:'🏢', label:'Tenants'       },
-  { href:'/superadmin/leads',          icon:'👥', label:'All Leads'     },
-  { href:'/superadmin/conversations',  icon:'💬', label:'Conversations' },
   { href:'/superadmin/team',           icon:'👤', label:'Team'          },
   { href:'/superadmin/settings',       icon:'⚙️', label:'Settings'      },
 ]
