@@ -296,7 +296,7 @@
             placeholder="Type a message…" rows="1"
             aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
-            <svg viewBox="0 0 24 24" style="fill:#fff;width:15px;height:15px"><path fill="#fff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <svg viewBox="0 0 24 24" width="15" height="15"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
         <div class="kaali-byline">
