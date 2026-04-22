@@ -262,8 +262,8 @@
     bubble.setAttribute('aria-label', `Chat with ${nm}`)
     bubble.innerHTML = `
       <div class="kaali-badge" id="kaali-badge"></div>
-      <svg viewBox="0 0 24 24" id="kaali-ico-chat"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-      <svg viewBox="0 0 24 24" id="kaali-ico-close" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
     `
 
     // Panel
@@ -296,7 +296,7 @@
             placeholder="Type a message…" rows="1"
             aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
-            <svg viewBox="0 0 24 24" width="15" height="15"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
         <div class="kaali-byline">
