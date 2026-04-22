@@ -29,10 +29,10 @@ export default function LoginPage() {
       <div style={{ width:'100%', maxWidth:420, background:'var(--s1)', border:'0.5px solid rgba(255,255,255,.13)', borderRadius:20, padding:36 }}>
         <Link href="/" style={{ fontFamily:'var(--font-brand)', fontSize:17, color:'var(--tx)', marginBottom:26, display:'flex', alignItems:'center', gap:7 }}>
           <div style={{ width:7, height:7, background:'var(--ac)', borderRadius:'50%' }} />
-          Kaali
+          Absolute AIChat
         </Link>
         <h1 style={{ fontFamily:'var(--font-brand)', fontSize:21, fontWeight:700, color:'var(--tx)', marginBottom:5 }}>Welcome back</h1>
-        <p style={{ fontSize:13, color:'var(--tm)', marginBottom:26, lineHeight:1.6 }}>Sign in to your Kaali workspace.</p>
+        <p style={{ fontSize:13, color:'var(--tm)', marginBottom:26, lineHeight:1.6 }}>Sign in to your Absolute AIChat workspace.</p>
 
         {error && (
           <div style={{ background:'rgba(248,113,113,.1)', border:'0.5px solid rgba(248,113,113,.3)', color:'var(--rd)', padding:'10px 13px', borderRadius:9, fontSize:13, marginBottom:16 }}>

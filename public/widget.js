@@ -1,5 +1,5 @@
 /**
- * Kaali Widget — v1.0.0
+ * Kaali Widget — v1.1.0
  * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
  * Powered by Absolute App Labs
  */
@@ -70,7 +70,7 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 20px; right: 80px;
+      position: fixed; bottom: 94px; right: 26px;
       width: 376px; height: 580px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
@@ -274,7 +274,7 @@
     panel.innerHTML = `
       <div class="kaali-hdr">
         <div class="kaali-av">
-          <span class="kaali-av-l" id="kaali-av-letter">${letter}</span>
+          <span class="kaali-av-l">${letter}</span>
           <div class="kaali-av-dot"></div>
         </div>
         <div style="flex:1">
@@ -511,39 +511,28 @@
     if (!cfg) return
     const color = cfg.bubbleColor || '#4F8EF7'
 
-    // Bubble color
     const bubble = document.getElementById('kaali-bubble')
     if (bubble) {
       bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
       bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
     }
 
-    // Send button color
-    const sendBtn = document.getElementById('kaali-send')
-    if (sendBtn) sendBtn.style.background = color
-
-    // Theme CSS
     let styleEl = document.getElementById('kaali-theme-css')
     if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'kaali-theme-css'; document.head.appendChild(styleEl) }
-    styleEl.textContent = '.kaali-vbtn { border-color: ' + color + '44 !important; } .kaali-vbtn:hover { background: ' + color + '22 !important; } #kaali-send { background: ' + color + ' !important; }'
+    styleEl.textContent = '#kaali-snd { background: ' + color + ' !important; } #kaali-snd:hover { background: ' + color + 'CC !important; } .kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + '88 !important; }'
 
-    // Avatar in header only (not bubble)
     if (cfg.avatarUrl) {
       const avEl = document.querySelector('.kaali-av-l')
       if (avEl) {
-        avEl.style.overflow = 'hidden'
-        avEl.style.padding = '0'
-        avEl.style.background = 'transparent'
+        avEl.style.overflow = 'hidden'; avEl.style.padding = '0'; avEl.style.background = 'transparent'
         const img = document.createElement('img')
         img.src = cfg.avatarUrl
         img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
         img.onerror = function() { avEl.textContent = (cfg.botName||'K').charAt(0).toUpperCase() }
-        avEl.innerHTML = ''
-        avEl.appendChild(img)
+        avEl.innerHTML = ''; avEl.appendChild(img)
       }
     }
 
-    // Widget mode
     if (cfg.widgetMode === 'always_open') {
       setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
@@ -551,11 +540,9 @@
       const panel = document.getElementById('kaali-panel')
       if (panel) {
         panel.style.cssText = 'position:fixed !important;top:50% !important;left:50% !important;right:auto !important;bottom:auto !important;transform:translate(-50%,-50%) !important;width:380px !important;height:520px !important;z-index:2147483647 !important'
-        const bd = document.createElement('div')
-        bd.id = 'kaali-backdrop'
+        const bd = document.createElement('div'); bd.id = 'kaali-backdrop'
         bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483646'
-        bd.onclick = closePanel
-        document.body.appendChild(bd)
+        bd.onclick = closePanel; document.body.appendChild(bd)
         setTimeout(openPanel, 800)
       }
     }
@@ -578,7 +565,7 @@
 
     injectStyles()
     buildDOM(config)
-    setTimeout(() => applyTenantStyle(config), 100)
+    setTimeout(() => applyTenantStyle(config), 150)
 
     // Show unread badge after 15s
     setTimeout(() => {
@@ -596,3 +583,4 @@
     boot()
   }
 })()
+// v1.1.1
