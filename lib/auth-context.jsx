@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
     if (!token.exists()) { setLoading(false); return }
     try {
       const data = await authApi.me()
+      // data.tenant may include isMember/allowedPages for team members
       setUser(data.tenant)
     } catch {
       token.clear()
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
   const login = useCallback(async ({ email, password }) => {
     const data = await authApi.login({ email, password })
     token.set(data.token)
+    // For team members, data.tenant has isMember=true and allowedPages
     setUser(data.tenant)
     router.push('/dashboard')
     return data
@@ -56,6 +58,7 @@ export function AuthProvider({ children }) {
   const refreshUser = useCallback(async () => {
     try {
       const data = await authApi.me()
+      // data.tenant may include isMember/allowedPages for team members
       setUser(data.tenant)
     } catch {}
   }, [])

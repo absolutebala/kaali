@@ -10,6 +10,22 @@ export async function GET(request) {
   const { tenant: payload, error } = await requireAuth(request)
   if (error) return error
 
+  // Handle team member tokens
+  if (payload.memberId) {
+    const [{ data: member }, { data: tenantData }] = await Promise.all([
+      supabaseAdmin.from('tenant_members').select('id, name, email, role, allowed_pages, is_active').eq('id', payload.memberId).single(),
+      supabaseAdmin.from('tenants').select('id, company, plan, bot_name, avatar_url, bubble_color, widget_mode').eq('id', payload.tenantId).single(),
+    ])
+    if (!member || !member.is_active) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ tenant: {
+      id: payload.tenantId, name: member.name, email: member.email,
+      company: tenantData?.company || '', plan: tenantData?.plan || 'starter',
+      botName: tenantData?.bot_name || 'Kaali', avatarUrl: tenantData?.avatar_url || '',
+      bubbleColor: tenantData?.bubble_color || '#4F8EF7', widgetMode: tenantData?.widget_mode || 'bubble',
+      isMember: true, memberRole: member.role, allowedPages: member.allowed_pages || [],
+    }})
+  }
+
   const { data: tenant, error: dbErr } = await supabaseAdmin
     .from('tenants')
     .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, created_at')
