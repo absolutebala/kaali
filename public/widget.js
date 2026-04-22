@@ -70,7 +70,7 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 94px; right: 26px;
+      position: fixed; bottom: 20px; right: 80px;
       width: 376px; height: 580px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
@@ -227,7 +227,8 @@
     .kaali-snd:hover { background: #3B7BF5; }
     .kaali-snd:active { transform: scale(.94); }
     .kaali-snd:disabled { background: #172038; cursor: default; }
-    .kaali-snd svg { width: 15px; height: 15px; fill: #fff; }
+    .kaali-snd svg { width: 18px; height: 18px; fill: #fff; display: block; }
+    .kaali-snd svg path { fill: #fff !important; }
     .kaali-byline {
       text-align: center; font-size: 10px;
       color: #3A4A6A; margin-top: 6px;
@@ -296,7 +297,7 @@
             placeholder="Type a message…" rows="1"
             aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
-            <svg viewBox="0 0 24 24" style="fill:#fff;width:15px;height:15px"><path fill="#fff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <svg viewBox="0 0 24 24" style="fill:#fff;width:18px;height:18px;display:block;flex-shrink:0"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
         <div class="kaali-byline">
@@ -357,7 +358,7 @@
         tab = document.createElement('button')
         tab.id = 'kaali-tab'
         const color = config.bubbleColor || '#4F8EF7'
-        tab.style.cssText = 'position:fixed;bottom:26px;right:26px;background:' + color + ';color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;z-index:2147483640;box-shadow:0 4px 16px ' + color + '88;font-family:inherit'
+        tab.style.cssText = 'position:fixed;bottom:26px;right:90px;background:' + color + ';color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;z-index:2147483640;box-shadow:0 4px 16px ' + color + '88;font-family:inherit'
         tab.textContent = '💬 Chat'
         tab.onclick = () => { tab.style.display = 'none'; openPanel() }
         document.body.appendChild(tab)
