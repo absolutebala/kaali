@@ -85,7 +85,7 @@ export default function RegisterPage() {
       padding:'40px 24px 60px', background:'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(79,142,247,.08) 0%, transparent 70%)' }}>
       <Link href="/" style={{ fontFamily:'var(--font-brand)', fontSize:16, color:'var(--tx)', marginBottom:36, display:'flex', alignItems:'center', gap:7 }}>
         <div style={{ width:7, height:7, background:'var(--ac)', borderRadius:'50%' }} />
-        Kaali
+        Absolute AIChat
       </Link>
 
       {/* Progress */}
