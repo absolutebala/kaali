@@ -547,7 +547,11 @@
 
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
-      setTimeout(openPanel, 800)
+      setTimeout(() => {
+        openPanel()
+        // Force showWelcome in case it was missed
+        if (!isStarted) { isStarted = true; setTimeout(showWelcome, 300) }
+      }, 800)
     } else if (cfg.widgetMode === 'popup') {
       if (bubble) bubble.style.display = 'none'
       const panel = document.getElementById('kaali-panel')
