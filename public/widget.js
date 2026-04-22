@@ -1,5 +1,5 @@
 /**
- * Kaali Widget — v1.1.0
+ * Kaali Widget — v1.0.0
  * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
  * Powered by Absolute App Labs
  */
@@ -296,7 +296,7 @@
             placeholder="Type a message…" rows="1"
             aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <svg viewBox="0 0 24 24" style="fill:#fff;width:15px;height:15px"><path fill="#fff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
         <div class="kaali-byline">
@@ -507,32 +507,45 @@
 
   // ── Load config and boot ──────────────────────────────────
 
+  // ── Apply tenant branding ─────────────────────────────────
   function applyTenantStyle(cfg) {
     if (!cfg) return
     const color = cfg.bubbleColor || '#4F8EF7'
 
+    // 1. Bubble
     const bubble = document.getElementById('kaali-bubble')
     if (bubble) {
       bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
       bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
     }
 
+    // 2. Avatar circle background
+    const avCircle = document.querySelector('.kaali-av')
+    if (avCircle) avCircle.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
+
+    // 3. Send button + visitor buttons via injected CSS
     let styleEl = document.getElementById('kaali-theme-css')
     if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'kaali-theme-css'; document.head.appendChild(styleEl) }
-    styleEl.textContent = '#kaali-snd { background: ' + color + ' !important; } #kaali-snd:hover { background: ' + color + 'CC !important; } .kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + '88 !important; }'
+    styleEl.textContent = [
+      '#kaali-snd { background: ' + color + ' !important; }',
+      '#kaali-snd:hover { filter: brightness(1.1); }',
+      '.kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + '88 !important; }',
+    ].join(' ')
 
+    // 4. Avatar photo in header only
     if (cfg.avatarUrl) {
       const avEl = document.querySelector('.kaali-av-l')
       if (avEl) {
-        avEl.style.overflow = 'hidden'; avEl.style.padding = '0'; avEl.style.background = 'transparent'
+        avEl.style.cssText = 'overflow:hidden;padding:0;background:transparent;width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center'
         const img = document.createElement('img')
         img.src = cfg.avatarUrl
         img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
-        img.onerror = function() { avEl.textContent = (cfg.botName||'K').charAt(0).toUpperCase() }
+        img.onerror = function() { avEl.innerHTML = '<span style="font-size:14px;font-weight:700;color:#fff">' + (cfg.botName||'K').charAt(0).toUpperCase() + '</span>' }
         avEl.innerHTML = ''; avEl.appendChild(img)
       }
     }
 
+    // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
       setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
@@ -540,9 +553,11 @@
       const panel = document.getElementById('kaali-panel')
       if (panel) {
         panel.style.cssText = 'position:fixed !important;top:50% !important;left:50% !important;right:auto !important;bottom:auto !important;transform:translate(-50%,-50%) !important;width:380px !important;height:520px !important;z-index:2147483647 !important'
-        const bd = document.createElement('div'); bd.id = 'kaali-backdrop'
-        bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483646'
-        bd.onclick = closePanel; document.body.appendChild(bd)
+        if (!document.getElementById('kaali-backdrop')) {
+          const bd = document.createElement('div'); bd.id = 'kaali-backdrop'
+          bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483646'
+          bd.onclick = closePanel; document.body.appendChild(bd)
+        }
         setTimeout(openPanel, 800)
       }
     }
@@ -583,4 +598,3 @@
     boot()
   }
 })()
-// v1.1.1
