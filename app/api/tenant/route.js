@@ -13,7 +13,7 @@ export async function GET(request) {
 
   const { data, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4')
     .eq('id', payload.tenantId)
     .single()
 
@@ -45,6 +45,10 @@ export async function PATCH(request) {
   if (body.avatarUrl   !== undefined) updates.avatar_url   = body.avatarUrl.trim()
   if (body.bubbleColor !== undefined) updates.bubble_color = body.bubbleColor.trim()
   if (body.widgetMode  !== undefined) updates.widget_mode  = body.widgetMode.trim()
+  if (body.visitorBtn1 !== undefined) updates.visitor_btn_1 = body.visitorBtn1
+  if (body.visitorBtn2 !== undefined) updates.visitor_btn_2 = body.visitorBtn2
+  if (body.visitorBtn3 !== undefined) updates.visitor_btn_3 = body.visitorBtn3
+  if (body.visitorBtn4 !== undefined) updates.visitor_btn_4 = body.visitorBtn4
   if (body.alertThreshold !== undefined) {
     updates.alert_threshold = parseInt(body.alertThreshold)
     updates.alert_sent      = false   // reset so alert fires again at new threshold

@@ -301,7 +301,7 @@
           </button>
         </div>
         <div class="kaali-byline">
-          Powered by <a href="https://absoluteapplabs.com" target="_blank" rel="noopener">Absolute App Labs</a>
+          Powered by <a href="https://aichat.absoluteapplabs.com" target="_blank" rel="noopener">Absolute App Labs</a>
         </div>
       </div>
     `
@@ -351,19 +351,10 @@
     if (icoChat)  icoChat.style.display  = 'block'
     if (icoClose) icoClose.style.display = 'none'
 
-    // In always_open mode, show a minimized tab to allow reopening
+    // In always_open mode, show bubble so user can reopen
     if (config && config.widgetMode === 'always_open') {
-      let tab = document.getElementById('kaali-tab')
-      if (!tab) {
-        tab = document.createElement('button')
-        tab.id = 'kaali-tab'
-        const color = config.bubbleColor || '#4F8EF7'
-        tab.style.cssText = 'position:fixed;bottom:26px;right:90px;background:' + color + ';color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;z-index:2147483640;box-shadow:0 4px 16px ' + color + '88;font-family:inherit'
-        tab.textContent = '💬 Chat'
-        tab.onclick = () => { tab.style.display = 'none'; openPanel() }
-        document.body.appendChild(tab)
-      }
-      tab.style.display = 'block'
+      const bubble = document.getElementById('kaali-bubble')
+      if (bubble) { bubble.style.display = 'flex'; bubble.style.visibility = 'visible' }
     }
   }
 
@@ -425,10 +416,10 @@
       const inner = document.createElement('div')
       inner.className = 'kaali-vbtns'
       ;[
-        { em: '🚀', label: 'I am looking to build a product', type: 'CLIENT'   },
-        { em: '🤝', label: 'I am your existing client',       type: 'EXISTING' },
-        { em: '📈', label: 'I am an investor',                type: 'INVESTOR' },
-        { em: '💬', label: 'Just exploring',                  type: 'GENERAL'  },
+        { em: '🚀', label: config.visitorBtn1 || 'I am looking to build a product', type: 'CLIENT'   },
+        { em: '🤝', label: config.visitorBtn2 || 'I am your existing client',       type: 'EXISTING' },
+        { em: '📈', label: config.visitorBtn3 || 'I am an investor',                type: 'INVESTOR' },
+        { em: '💬', label: config.visitorBtn4 || 'Just exploring',                  type: 'GENERAL'  },
       ].forEach(o => {
         const btn = document.createElement('button')
         btn.className = 'kaali-vbtn'
