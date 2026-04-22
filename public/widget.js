@@ -70,7 +70,7 @@
       50%      { box-shadow: 0 4px 26px rgba(30,79,216,.68), 0 0 0 8px rgba(30,79,216,.07); }
     }
     #kaali-panel {
-      position: fixed; bottom: 20px; right: 80px;
+      position: fixed; bottom: 94px; right: 26px;
       width: 376px; height: 580px;
       background: #0C1220;
       border: 0.5px solid rgba(79,142,247,.2);
@@ -262,8 +262,8 @@
     bubble.setAttribute('aria-label', `Chat with ${nm}`)
     bubble.innerHTML = `
       <div class="kaali-badge" id="kaali-badge"></div>
-      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      <svg viewBox="0 0 24 24" id="kaali-ico-chat"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      <svg viewBox="0 0 24 24" id="kaali-ico-close" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
     `
 
     // Panel
@@ -296,7 +296,7 @@
             placeholder="Type a message…" rows="1"
             aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
-            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <svg viewBox="0 0 24 24" style="fill:#fff;width:15px;height:15px"><path fill="#fff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
         <div class="kaali-byline">
@@ -330,18 +330,40 @@
   function togglePanel()  { isOpen ? closePanel() : openPanel() }
   function openPanel()  {
     isOpen = true
-    document.getElementById('kaali-panel').classList.add('kaali-open')
-    document.getElementById('kaali-ico-chat').style.display  = 'none'
-    document.getElementById('kaali-ico-close').style.display = 'block'
-    document.getElementById('kaali-badge').style.display     = 'none'
+    const panel = document.getElementById('kaali-panel')
+    if (panel) panel.classList.add('kaali-open')
+    const icoChat  = document.getElementById('kaali-ico-chat')
+    const icoClose = document.getElementById('kaali-ico-close')
+    const badge    = document.getElementById('kaali-badge')
+    if (icoChat)  icoChat.style.display  = 'none'
+    if (icoClose) icoClose.style.display = 'block'
+    if (badge)    badge.style.display    = 'none'
     if (!isStarted) { isStarted = true; setTimeout(showWelcome, 220) }
     setTimeout(() => document.getElementById('kaali-inp')?.focus(), 300)
   }
   function closePanel() {
     isOpen = false
-    document.getElementById('kaali-panel').classList.remove('kaali-open')
-    document.getElementById('kaali-ico-chat').style.display  = 'block'
-    document.getElementById('kaali-ico-close').style.display = 'none'
+    const panel = document.getElementById('kaali-panel')
+    if (panel) panel.classList.remove('kaali-open')
+    const icoChat  = document.getElementById('kaali-ico-chat')
+    const icoClose = document.getElementById('kaali-ico-close')
+    if (icoChat)  icoChat.style.display  = 'block'
+    if (icoClose) icoClose.style.display = 'none'
+
+    // In always_open mode, show a minimized tab to allow reopening
+    if (config && config.widgetMode === 'always_open') {
+      let tab = document.getElementById('kaali-tab')
+      if (!tab) {
+        tab = document.createElement('button')
+        tab.id = 'kaali-tab'
+        const color = config.bubbleColor || '#4F8EF7'
+        tab.style.cssText = 'position:fixed;bottom:26px;right:26px;background:' + color + ';color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;z-index:2147483640;box-shadow:0 4px 16px ' + color + '88;font-family:inherit'
+        tab.textContent = '💬 Chat'
+        tab.onclick = () => { tab.style.display = 'none'; openPanel() }
+        document.body.appendChild(tab)
+      }
+      tab.style.display = 'block'
+    }
   }
 
   // ── Message rendering ─────────────────────────────────────
@@ -547,10 +569,7 @@
 
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
-      setTimeout(() => {
-        isStarted = false
-        openPanel()
-      }, 800)
+      setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
       if (bubble) bubble.style.display = 'none'
       const panel = document.getElementById('kaali-panel')
