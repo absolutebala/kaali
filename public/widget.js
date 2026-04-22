@@ -548,9 +548,8 @@
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
       setTimeout(() => {
+        isStarted = false
         openPanel()
-        // Force showWelcome in case it was missed
-        if (!isStarted) { isStarted = true; setTimeout(showWelcome, 300) }
       }, 800)
     } else if (cfg.widgetMode === 'popup') {
       if (bubble) bubble.style.display = 'none'
