@@ -38,9 +38,10 @@ export async function POST(request) {
     }
 
     // ── Load services + documents ─────────────────────────────
-    const [{ data: services }, { data: documents }] = await Promise.all([
+    const [{ data: services }, { data: documents }, { data: trainingPairs }] = await Promise.all([
       supabaseAdmin.from('services').select('name, description').eq('tenant_id', tenantId).order('sort_order'),
       supabaseAdmin.from('documents').select('name, extracted_text').eq('tenant_id', tenantId),
+      supabaseAdmin.from('training_pairs').select('question, answer').eq('tenant_id', tenantId),
     ])
 
     // ── Create conversation if new ────────────────────────────
@@ -68,8 +69,9 @@ export async function POST(request) {
     // ── Call AI ───────────────────────────────────────────────
     const { text: rawText, error: aiError } = await callAI({
       tenant, messages,
-      services:  services  || [],
-      documents: documents || [],
+      services:      services      || [],
+      documents:     documents     || [],
+      trainingPairs: trainingPairs || [],
     })
 
     if (aiError) {
