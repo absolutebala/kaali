@@ -1,5 +1,5 @@
 /**
- * Kaali Widget — v1.0.0
+ * Kaali Widget — v1.1.0
  * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
  * Powered by Absolute App Labs
  */
