@@ -200,7 +200,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* HubSpot */}}
+      {/* HubSpot */}
       <div className="kb-card">
         <div className="kb-header">
           <span className="kb-title">HubSpot Integration</span>
