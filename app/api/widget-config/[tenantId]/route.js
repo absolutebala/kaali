@@ -37,10 +37,10 @@ export async function GET(request, { params }) {
     avatarUrl:   tenant.avatar_url    || '',
     bubbleColor: tenant.bubble_color  || '#4F8EF7',
     widgetMode:  tenant.widget_mode   || 'bubble',
-    visitorBtn1: tenant.visitor_btn_1 || 'I am looking to build a product',
-    visitorBtn2: tenant.visitor_btn_2 || 'I am your existing client',
-    visitorBtn3: tenant.visitor_btn_3 || 'I am an investor',
-    visitorBtn4: tenant.visitor_btn_4 || 'Just exploring',
+    visitorBtn1: tenant.visitor_btn_1 !== null ? (tenant.visitor_btn_1 || '') : 'I am looking to build a product',
+    visitorBtn2: tenant.visitor_btn_2 !== null ? (tenant.visitor_btn_2 || '') : 'I am your existing client',
+    visitorBtn3: tenant.visitor_btn_3 !== null ? (tenant.visitor_btn_3 || '') : 'I am an investor',
+    visitorBtn4: tenant.visitor_btn_4 !== null ? (tenant.visitor_btn_4 || '') : 'Just exploring',
   }, {
     headers: {
       'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',

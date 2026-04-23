@@ -51,7 +51,6 @@ export default function SettingsPage() {
         widgetMode:       form.widgetMode,
         b2bMode:          form.b2bMode,
       })
-      await refreshUser()
       setSaved(true); setTimeout(() => setSaved(false), 2500)
     } catch(e) { showToast(e.message, true) }
     finally { setSaving(false) }

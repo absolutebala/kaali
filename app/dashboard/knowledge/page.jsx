@@ -73,10 +73,10 @@ export default function KnowledgePage() {
     setSavingVB(true)
     try {
       await tenantApi.update({
-        visitorBtn1: vbtns.b1 || 'I am looking to build a product',
-        visitorBtn2: vbtns.b2 || 'I am your existing client',
-        visitorBtn3: vbtns.b3 || 'I am an investor',
-        visitorBtn4: vbtns.b4 || 'Just exploring',
+        visitorBtn1: vbtns.b1 !== undefined ? vbtns.b1 : '',
+        visitorBtn2: vbtns.b2 !== undefined ? vbtns.b2 : '',
+        visitorBtn3: vbtns.b3 !== undefined ? vbtns.b3 : '',
+        visitorBtn4: vbtns.b4 !== undefined ? vbtns.b4 : '',
       })
       showToast('Visitor buttons saved!')
     } catch(e) { showToast(e.message, true) }
