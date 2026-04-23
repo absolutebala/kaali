@@ -420,7 +420,8 @@
         { em: '🤝', label: config.visitorBtn2 || 'I am your existing client',       type: 'EXISTING' },
         { em: '📈', label: config.visitorBtn3 || 'I am an investor',                type: 'INVESTOR' },
         { em: '💬', label: config.visitorBtn4 || 'Just exploring',                  type: 'GENERAL'  },
-      ].forEach(o => {
+      ].filter(o => o.label.trim() !== '')
+      .forEach(o => {
         const btn = document.createElement('button')
         btn.className = 'kaali-vbtn'
         btn.innerHTML = `<span style="font-size:13px;width:18px;text-align:center">${o.em}</span>${o.label}`
@@ -561,16 +562,50 @@
 
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
-      setTimeout(openPanel, 800)
+      // Don't auto-open in dashboard preview (same origin)
+      const isDashboard = window.location.pathname.startsWith('/dashboard')
+      if (!isDashboard) setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
+      // Popup mode: hide bubble, show panel centered with backdrop
       if (bubble) bubble.style.display = 'none'
       const panel = document.getElementById('kaali-panel')
       if (panel) {
-        panel.style.cssText = 'position:fixed !important;top:50% !important;left:50% !important;right:auto !important;bottom:auto !important;transform:translate(-50%,-50%) !important;width:380px !important;height:520px !important;z-index:2147483647 !important'
+        // Inject popup CSS
+        let popupStyle = document.getElementById('kaali-popup-css')
+        if (!popupStyle) {
+          popupStyle = document.createElement('style')
+          popupStyle.id = 'kaali-popup-css'
+          popupStyle.textContent = [
+            '#kaali-panel.kaali-popup {',
+            '  position: fixed !important;',
+            '  top: 50% !important;',
+            '  left: 50% !important;',
+            '  right: auto !important;',
+            '  bottom: auto !important;',
+            '  width: 380px !important;',
+            '  height: 540px !important;',
+            '  z-index: 2147483647 !important;',
+            '  transform: translate(-50%, -50%) scale(0.94) !important;',
+            '  transform-origin: center !important;',
+            '}',
+            '#kaali-panel.kaali-popup.kaali-open {',
+            '  transform: translate(-50%, -50%) scale(1) !important;',
+            '}',
+          ].join('
+')
+          document.head.appendChild(popupStyle)
+        }
+        panel.classList.add('kaali-popup')
+
+        // Add backdrop
         if (!document.getElementById('kaali-backdrop')) {
           const bd = document.createElement('div'); bd.id = 'kaali-backdrop'
-          bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483646'
-          bd.onclick = closePanel; document.body.appendChild(bd)
+          bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2147483646;backdrop-filter:blur(2px)'
+          bd.onclick = function() {
+            closePanel()
+            bd.style.display = 'none'
+          }
+          document.body.appendChild(bd)
         }
         setTimeout(openPanel, 800)
       }

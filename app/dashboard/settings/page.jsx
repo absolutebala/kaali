@@ -13,7 +13,7 @@ export default function SettingsPage() {
   const [form, setForm] = useState({
     botName:'', tone:'friendly', calendly:'', company:'',
     hubspotToken:'', zapierWebhookUrl:'',
-    bubbleColor:'#4F8EF7', widgetMode:'bubble',
+    bubbleColor:'#4F8EF7', widgetMode:'bubble', b2bMode:false,
   })
   const [saving,      setSaving]      = useState(false)
   const [saved,       setSaved]       = useState(false)
@@ -49,7 +49,9 @@ export default function SettingsPage() {
         zapierWebhookUrl: form.zapierWebhookUrl,
         bubbleColor:      form.bubbleColor,
         widgetMode:       form.widgetMode,
+        b2bMode:          form.b2bMode,
       })
+      await refreshUser()
       setSaved(true); setTimeout(() => setSaved(false), 2500)
     } catch(e) { showToast(e.message, true) }
     finally { setSaving(false) }
@@ -67,7 +69,7 @@ export default function SettingsPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      setAvatarUrl(data.avatarUrl + "?t=" + Date.now())
+      setAvatarUrl(data.avatarUrl)
       await refreshUser()
       showToast('Avatar updated!')
     } catch(e) { showToast(e.message, true) }
@@ -179,10 +181,26 @@ export default function SettingsPage() {
               ))}
             </div>
           </div>
+
+          {/* B2B Mode */}
+          <div style={{ marginTop:18, paddingTop:18, borderTop:'0.5px solid rgba(255,255,255,.07)' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>B2B Mode</div>
+                <div style={{ fontSize:12, color:'var(--tm)' }}>Bot will ask visitors for their company name and job title during lead capture</div>
+              </div>
+              <div onClick={() => setForm(p => ({ ...p, b2bMode: !p.b2bMode }))}
+                style={{ width:44, height:24, borderRadius:12, cursor:'pointer', transition:'background .2s', flexShrink:0,
+                  background: form.b2bMode ? 'var(--ac)' : 'var(--s3)',
+                  position:'relative' }}>
+                <div style={{ position:'absolute', top:3, left: form.b2bMode ? 23 : 3, width:18, height:18, borderRadius:'50%', background:'#fff', transition:'left .2s' }} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* HubSpot */}
+      {/* HubSpot */}}
       <div className="kb-card">
         <div className="kb-header">
           <span className="kb-title">HubSpot Integration</span>

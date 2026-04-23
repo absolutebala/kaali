@@ -21,7 +21,7 @@ export async function GET(request) {
     // Verify tenant owns it
     const { data: convo } = await supabaseAdmin
       .from('conversations')
-      .select('id, visitor_type, lead_captured, started_at, page_url, leads(country, city, device, session_count, pages_visited, name, email, company, designation)')
+      .select('id, visitor_type, lead_captured, started_at, page_url, leads!leads_conversation_id_fkey(country, city, device, session_count, pages_visited, name, email, company, designation)')
       .eq('id', convoId)
       .eq('tenant_id', tenant.tenantId)
       .single()
