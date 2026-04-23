@@ -1,7 +1,7 @@
 import { NextResponse }  from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { requireAuth }   from '@/lib/auth'
-import bcrypt            from 'bcrypt'
+import bcrypt            from 'bcryptjs'
 
 export async function OPTIONS() { return new NextResponse(null, { status: 204 }) }
 
