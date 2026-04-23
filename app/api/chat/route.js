@@ -49,7 +49,15 @@ export async function POST(request) {
     if (!convoId) {
       const { data: convo } = await supabaseAdmin
         .from('conversations')
-        .insert({ tenant_id: tenantId, visitor_type: visitorType || 'GENERAL', page_url: pageUrl || '' })
+        .insert({
+          tenant_id:    tenantId,
+          visitor_type: visitorType || 'GENERAL',
+          page_url:     pageUrl || '',
+          country:      visitorData?.country      || '',
+          city:         visitorData?.city         || '',
+          device:       visitorData?.device       || '',
+          pages_visited:visitorData?.pagesVisited || [],
+        })
         .select('id')
         .single()
       convoId = convo?.id

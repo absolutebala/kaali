@@ -21,7 +21,7 @@ export async function GET(request) {
     // Verify tenant owns it
     const { data: convo } = await supabaseAdmin
       .from('conversations')
-      .select('id, visitor_type, lead_captured, started_at, page_url, leads!leads_conversation_id_fkey(country, city, device, session_count, pages_visited, name, email, company, designation)')
+      .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, pages_visited, leads!leads_conversation_id_fkey(country, city, device, session_count, pages_visited, name, email, company, designation)')
       .eq('id', convoId)
       .eq('tenant_id', tenant.tenantId)
       .single()
@@ -45,7 +45,7 @@ export async function GET(request) {
 
   const { data, count } = await supabaseAdmin
     .from('conversations')
-    .select('id, visitor_type, lead_captured, started_at, page_url', { count: 'exact' })
+    .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device', { count: 'exact' })
     .eq('tenant_id', tenant.tenantId)
     .order('started_at', { ascending: false })
     .range((page - 1) * limit, page * limit - 1)
