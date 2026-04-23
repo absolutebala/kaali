@@ -1,5 +1,5 @@
 /**
- * Kaali Widget — v1.2.0
+ * Kaali Widget — v1.0.0
  * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
  * Powered by Absolute App Labs
  */
@@ -301,7 +301,7 @@
           </button>
         </div>
         <div class="kaali-byline">
-          Powered by <a href="https://aichat.absoluteapplabs.com" target="_blank" rel="noopener">Absolute App Labs</a>
+          Powered by <a href="https://absoluteapplabs.com" target="_blank" rel="noopener">Absolute App Labs</a>
         </div>
       </div>
     `
@@ -351,10 +351,19 @@
     if (icoChat)  icoChat.style.display  = 'block'
     if (icoClose) icoClose.style.display = 'none'
 
-    // In always_open mode, show bubble so user can reopen
+    // In always_open mode, show a minimized tab to allow reopening
     if (config && config.widgetMode === 'always_open') {
-      const bubble = document.getElementById('kaali-bubble')
-      if (bubble) { bubble.style.display = 'flex'; bubble.style.visibility = 'visible' }
+      let tab = document.getElementById('kaali-tab')
+      if (!tab) {
+        tab = document.createElement('button')
+        tab.id = 'kaali-tab'
+        const color = config.bubbleColor || '#4F8EF7'
+        tab.style.cssText = 'position:fixed;bottom:26px;right:90px;background:' + color + ';color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;z-index:2147483640;box-shadow:0 4px 16px ' + color + '88;font-family:inherit'
+        tab.textContent = '💬 Chat'
+        tab.onclick = () => { tab.style.display = 'none'; openPanel() }
+        document.body.appendChild(tab)
+      }
+      tab.style.display = 'block'
     }
   }
 
@@ -416,12 +425,11 @@
       const inner = document.createElement('div')
       inner.className = 'kaali-vbtns'
       ;[
-        { em: '🚀', label: config.visitorBtn1 || 'I am looking to build a product', type: 'CLIENT'   },
-        { em: '🤝', label: config.visitorBtn2 || 'I am your existing client',       type: 'EXISTING' },
-        { em: '📈', label: config.visitorBtn3 || 'I am an investor',                type: 'INVESTOR' },
-        { em: '💬', label: config.visitorBtn4 || 'Just exploring',                  type: 'GENERAL'  },
-      ].filter(o => o.label.trim() !== '')
-      .forEach(o => {
+        { em: '🚀', label: 'I am looking to build a product', type: 'CLIENT'   },
+        { em: '🤝', label: 'I am your existing client',       type: 'EXISTING' },
+        { em: '📈', label: 'I am an investor',                type: 'INVESTOR' },
+        { em: '💬', label: 'Just exploring',                  type: 'GENERAL'  },
+      ].forEach(o => {
         const btn = document.createElement('button')
         btn.className = 'kaali-vbtn'
         btn.innerHTML = `<span style="font-size:13px;width:18px;text-align:center">${o.em}</span>${o.label}`
@@ -562,50 +570,16 @@
 
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
-      // Don't auto-open in dashboard preview (same origin)
-      const isDashboard = window.location.pathname.startsWith('/dashboard')
-      if (!isDashboard) setTimeout(openPanel, 800)
+      setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
-      // Popup mode: hide bubble, show panel centered with backdrop
       if (bubble) bubble.style.display = 'none'
       const panel = document.getElementById('kaali-panel')
       if (panel) {
-        // Inject popup CSS
-        let popupStyle = document.getElementById('kaali-popup-css')
-        if (!popupStyle) {
-          popupStyle = document.createElement('style')
-          popupStyle.id = 'kaali-popup-css'
-          popupStyle.textContent = [
-            '#kaali-panel.kaali-popup {',
-            '  position: fixed !important;',
-            '  top: 50% !important;',
-            '  left: 50% !important;',
-            '  right: auto !important;',
-            '  bottom: auto !important;',
-            '  width: 380px !important;',
-            '  height: 540px !important;',
-            '  z-index: 2147483647 !important;',
-            '  transform: translate(-50%, -50%) scale(0.94) !important;',
-            '  transform-origin: center !important;',
-            '}',
-            '#kaali-panel.kaali-popup.kaali-open {',
-            '  transform: translate(-50%, -50%) scale(1) !important;',
-            '}',
-          ].join('
-')
-          document.head.appendChild(popupStyle)
-        }
-        panel.classList.add('kaali-popup')
-
-        // Add backdrop
+        panel.style.cssText = 'position:fixed !important;top:50% !important;left:50% !important;right:auto !important;bottom:auto !important;transform:translate(-50%,-50%) !important;width:380px !important;height:520px !important;z-index:2147483647 !important'
         if (!document.getElementById('kaali-backdrop')) {
           const bd = document.createElement('div'); bd.id = 'kaali-backdrop'
-          bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2147483646;backdrop-filter:blur(2px)'
-          bd.onclick = function() {
-            closePanel()
-            bd.style.display = 'none'
-          }
-          document.body.appendChild(bd)
+          bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2147483646'
+          bd.onclick = closePanel; document.body.appendChild(bd)
         }
         setTimeout(openPanel, 800)
       }
