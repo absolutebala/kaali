@@ -52,6 +52,13 @@ export async function POST(request) {
       }
     }
 
+    // ── Check online agents for this tenant ──────────────────
+    const { data: onlineAgentsList } = await supabaseAdmin
+      .from('agent_sessions').select('id')
+      .eq('tenant_id', tenantId).eq('is_online', true)
+      .gt('last_seen', new Date(Date.now() - 120000).toISOString())
+    const agentsOnline = !!(onlineAgentsList && onlineAgentsList.length > 0)
+
     const [{ data: services }, { data: documents }, { data: trainingPairs }] = await Promise.all([
       supabaseAdmin.from('services').select('name, description').eq('tenant_id', tenantId).order('sort_order'),
       supabaseAdmin.from('documents').select('name, extracted_text').eq('tenant_id', tenantId),
@@ -93,12 +100,56 @@ export async function POST(request) {
       })
     }
 
+    // ── Pre-check for handoff request (before calling AI) ─────
+    const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me to.*team|human support|human agent|speak to a person|want.*human|want.*agent|want.*real person/i
+    const lastMsg = messages.filter(m => m.role === 'user').pop()?.content || ''
+    if (handoffRx.test(lastMsg)) {
+      // Ensure conversation exists
+      let handoffConvoId = conversationId
+      if (!handoffConvoId) {
+        const { data: newConvo } = await supabaseAdmin.from('conversations').insert({
+          tenant_id: tenantId, visitor_type: visitorType || 'GENERAL', page_url: pageUrl || '',
+          country: visitorData?.country||'', city: visitorData?.city||'', device: visitorData?.device||'',
+          org: (visitorData?.org||'').replace(/^AS\d+\s+/,''), status: 'waiting',
+          handoff_at: new Date().toISOString(), handoff_msg: lastMsg,
+        }).select('id').single()
+        handoffConvoId = newConvo?.id
+      } else {
+        await supabaseAdmin.from('conversations').update({
+          status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastMsg,
+        }).eq('id', handoffConvoId)
+      }
+      // Store user message
+      if (handoffConvoId && lastMsg) {
+        await supabaseAdmin.from('messages').insert({ conversation_id: handoffConvoId, role: 'user', content: lastMsg })
+      }
+      // Check agents online
+      const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
+        .select('id').eq('tenant_id', tenantId).eq('is_online', true)
+        .gt('last_seen', new Date(Date.now() - 120000).toISOString())
+      const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
+      // Send email alert
+      if (tenant.alert_email) {
+        sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: handoffConvoId })
+          .catch(e => console.error('[Handoff email]', e.message))
+      }
+      // Store bot response
+      const botReply = agentsOnline
+        ? "I'm connecting you to a team member now! While they join, could I quickly get your name and email so they know who they're speaking with? 😊"
+        : "I'm alerting our team right now! Could I get your name and email so they can reach you? Our team typically responds within a few minutes."
+      if (handoffConvoId) {
+        await supabaseAdmin.from('messages').insert({ conversation_id: handoffConvoId, role: 'assistant', content: botReply })
+      }
+      return NextResponse.json({ text: botReply, conversationId: handoffConvoId, handoff: true, agentsOnline })
+    }
+
     // ── Call AI ───────────────────────────────────────────────
     const { text: rawText, error: aiError } = await callAI({
       tenant, messages,
       services:      services      || [],
       documents:     documents     || [],
       trainingPairs: trainingPairs || [],
+      agentsOnline,
     })
 
     if (aiError) {
@@ -120,6 +171,23 @@ export async function POST(request) {
       })
     }
 
+    // -- Check if waiting conversation timed out (30s)
+    if (conversationId) {
+      const { data: waitConvo } = await supabaseAdmin
+        .from('conversations').select('status, handoff_at')
+        .eq('id', conversationId).maybeSingle()
+      if (waitConvo?.status === 'waiting' && waitConvo.handoff_at) {
+        const waitSecs = (Date.now() - new Date(waitConvo.handoff_at).getTime()) / 1000
+        if (waitSecs > 30) {
+          await supabaseAdmin.from('conversations').update({ status: 'bot' }).eq('id', conversationId)
+          return NextResponse.json({
+            text: "It looks like our team is a bit busy right now. No worries — share your name and email and someone will follow up shortly!",
+            conversationId, timeout: true,
+          })
+        }
+      }
+    }
+
     // -- Check for handoff request
     const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me|human support|human agent|speak to a person/i
     const wantsHuman = handoffRx.test(lastUserMsg || '')
@@ -128,19 +196,14 @@ export async function POST(request) {
         await supabaseAdmin.from('conversations').update({
           status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastUserMsg,
         }).eq('id', convoId)
-        const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
-          .select('id').eq('tenant_id', tenantId).eq('is_online', true)
-          .gt('last_seen', new Date(Date.now() - 60000).toISOString())
         if (tenant.alert_email) {
           sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: convoId })
             .catch(e => console.error('[Handoff email]', e.message))
         }
-        const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
-        // Always collect contact details before/during handoff
         return NextResponse.json({
           text: agentsOnline
-            ? "I'm connecting you to a team member now! While they join, could I quickly get your name and email so they know who they're speaking with? 😊"
-            : "I'm alerting our team right now! Could I get your name and email so they can reach you? Our team typically responds within a few minutes.",
+            ? "Great! I'm connecting you to a team member now — they'll be with you shortly. While you wait, could I get your name and email? 😊"
+            : "Our team isn't available right now, but I'll make sure someone follows up with you soon. Could I get your name and email address?",
           conversationId: convoId, handoff: true, agentsOnline,
         })
       }
