@@ -38,17 +38,22 @@ export async function POST(request) {
       })
     }
 
-    // ── Load services + documents ─────────────────────────────
+    // ── Define lastUserMsg early ─────────────────────────────
+    const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
+
     // ── Check if conversation is in live agent mode ──────────
     if (conversationId) {
       const { data: activeConvo } = await supabaseAdmin
         .from('conversations').select('status').eq('id', conversationId).single()
       if (activeConvo?.status === 'live') {
-        // Store message but don't call AI - agent is handling it
         if (lastUserMsg) {
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'user', content: lastUserMsg })
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'user', content: lastUserMsg.content })
         }
         return NextResponse.json({ text: null, live: true, conversationId })
+      }
+      // If collecting status - conversation exists, let it proceed normally
+      if (activeConvo?.status === 'collecting' || activeConvo?.status === 'waiting') {
+        // Continue to AI call so it can extract lead details
       }
     }
 
@@ -90,7 +95,6 @@ export async function POST(request) {
     }
 
     // ── Store user message ────────────────────────────────────
-    const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')
     if (lastUserMsg && convoId) {
       await supabaseAdmin.from('messages').insert({
         conversation_id: convoId,
