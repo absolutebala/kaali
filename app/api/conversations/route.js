@@ -19,27 +19,34 @@ export async function GET(request) {
   if (convoId) {
     // ── Single conversation messages ──────────────────────
     // Verify tenant owns it
-    const { data: convo } = await supabaseAdmin
+    // Fetch conversation
+    const { data: convo, error: convoErr } = await supabaseAdmin
       .from('conversations')
-      .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, pages_visited, org, browser, os, referrer, timezone, is_read, leads!leads_conversation_id_fkey(country, city, device, session_count, pages_visited, name, email, company, designation, org, browser, os, language, screen_width, utm_source, utm_campaign, ip_address)')
+      .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, pages_visited, org, browser, os, referrer, timezone, is_read')
       .eq('id', convoId)
       .eq('tenant_id', tenant.tenantId)
       .single()
 
-    if (!convo) return NextResponse.json({ error: 'Conversation not found.' }, { status: 404 })
+    if (!convo || convoErr) return NextResponse.json({ error: 'Conversation not found.' }, { status: 404 })
 
-    // Mark conversation as read
-    await supabaseAdmin.from('conversations').update({ is_read: true }).eq('id', id).eq('tenant_id', tenant.tenantId)
+    // Mark as read
+    await supabaseAdmin.from('conversations').update({ is_read: true }).eq('id', convoId).eq('tenant_id', tenant.tenantId)
 
+    // Fetch messages
     const { data: messages } = await supabaseAdmin
       .from('messages')
       .select('id, role, content, created_at')
       .eq('conversation_id', convoId)
       .order('created_at', { ascending: true })
 
-    const convoWithLead = { ...convo, lead: convo.leads?.[0] || null }
-    delete convoWithLead.leads
-    return NextResponse.json({ conversation: convoWithLead, messages: messages || [] })
+    // Fetch lead separately (optional — won't break if missing)
+    const { data: leadData } = await supabaseAdmin
+      .from('leads')
+      .select('name, email, company, designation, country, city, device, session_count, pages_visited, org, browser, os, language, screen_width, utm_source, utm_campaign, ip_address')
+      .eq('conversation_id', convoId)
+      .maybeSingle()
+
+    return NextResponse.json({ conversation: { ...convo, lead: leadData || null }, messages: messages || [] })
   }
 
   // ── Conversation list ─────────────────────────────────────
