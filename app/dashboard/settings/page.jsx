@@ -84,10 +84,7 @@ export default function SettingsPage() {
       <div className="kb-card">
         <div className="kb-header"><span className="kb-title">Bot & Company Settings</span></div>
         <div className="card-body">
-
-          {/* Avatar + Bot Name row */}
           <div style={{ display:'flex', alignItems:'flex-start', gap:20, marginBottom:18, paddingBottom:18, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            {/* Avatar */}
             <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, flexShrink:0 }}>
               <div style={{ width:72, height:72, borderRadius:'50%', overflow:'hidden', border:`3px solid ${form.bubbleColor}`,
                 background:`linear-gradient(145deg, ${form.bubbleColor}88, ${form.bubbleColor})`,
@@ -114,8 +111,6 @@ export default function SettingsPage() {
                   style={{ fontSize:11, color:'var(--rd)', background:'none', border:'none', cursor:'pointer' }}>Remove</button>
               )}
             </div>
-
-            {/* Bot name + company */}
             <div style={{ flex:1, display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
               <div className="form-row" style={{ marginBottom:0 }}>
                 <label className="form-label">Bot Name</label>
@@ -133,68 +128,66 @@ export default function SettingsPage() {
                   <option value="sharp">Sharp & Concise</option>
                 </select>
               </div>
-
             </div>
           </div>
-
-          {/* B2B Mode */}
-          <div style={{ paddingTop:14, paddingBottom:14, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-              <div>
-                <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>B2B Mode</div>
-                <div style={{ fontSize:12, color:'var(--tm)' }}>Bot asks for company name and job title during lead capture</div>
-              </div>
-              <div onClick={() => setForm(p => ({ ...p, b2bMode: !p.b2bMode }))}
-                style={{ width:44, height:24, borderRadius:12, cursor:'pointer', transition:'background .2s', flexShrink:0,
-                  background: form.b2bMode ? 'var(--ac)' : 'rgba(255,255,255,.1)', position:'relative' }}>
-                <div style={{ position:'absolute', top:3, left: form.b2bMode ? 23 : 3, width:18, height:18, borderRadius:'50%', background:'#fff', transition:'left .2s' }} />
-              </div>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div>
+              <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>B2B Mode</div>
+              <div style={{ fontSize:12, color:'var(--tm)' }}>Bot asks for company name and job title during lead capture</div>
+            </div>
+            <div onClick={() => setForm(p => ({ ...p, b2bMode: !p.b2bMode }))}
+              style={{ width:44, height:24, borderRadius:12, cursor:'pointer', transition:'background .2s', flexShrink:0,
+                background: form.b2bMode ? 'var(--ac)' : 'rgba(255,255,255,.1)', position:'relative' }}>
+              <div style={{ position:'absolute', top:3, left: form.b2bMode ? 23 : 3, width:18, height:18, borderRadius:'50%', background:'#fff', transition:'left .2s' }} />
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Bubble Color */}
-          <div style={{ marginBottom:18, paddingBottom:18, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            <label className="form-label">Bubble Color</label>
-            <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginTop:6 }}>
-              {COLORS.map(c => (
-                <div key={c} onClick={() => setForm(p=>({...p,bubbleColor:c}))}
-                  style={{ width:30, height:30, borderRadius:'50%', background:c, cursor:'pointer',
-                    border: form.bubbleColor===c ? '3px solid #fff' : '3px solid transparent',
-                    boxShadow: form.bubbleColor===c ? `0 0 0 2px ${c}` : 'none',
-                    transition:'all .15s' }} />
-              ))}
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <input type="color" value={form.bubbleColor} onChange={e=>setForm(p=>({...p,bubbleColor:e.target.value}))}
-                  style={{ width:30, height:30, border:'none', borderRadius:'50%', cursor:'pointer', padding:0, background:'none' }} />
-                <span style={{ fontSize:12, color:'var(--tm)' }}>Custom</span>
-              </div>
-              <div style={{ width:30, height:30, borderRadius:'50%', background:`linear-gradient(145deg,${form.bubbleColor}88,${form.bubbleColor})`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:12, color:'#fff', fontWeight:700 }}>
-                {(form.botName||'K').charAt(0).toUpperCase()}
-              </div>
+      {/* Bubble Color */}
+      <div className="kb-card">
+        <div className="kb-header"><span className="kb-title">Bubble Color</span></div>
+        <div className="card-body">
+          <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap' }}>
+            {COLORS.map(c => (
+              <div key={c} onClick={() => setForm(p=>({...p,bubbleColor:c}))}
+                style={{ width:30, height:30, borderRadius:'50%', background:c, cursor:'pointer',
+                  border: form.bubbleColor===c ? '3px solid #fff' : '3px solid transparent',
+                  boxShadow: form.bubbleColor===c ? `0 0 0 2px ${c}` : 'none',
+                  transition:'all .15s' }} />
+            ))}
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <input type="color" value={form.bubbleColor} onChange={e=>setForm(p=>({...p,bubbleColor:e.target.value}))}
+                style={{ width:30, height:30, border:'none', borderRadius:'50%', cursor:'pointer', padding:0, background:'none' }} />
+              <span style={{ fontSize:12, color:'var(--tm)' }}>Custom</span>
+            </div>
+            <div style={{ width:30, height:30, borderRadius:'50%', background:`linear-gradient(145deg,${form.bubbleColor}88,${form.bubbleColor})`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:12, color:'#fff', fontWeight:700 }}>
+              {(form.botName||'K').charAt(0).toUpperCase()}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Widget Display Mode */}
-          <div>
-            <label className="form-label">Widget Display Mode</label>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginTop:6 }}>
-              {[
-                { val:'bubble',      icon:'💬', label:'Floating Bubble',     desc:'Chat opens when visitor clicks the bubble' },
-                { val:'always_open', icon:'📖', label:'Always Open',         desc:'Chat panel is always visible on the page' },
-                { val:'popup',       icon:'🎯', label:'Centre Popup',        desc:'Chat appears as a centred overlay popup' },
-              ].map(m => (
-                <div key={m.val} onClick={() => setForm(p=>({...p,widgetMode:m.val}))}
-                  style={{ padding:12, background: form.widgetMode===m.val ? 'rgba(79,142,247,.12)' : 'var(--s2)',
-                    border: `1.5px solid ${form.widgetMode===m.val ? 'var(--ac)' : 'rgba(255,255,255,.1)'}`,
-                    borderRadius:10, cursor:'pointer', transition:'all .15s' }}>
-                  <div style={{ fontSize:20, marginBottom:6 }}>{m.icon}</div>
-                  <div style={{ fontSize:12, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>{m.label}</div>
-                  <div style={{ fontSize:11, color:'var(--tm)', lineHeight:1.4 }}>{m.desc}</div>
-                </div>
-              ))}
-            </div>
+      {/* Widget Display Mode */}
+      <div className="kb-card">
+        <div className="kb-header"><span className="kb-title">Widget Display Mode</span></div>
+        <div className="card-body">
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+            {[
+              { val:'bubble',      icon:'💬', label:'Floating Bubble', desc:'Chat opens when visitor clicks the bubble' },
+              { val:'always_open', icon:'📖', label:'Always Open',     desc:'Chat panel is always visible on the page' },
+              { val:'popup',       icon:'🎯', label:'Centre Popup',    desc:'Chat appears as a centred overlay popup' },
+            ].map(m => (
+              <div key={m.val} onClick={() => setForm(p=>({...p,widgetMode:m.val}))}
+                style={{ padding:12, background: form.widgetMode===m.val ? 'rgba(79,142,247,.12)' : 'var(--s2)',
+                  border: `1.5px solid ${form.widgetMode===m.val ? 'var(--ac)' : 'rgba(255,255,255,.1)'}`,
+                  borderRadius:10, cursor:'pointer', transition:'all .15s' }}>
+                <div style={{ fontSize:20, marginBottom:6 }}>{m.icon}</div>
+                <div style={{ fontSize:12, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>{m.label}</div>
+                <div style={{ fontSize:11, color:'var(--tm)', lineHeight:1.4 }}>{m.desc}</div>
+              </div>
+            ))}
           </div>
-
         </div>
       </div>
 
