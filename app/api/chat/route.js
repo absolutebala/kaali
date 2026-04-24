@@ -103,45 +103,51 @@ export async function POST(request) {
     // ── Pre-check for handoff request (before calling AI) ─────
     const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me to.*team|human support|human agent|speak to a person|want.*human|want.*agent|want.*real person/i
     const lastMsg = messages.filter(m => m.role === 'user').pop()?.content || ''
-    if (handoffRx.test(lastMsg)) {
-      // Ensure conversation exists
+
+    // Check if previous bot message was asking for contact during handoff
+    const prevMsgs = messages.slice(-4)
+    const botAskedForContact = prevMsgs.some(m => m.role === 'assistant' && (m.content.includes('name and email') || m.content.includes('get your name')))
+    const alreadyInHandoff = conversationId && botAskedForContact
+
+    if (handoffRx.test(lastMsg) && !alreadyInHandoff) {
+      // Step 1: Ask for contact details first
       let handoffConvoId = conversationId
       if (!handoffConvoId) {
         const { data: newConvo } = await supabaseAdmin.from('conversations').insert({
           tenant_id: tenantId, visitor_type: visitorType || 'GENERAL', page_url: pageUrl || '',
           country: visitorData?.country||'', city: visitorData?.city||'', device: visitorData?.device||'',
-          org: (visitorData?.org||'').replace(/^AS\d+\s+/,''), status: 'waiting',
+          org: (visitorData?.org||'').replace(/^AS\d+\s+/,''), status: 'collecting',
           handoff_at: new Date().toISOString(), handoff_msg: lastMsg,
         }).select('id').single()
         handoffConvoId = newConvo?.id
       } else {
         await supabaseAdmin.from('conversations').update({
-          status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastMsg,
+          status: 'collecting', handoff_at: new Date().toISOString(), handoff_msg: lastMsg,
         }).eq('id', handoffConvoId)
       }
-      // Store user message
       if (handoffConvoId && lastMsg) {
         await supabaseAdmin.from('messages').insert({ conversation_id: handoffConvoId, role: 'user', content: lastMsg })
       }
-      // Check agents online
-      const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
-        .select('id').eq('tenant_id', tenantId).eq('is_online', true)
-        .gt('last_seen', new Date(Date.now() - 120000).toISOString())
-      const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
-      // Send email alert
-      if (tenant.alert_email) {
-        sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: handoffConvoId })
-          .catch(e => console.error('[Handoff email]', e.message))
-      }
-      // Store bot response
-      const botReply = agentsOnline
-        ? "I'm connecting you to a team member now! While they join, could I quickly get your name and email so they know who they're speaking with? 😊"
-        : "I'm alerting our team right now! Could I get your name and email so they can reach you? Our team typically responds within a few minutes."
+      const botReply = "Of course! Before I connect you, could I get your name and email address? That way our team member will know who they're speaking with. 😊"
       if (handoffConvoId) {
         await supabaseAdmin.from('messages').insert({ conversation_id: handoffConvoId, role: 'assistant', content: botReply })
       }
-      return NextResponse.json({ text: botReply, conversationId: handoffConvoId, handoff: true, agentsOnline })
+      return NextResponse.json({ text: botReply, conversationId: handoffConvoId, handoff: 'collecting' })
     }
+
+    // Check if we're collecting contact for handoff and now have name+email
+    if (alreadyInHandoff && conversationId) {
+      const { data: convoStatus } = await supabaseAdmin.from('conversations')
+        .select('status').eq('id', conversationId).single()
+
+      if (convoStatus?.status === 'collecting') {
+        // Let AI handle extracting the name/email, then we'll fire the handoff
+        // after lead is captured (handled below in lead capture flow)
+        // Just mark conversation as waiting now
+        await supabaseAdmin.from('conversations').update({ status: 'waiting' }).eq('id', conversationId)
+      }
+    }
+
 
     // ── Call AI ───────────────────────────────────────────────
     const { text: rawText, error: aiError } = await callAI({
@@ -188,6 +194,28 @@ export async function POST(request) {
       }
     }
 
+    // -- Check for handoff request
+    const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me|human support|human agent|speak to a person/i
+    const wantsHuman = handoffRx.test(lastUserMsg || '')
+    if (wantsHuman && rawText && !rawText.includes('__lead__')) {
+      if (convoId) {
+        await supabaseAdmin.from('conversations').update({
+          status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastUserMsg,
+        }).eq('id', convoId)
+        if (tenant.alert_email) {
+          sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: convoId })
+            .catch(e => console.error('[Handoff email]', e.message))
+        }
+        return NextResponse.json({
+          text: agentsOnline
+            ? "Great! I'm connecting you to a team member now — they'll be with you shortly. While you wait, could I get your name and email? 😊"
+            : "Our team isn't available right now, but I'll make sure someone follows up with you soon. Could I get your name and email address?",
+          conversationId: convoId, handoff: true, agentsOnline,
+        })
+      }
+    }
+
+    // ── Persist lead + fire integrations ─────────────────────
     let leadSaved = null
     if (lead?.email) {
       const userMsgs = messages.filter(m => m.role === 'user' && !m.content.startsWith('[Visitor'))
@@ -232,6 +260,29 @@ export async function POST(request) {
       }
 
       leadSaved = saved
+
+      // If this was a handoff collection, update status and notify agents
+      if (conversationId) {
+        const { data: convoCheck } = await supabaseAdmin.from('conversations')
+          .select('status').eq('id', conversationId).single()
+        if (convoCheck?.status === 'collecting' || convoCheck?.status === 'waiting') {
+          await supabaseAdmin.from('conversations').update({ status: 'waiting' }).eq('id', conversationId)
+          const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
+            .select('id').eq('tenant_id', tenantId).eq('is_online', true)
+            .gt('last_seen', new Date(Date.now() - 120000).toISOString())
+          if (tenant.alert_email) {
+            sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId })
+              .catch(e => console.error('[Handoff email]', e.message))
+          }
+          const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
+          // Override the response to confirm transfer
+          const transferReply = agentsOnline
+            ? `Thanks! Connecting you to our team now... 🔄 A team member will be with you shortly.`
+            : `Thanks! I've alerted our team and they'll follow up with you soon. Is there anything else I can help you with in the meantime?`
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'assistant', content: transferReply })
+          return NextResponse.json({ text: transferReply, conversationId, handoff: true, agentsOnline, lead: { name: leadSaved.name, email: leadSaved.email } })
+        }
+      }
 
       // Fire integrations in parallel, non-blocking
       const integrations = []
