@@ -133,10 +133,7 @@ export default function SettingsPage() {
                   <option value="sharp">Sharp & Concise</option>
                 </select>
               </div>
-              <div className="form-row" style={{ marginBottom:0 }}>
-                <label className="form-label">Calendly URL</label>
-                <input className="form-input" value={form.calendly} onChange={f('calendly')} placeholder="https://calendly.com/yourlink" />
-              </div>
+
             </div>
           </div>
 
@@ -158,6 +155,22 @@ export default function SettingsPage() {
               </div>
               <div style={{ width:30, height:30, borderRadius:'50%', background:`linear-gradient(145deg,${form.bubbleColor}88,${form.bubbleColor})`, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:12, color:'#fff', fontWeight:700 }}>
                 {(form.botName||'K').charAt(0).toUpperCase()}
+              </div>
+            </div>
+          </div>
+
+          {/* B2B Mode */}
+          <div style={{ paddingTop:18, marginTop:4, borderTop:'0.5px solid rgba(255,255,255,.07)' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>B2B Mode</div>
+                <div style={{ fontSize:12, color:'var(--tm)' }}>Bot asks for company name and job title during lead capture</div>
+              </div>
+              <div onClick={() => setForm(p => ({ ...p, b2bMode: !p.b2bMode }))}
+                style={{ width:44, height:24, borderRadius:12, cursor:'pointer', transition:'background .2s', flexShrink:0,
+                  background: form.b2bMode ? 'var(--ac)' : 'rgba(255,255,255,.1)',
+                  position:'relative' }}>
+                <div style={{ position:'absolute', top:3, left: form.b2bMode ? 23 : 3, width:18, height:18, borderRadius:'50%', background:'#fff', transition:'left .2s' }} />
               </div>
             </div>
           </div>
@@ -209,15 +222,17 @@ export default function SettingsPage() {
         </div>
         <div style={{ padding:'0 18px 18px' }}>
 
-          {/* 3 integration boxes */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:20 }}>
+          {/* 4 integration boxes — 2x2 grid */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:12, marginBottom:20 }}>
             {[
-              { key:'hubspot', label:'HubSpot CRM', color:'#FF7A59', connected: !!form.hubspotToken,
+              { key:'hubspot',  label:'HubSpot CRM', color:'#FF7A59', connected: !!form.hubspotToken,
                 icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.164 7.93V5.084a2.198 2.198 0 0 0 1.269-1.978V3.07A2.199 2.199 0 0 0 17.236.873h-.036a2.199 2.199 0 0 0-2.197 2.197v.036a2.198 2.198 0 0 0 1.269 1.978V7.93a6.232 6.232 0 0 0-2.962 1.305L6.225 4.129a2.44 2.44 0 1 0-1.197 1.476l6.893 5.001a6.232 6.232 0 0 0-.896 3.242 6.23 6.23 0 0 0 .97 3.361l-2.098 2.098a1.907 1.907 0 1 0 1.162 1.086l2.012-2.012a6.267 6.267 0 0 0 9.136-5.533A6.263 6.263 0 0 0 18.164 7.93zm-1 9.87a3.266 3.266 0 1 1 0-6.532 3.266 3.266 0 0 1 0 6.531z"/></svg> },
-              { key:'zoho',    label:'Zoho CRM',    color:'#E42527', connected: !!form.zohoToken,
+              { key:'zoho',     label:'Zoho CRM',    color:'#E42527', connected: !!form.zohoToken,
                 icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5h-9v-2l5.5-6H7.5V7h9v2l-5.5 6h5.5v1.5z"/></svg> },
-              { key:'zapier',  label:'Zapier',      color:'#FF4A00', connected: !!form.zapierWebhookUrl,
+              { key:'zapier',   label:'Zapier',      color:'#FF4A00', connected: !!form.zapierWebhookUrl,
                 icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M14.5 2.5l-3 8H3l7 5-2.5 8 7-5 7 5-2.5-8 7-5h-8.5l-3-8z"/></svg> },
+              { key:'calendly', label:'Calendly',    color:'#006BFF', connected: !!form.calendlyUrl,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 3 3 3.9 3 5v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13zM7 10h5v5H7z"/></svg> },
             ].map(intg => (
               <div key={intg.key}
                 onClick={() => setActiveIntg(intg.key === activeIntg ? null : intg.key)}
@@ -276,6 +291,18 @@ export default function SettingsPage() {
               </div>
               <input className="form-input" value={form.zapierWebhookUrl} onChange={f('zapierWebhookUrl')} placeholder="https://hooks.zapier.com/hooks/catch/..." />
               <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>Sends lead data to 5,000+ apps. Connect Google Sheets, Slack, Notion and more</div>
+            </div>
+          )}
+
+          {/* Calendly panel */}
+          {activeIntg === 'calendly' && (
+            <div style={{ padding:'16px', background:'rgba(0,107,255,.06)', border:'0.5px solid rgba(0,107,255,.2)', borderRadius:10, marginBottom:4 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+                <span style={{ fontSize:13, fontWeight:500, color:'var(--tx)' }}>Calendly Booking URL</span>
+                <a href="https://calendly.com" target="_blank" rel="noopener" style={{ fontSize:11, color:'#006BFF', textDecoration:'none' }}>Get link →</a>
+              </div>
+              <input className="form-input" value={form.calendlyUrl} onChange={f('calendlyUrl')} placeholder="https://calendly.com/your-name/30min" />
+              <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>When set, the bot offers a booking link to qualified leads at the right moment in the conversation</div>
             </div>
           )}
 
