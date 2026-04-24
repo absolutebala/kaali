@@ -457,6 +457,16 @@
     showTyping()
 
     try {
+      // If conversation is live (agent took over), send directly without AI response indicator
+      if (convId && window.__kaaliIsLive) {
+        const tk2 = config.apiUrl.includes('vercel') ? '' : ''
+        await fetch(config.apiUrl, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ tenantId, conversationId:convId, messages:[{role:'user',content:text}], visitorType, pageUrl:location.href, visitorData:{} })
+        })
+        return
+      }
+
       const res = await fetch(config.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -489,11 +499,18 @@
       const data = await res.json()
       hideTyping()
 
-      // If handoff initiated, start polling for live agent messages
+      // If handoff initiated
       if (data.handoff) {
         if (!convId && data.conversationId) convId = data.conversationId
         addMsg('assistant', data.text)
-        startLivePoll()
+        const inp = document.getElementById('kaali-inp')
+        const snd = document.getElementById('kaali-snd')
+        if (inp) { inp.disabled = false; inp.placeholder = 'Type your message…' }
+        if (snd) snd.disabled = false
+        // Only start live polling when fully transferred (not during contact collection)
+        if (data.handoff === true) {
+          startLivePoll()
+        }
         return
       }
 
