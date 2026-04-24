@@ -121,7 +121,7 @@ export async function POST(request) {
     }
 
     // -- Check for handoff request
-    const handoffRx = /talk to.*(human|person|agent|team)|speak with.*team|real person|live agent|connect me to.*team/i
+    const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me|human support|human agent|speak to a person/i
     const wantsHuman = handoffRx.test(lastUserMsg || '')
     if (wantsHuman && rawText && !rawText.includes('__lead__')) {
       if (convoId) {
