@@ -33,17 +33,17 @@ export default function LivePage() {
       setWaiting(d.waiting || [])
       setLive(d.live || [])
       setOnlineCount(d.onlineCount || 0)
-    } catch(e) { console.error('[Live] refresh error:', e) }
 
-    // Ring if new waiting chat appeared
-    const newChats = (d.waiting || []).filter(c => !prevWaiting.current.find(p => p.id === c.id))
-    if (newChats.length > 0 && isOnline) {
-      playRing()
-      if (typeof window !== 'undefined' && Notification.permission === 'granted') {
-        new Notification('New chat request!', { body: `Visitor wants to speak with ${user?.company || 'your team'}`, icon: '/favicon.ico' })
+      // Ring if new waiting chat appeared
+      const newChats = (d.waiting || []).filter(c => !prevWaiting.current.find(p => p.id === c.id))
+      if (newChats.length > 0 && isOnline) {
+        playRing()
+        if (typeof window !== 'undefined' && Notification.permission === 'granted') {
+          new Notification('New chat request!', { body: `Visitor wants to speak with ${user?.company || 'your team'}`, icon: '/favicon.ico' })
+        }
       }
-    }
-    prevWaiting.current = d.waiting || []
+      prevWaiting.current = d.waiting || []
+    } catch(e) { console.error('[Live] refresh error:', e) }
   }
 
   // Heartbeat — tells server this agent is online

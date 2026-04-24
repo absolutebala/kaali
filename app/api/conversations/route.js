@@ -22,7 +22,7 @@ export async function GET(request) {
     // Fetch conversation
     const { data: convo, error: convoErr } = await supabaseAdmin
       .from('conversations')
-      .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, pages_visited, org, browser, os, referrer, timezone, is_read')
+      .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, pages_visited, org, browser, os, referrer, timezone, is_read, status, handoff_at, handoff_msg, agent_id')
       .eq('id', convoId)
       .eq('tenant_id', tenant.tenantId)
       .single()
@@ -55,7 +55,7 @@ export async function GET(request) {
 
   const { data, count } = await supabaseAdmin
     .from('conversations')
-    .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, org, browser, os, referrer, is_read', { count: 'exact' })
+    .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, org, browser, os, referrer, is_read, status, handoff_at', { count: 'exact' })
     .eq('tenant_id', tenant.tenantId)
     .order('started_at', { ascending: false })
     .range((page - 1) * limit, page * limit - 1)
