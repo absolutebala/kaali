@@ -51,6 +51,7 @@ export default function SettingsPage() {
         widgetMode:       form.widgetMode,
         b2bMode:          form.b2bMode,
       })
+      await refreshUser()
       setSaved(true); setTimeout(() => setSaved(false), 2500)
     } catch(e) { showToast(e.message, true) }
     finally { setSaving(false) }
@@ -199,7 +200,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* HubSpot */}
+      {/* HubSpot */}}
       <div className="kb-card">
         <div className="kb-header">
           <span className="kb-title">HubSpot Integration</span>
@@ -220,7 +221,60 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Zapier */}
+      {/* Zoho CRM */}
+      <div className="kb-card">
+        <div className="kb-header">
+          <span className="kb-title">Zoho CRM</span>
+          {form.zohoToken && <span style={{ fontSize:11, padding:'2px 10px', borderRadius:20, background:'rgba(34,209,122,.1)', color:'#5EDFAC' }}>● Connected</span>}
+        </div>
+        <div className="card-body">
+          <p style={{ fontSize:13, color:'var(--tm)', marginBottom:14, lineHeight:1.6 }}>
+            Automatically create leads in your Zoho CRM when visitors share their contact details.
+            Enter your Zoho CRM OAuth access token below.
+          </p>
+          <div className="form-row" style={{ marginBottom:10 }}>
+            <label className="form-label">Zoho CRM API Token</label>
+            <input className="form-input" type="password" value={form.zohoToken}
+              onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
+              placeholder="Paste your Zoho OAuth access token" />
+          </div>
+          <div style={{ fontSize:12, color:'var(--td)', marginBottom:14 }}>
+            Get your token from{' '}
+            <a href="https://api-console.zoho.com" target="_blank" rel="noreferrer" style={{ color:'var(--ac)' }}>Zoho API Console</a>
+            {' '}→ Self Client → Generate Token → Scope: <code style={{ background:'var(--s2)', padding:'1px 6px', borderRadius:4, fontSize:11 }}>ZohoCRM.modules.leads.CREATE,ZohoCRM.modules.contacts.CREATE</code>
+          </div>
+          <div style={{ display:'flex', justifyContent:'flex-end', gap:8 }}>
+            {form.zohoToken && <button className="btn-ghost btn-sm" onClick={() => { setForm(p => ({ ...p, zohoToken:'' })); saveSettings() }}>Disconnect</button>}
+            <button className="btn-pri btn-sm" onClick={saveSettings} disabled={saving}>Save</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Zoho CRM */}
+      <div className="kb-card">
+        <div className="kb-header">
+          <span className="kb-title">Zoho CRM</span>
+        </div>
+        <div className="card-body">
+          <div className="form-row" style={{ marginBottom:12 }}>
+            <label className="form-label">Zoho CRM OAuth Access Token</label>
+            <input className="form-input" type="password"
+              value={form.zohoToken}
+              onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
+              placeholder="Paste your Zoho CRM OAuth access token"
+            />
+          </div>
+          <div style={{ fontSize:12, color:'var(--tm)', lineHeight:1.6, marginBottom:8 }}>
+            When a lead is captured, a new Lead record is automatically created in your Zoho CRM.
+          </div>
+          <a href="https://www.zoho.com/crm/developer/docs/api/v6/overview.html" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize:12, color:'var(--ac)', textDecoration:'none' }}>
+            → How to get your Zoho CRM OAuth token
+          </a>
+        </div>
+      </div>
+
+      {/* Zapier */}}}
       <div className="kb-card">
         <div className="kb-header">
           <span className="kb-title">Zapier Webhook</span>

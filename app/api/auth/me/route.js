@@ -28,7 +28,7 @@ export async function GET(request) {
 
   const { data: tenant, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode, created_at')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, zoho_token, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode, created_at')
     .eq('id', payload.tenantId)
     .single()
 
@@ -76,6 +76,7 @@ export async function GET(request) {
       visitorBtn3:       tenant.visitor_btn_3       || 'I am an investor',
       visitorBtn4:       tenant.visitor_btn_4       || 'Just exploring',
       b2bMode:           tenant.b2b_mode            || false,
+      zohoToken:         tenant.zoho_token           || '',
       createdAt:         tenant.created_at,
     },
     services:  services  || [],

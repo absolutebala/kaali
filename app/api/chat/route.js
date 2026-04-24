@@ -3,6 +3,7 @@ import { supabaseAdmin }                 from '@/lib/supabase'
 import { callAI, extractLead }           from '@/lib/ai'
 import { sendUsageAlert, sendLeadAlert } from '@/lib/email'
 import { pushLeadToHubSpot }             from '@/lib/hubspot'
+import { pushLeadToZoho }              from '@/lib/zoho'
 import { fireZapierWebhook }           from '@/lib/zapier'
 
 export async function OPTIONS() {
@@ -147,22 +148,41 @@ export async function POST(request) {
           sendLeadAlert({
             to:          tenant.alert_email,
             companyName: tenant.company,
-            lead:        { name: lead.name, email: lead.email, type: lead.type },
+            lead:        { name: lead.name, email: lead.email, type: lead.type, company: lead.company||'', designation: lead.designation||'' },
             summary,
+            visitorData,
           }).catch(e => console.error('[Lead email]', e.message))
         )
       }
 
       // HubSpot push
-      integrations.push(
-        pushLeadToHubSpot({
-          name:    lead.name,
-          email:   lead.email,
-          type:    lead.type,
-          company: tenant.company,
-          summary,
-        }).catch(e => console.error('[HubSpot]', e.message))
-      )
+      if (tenant.hubspot_token) {
+        integrations.push(
+          pushLeadToHubSpot({
+            token:   tenant.hubspot_token,
+            name:    lead.name,
+            email:   lead.email,
+            type:    lead.type,
+            company: lead.company || tenant.company,
+            summary,
+          }).catch(e => console.error('[HubSpot]', e.message))
+        )
+      }
+
+      // Zoho CRM push
+      if (tenant.zoho_token) {
+        integrations.push(
+          pushLeadToZoho({
+            token:       tenant.zoho_token,
+            name:        lead.name,
+            email:       lead.email,
+            type:        lead.type,
+            company:     lead.company     || '',
+            designation: lead.designation || '',
+            summary,
+          }).catch(e => console.error('[Zoho]', e.message))
+        )
+      }
 
       // Fire all integrations without blocking the response
       Promise.allSettled(integrations)
