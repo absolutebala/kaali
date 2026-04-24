@@ -62,6 +62,7 @@ export async function POST(request) {
     // Send a message to widget that agent has joined
     await supabaseAdmin.from('messages').insert({
       conversation_id: conversationId,
+      tenant_id:       tenant.tenantId,
       role:            'assistant',
       content:         '👋 A team member has joined the chat. How can I help you today?',
       is_agent:        true,
@@ -78,6 +79,7 @@ export async function POST(request) {
 
     const { data: msg, error: dbErr } = await supabaseAdmin.from('messages').insert({
       conversation_id: conversationId,
+      tenant_id:       tenant.tenantId,
       role:            'assistant',
       content:         message.trim(),
       is_agent:        true,
