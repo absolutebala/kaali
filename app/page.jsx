@@ -1,6 +1,5 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import styles from './landing.module.css'
 
 export default function LandingPage() {
   const router = useRouter()
