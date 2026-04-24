@@ -1,7 +1,7 @@
 import { NextResponse }                  from 'next/server'
 import { supabaseAdmin }                 from '@/lib/supabase'
 import { callAI, extractLead }           from '@/lib/ai'
-import { sendUsageAlert, sendLeadAlert } from '@/lib/email'
+import { sendUsageAlert, sendLeadAlert, sendHandoffAlert } from '@/lib/email'
 import { pushLeadToHubSpot }             from '@/lib/hubspot'
 import { pushLeadToZoho }              from '@/lib/zoho'
 import { fireZapierWebhook }           from '@/lib/zapier'
@@ -39,6 +39,19 @@ export async function POST(request) {
     }
 
     // ── Load services + documents ─────────────────────────────
+    // ── Check if conversation is in live agent mode ──────────
+    if (conversationId) {
+      const { data: activeConvo } = await supabaseAdmin
+        .from('conversations').select('status').eq('id', conversationId).single()
+      if (activeConvo?.status === 'live') {
+        // Store message but don't call AI - agent is handling it
+        if (lastUserMsg) {
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'user', content: lastUserMsg })
+        }
+        return NextResponse.json({ text: null, live: true, conversationId })
+      }
+    }
+
     const [{ data: services }, { data: documents }, { data: trainingPairs }] = await Promise.all([
       supabaseAdmin.from('services').select('name, description').eq('tenant_id', tenantId).order('sort_order'),
       supabaseAdmin.from('documents').select('name, extracted_text').eq('tenant_id', tenantId),
@@ -105,6 +118,31 @@ export async function POST(request) {
         role:            'assistant',
         content:         cleanText,
       })
+    }
+
+    // -- Check for handoff request
+    const handoffRx = /talk to.*(human|person|agent|team)|speak with.*team|real person|live agent|connect me to.*team/i
+    const wantsHuman = handoffRx.test(lastUserMsg || '')
+    if (wantsHuman && rawText && !rawText.includes('__lead__')) {
+      if (convoId) {
+        await supabaseAdmin.from('conversations').update({
+          status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastUserMsg,
+        }).eq('id', convoId)
+        const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
+          .select('id').eq('tenant_id', tenantId).eq('is_online', true)
+          .gt('last_seen', new Date(Date.now() - 60000).toISOString())
+        if (tenant.alert_email) {
+          sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: convoId })
+            .catch(e => console.error('[Handoff email]', e.message))
+        }
+        const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
+        return NextResponse.json({
+          text: agentsOnline
+            ? 'Connecting you to a team member now. Please hold on... 🔄'
+            : "I'm letting our team know you want to speak with someone. While I find an agent, could I get your name and email so they can follow up?",
+          conversationId: convoId, handoff: true, agentsOnline,
+        })
+      }
     }
 
     // ── Persist lead + fire integrations ─────────────────────

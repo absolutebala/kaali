@@ -489,6 +489,14 @@
       const data = await res.json()
       hideTyping()
 
+      // If handoff initiated, start polling for live agent messages
+      if (data.handoff) {
+        if (!convId && data.conversationId) convId = data.conversationId
+        addMsg('assistant', data.text)
+        startLivePoll()
+        return
+      }
+
       if (!data.text) throw new Error(data.error || 'Empty response')
 
       // Persist conversation ID
@@ -515,6 +523,32 @@
 
     isBusy = false
     document.getElementById('kaali-snd').disabled = false
+  }
+
+  // ── Live agent polling ──────────────────────────────────────
+  let liveInterval = null
+  let lastMsgCount = 0
+
+  function startLivePoll() {
+    if (liveInterval) return
+    liveInterval = setInterval(async () => {
+      if (!convId) return
+      try {
+        const r = await fetch(`${config.apiUrl.replace('/chat','/conversations')}?id=${convId}`)
+        const d = await r.json()
+        const agentMsgs = (d.messages || []).filter(m => m.is_agent)
+        if (agentMsgs.length > lastMsgCount) {
+          const newMsgs = agentMsgs.slice(lastMsgCount)
+          newMsgs.forEach(m => addMsg('assistant', m.content + ' <span style="font-size:10px;opacity:.6">(Team)</span>'))
+          lastMsgCount = agentMsgs.length
+        }
+        // Stop polling if conversation closed
+        if (d.conversation?.status === 'closed') {
+          clearInterval(liveInterval); liveInterval = null
+          addMsg('assistant', 'The chat session has ended. Is there anything else I can help you with?')
+        }
+      } catch(e) {}
+    }, 3000)
   }
 
   // ── Fetch IP geolocation non-blocking ───────────────────────
