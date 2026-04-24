@@ -229,25 +229,24 @@ export async function POST(request) {
       leadSaved = saved
 
       // If this was a handoff collection, update status and notify agents
-      if (conversationId) {
+      if (convoId) {
         const { data: convoCheck } = await supabaseAdmin.from('conversations')
-          .select('status').eq('id', conversationId).single()
+          .select('status').eq('id', convoId).single()
         if (convoCheck?.status === 'collecting' || convoCheck?.status === 'waiting') {
-          await supabaseAdmin.from('conversations').update({ status: 'waiting' }).eq('id', conversationId)
+          await supabaseAdmin.from('conversations').update({ status: 'waiting' }).eq('id', convoId)
           const { data: onlineAgents } = await supabaseAdmin.from('agent_sessions')
             .select('id').eq('tenant_id', tenantId).eq('is_online', true)
             .gt('last_seen', new Date(Date.now() - 120000).toISOString())
           if (tenant.alert_email) {
-            sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId })
+            sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: convoId })
               .catch(e => console.error('[Handoff email]', e.message))
           }
           const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
-          // Override the response to confirm transfer
           const transferReply = agentsOnline
-            ? `Thanks! Connecting you to our team now... 🔄 A team member will be with you shortly.`
-            : `Thanks! I've alerted our team and they'll follow up with you soon. Is there anything else I can help you with in the meantime?`
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'assistant', content: transferReply })
-          return NextResponse.json({ text: transferReply, conversationId, handoff: true, agentsOnline, lead: { name: leadSaved.name, email: leadSaved.email } })
+            ? `Thanks ${leadSaved.name}! Connecting you to our team now... 🔄 A team member will be with you shortly.`
+            : `Thanks ${leadSaved.name}! I've alerted our team and they'll follow up with you soon at ${leadSaved.email}.`
+          await supabaseAdmin.from('messages').insert({ conversation_id: convoId, role: 'assistant', content: transferReply })
+          return NextResponse.json({ text: transferReply, conversationId: convoId, handoff: true, agentsOnline })
         }
       }
 
