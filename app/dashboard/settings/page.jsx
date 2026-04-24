@@ -200,94 +200,77 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* HubSpot */}
+      {/* Integrations */}
       <div className="kb-card">
         <div className="kb-header">
-          <span className="kb-title">HubSpot Integration</span>
-          <a href="https://app.hubspot.com/private-apps" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)' }}>Get token →</a>
+          <span className="kb-title">Integrations</span>
+          <span style={{ fontSize:12, color:'var(--tm)' }}>Fires on every lead capture</span>
         </div>
-        <div className="card-body">
-          <p style={{ fontSize:12.5, color:'var(--tm)', marginBottom:14, lineHeight:1.6 }}>
-            When a lead is captured, Kaali automatically creates or updates a contact in your HubSpot CRM.
-          </p>
-          <div className="form-row" style={{ marginBottom:0 }}>
-            <label className="form-label">HubSpot Private App Token</label>
+        <div style={{ padding:'0 18px 18px' }}>
+
+          {/* HubSpot */}
+          <div style={{ padding:'18px 0', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
+              <div style={{ width:40, height:40, borderRadius:10, background:'#FF7A59', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.164 7.93V5.084a2.198 2.198 0 0 0 1.269-1.978V3.07A2.199 2.199 0 0 0 17.236.873h-.036a2.199 2.199 0 0 0-2.197 2.197v.036a2.198 2.198 0 0 0 1.269 1.978V7.93a6.232 6.232 0 0 0-2.962 1.305L6.225 4.129a2.44 2.44 0 1 0-1.197 1.476l6.893 5.001a6.232 6.232 0 0 0-.896 3.242 6.23 6.23 0 0 0 .97 3.361l-2.098 2.098a1.907 1.907 0 1 0 1.162 1.086l2.012-2.012a6.267 6.267 0 0 0 9.136-5.533A6.263 6.263 0 0 0 18.164 7.93zm-1 9.87a3.266 3.266 0 1 1 0-6.532 3.266 3.266 0 0 1 0 6.531z"/></svg>
+              </div>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>HubSpot CRM</span>
+                  {form.hubspotToken && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
+                </div>
+                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Auto-creates/updates contacts on lead capture</div>
+              </div>
+              <a href="https://app.hubspot.com/private-apps" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Get token →</a>
+            </div>
             <div style={{ position:'relative' }}>
               <input className="form-input" type={hsVis?'text':'password'} value={form.hubspotToken}
-                onChange={f('hubspotToken')} placeholder="pat-na1-..." style={{ paddingRight:60 }} />
+                onChange={f('hubspotToken')} placeholder="pat-na1-xxxx..." style={{ paddingRight:60 }} />
               <button onClick={() => setHsVis(v=>!v)} style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>{hsVis?'Hide':'Show'}</button>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Zoho CRM */}
-      <div className="kb-card">
-        <div className="kb-header">
-          <span className="kb-title">Zoho CRM</span>
-          {form.zohoToken && <span style={{ fontSize:11, padding:'2px 10px', borderRadius:20, background:'rgba(34,209,122,.1)', color:'#5EDFAC' }}>● Connected</span>}
-        </div>
-        <div className="card-body">
-          <p style={{ fontSize:13, color:'var(--tm)', marginBottom:14, lineHeight:1.6 }}>
-            Automatically create leads in your Zoho CRM when visitors share their contact details.
-            Enter your Zoho CRM OAuth access token below.
-          </p>
-          <div className="form-row" style={{ marginBottom:10 }}>
-            <label className="form-label">Zoho CRM API Token</label>
+          {/* Zoho CRM */}
+          <div style={{ padding:'18px 0', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
+              <div style={{ width:40, height:40, borderRadius:10, background:'#E42527', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5h-9v-2l5.5-6H7.5V7h9v2l-5.5 6h5.5v1.5z"/></svg>
+              </div>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>Zoho CRM</span>
+                  {form.zohoToken && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
+                </div>
+                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Auto-creates lead records on lead capture</div>
+              </div>
+              <a href="https://api-console.zoho.com" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Get token →</a>
+            </div>
             <input className="form-input" type="password" value={form.zohoToken}
               onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
-              placeholder="Paste your Zoho OAuth access token" />
+              placeholder="Zoho OAuth access token" />
+            <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>
+              Scope needed: <code style={{ background:'var(--s2)', padding:'1px 5px', borderRadius:4 }}>ZohoCRM.modules.leads.CREATE</code>
+            </div>
           </div>
-          <div style={{ fontSize:12, color:'var(--td)', marginBottom:14 }}>
-            Get your token from{' '}
-            <a href="https://api-console.zoho.com" target="_blank" rel="noreferrer" style={{ color:'var(--ac)' }}>Zoho API Console</a>
-            {' '}→ Self Client → Generate Token → Scope: <code style={{ background:'var(--s2)', padding:'1px 6px', borderRadius:4, fontSize:11 }}>ZohoCRM.modules.leads.CREATE,ZohoCRM.modules.contacts.CREATE</code>
-          </div>
-          <div style={{ display:'flex', justifyContent:'flex-end', gap:8 }}>
-            {form.zohoToken && <button className="btn-ghost btn-sm" onClick={() => { setForm(p => ({ ...p, zohoToken:'' })); save() }}>Disconnect</button>}
-            <button className="btn-pri btn-sm" onClick={save} disabled={saving}>Save</button>
-          </div>
-        </div>
-      </div>
 
-      {/* Zoho CRM */}
-      <div className="kb-card">
-        <div className="kb-header">
-          <span className="kb-title">Zoho CRM</span>
-        </div>
-        <div className="card-body">
-          <div className="form-row" style={{ marginBottom:12 }}>
-            <label className="form-label">Zoho CRM OAuth Access Token</label>
-            <input className="form-input" type="password"
-              value={form.zohoToken}
-              onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
-              placeholder="Paste your Zoho CRM OAuth access token"
-            />
-          </div>
-          <div style={{ fontSize:12, color:'var(--tm)', lineHeight:1.6, marginBottom:8 }}>
-            When a lead is captured, a new Lead record is automatically created in your Zoho CRM.
-          </div>
-          <a href="https://www.zoho.com/crm/developer/docs/api/v6/overview.html" target="_blank" rel="noopener noreferrer"
-            style={{ fontSize:12, color:'var(--ac)', textDecoration:'none' }}>
-            → How to get your Zoho CRM OAuth token
-          </a>
-        </div>
-      </div>
-
-      {/* Zapier */}
-      <div className="kb-card">
-        <div className="kb-header">
-          <span className="kb-title">Zapier Webhook</span>
-          <a href="https://zapier.com/apps/webhook/integrations" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)' }}>Set up Zapier →</a>
-        </div>
-        <div className="card-body">
-          <p style={{ fontSize:12.5, color:'var(--tm)', marginBottom:14, lineHeight:1.6 }}>
-            When a lead is captured, Kaali sends the details to your Zapier webhook. Connect to Google Sheets, Slack, Gmail, Notion, or any 5,000+ apps.
-          </p>
-          <div className="form-row" style={{ marginBottom:0 }}>
-            <label className="form-label">Zapier Webhook URL</label>
+          {/* Zapier */}
+          <div style={{ padding:'18px 0' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
+              <div style={{ width:40, height:40, borderRadius:10, background:'#FF4A00', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M14.5 2.5l-3 8H3l7 5-2.5 8 7-5 7 5-2.5-8 7-5h-8.5l-3-8z"/></svg>
+              </div>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>Zapier</span>
+                  {form.zapierWebhookUrl && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
+                </div>
+                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Sends lead data to 5,000+ apps via webhook</div>
+              </div>
+              <a href="https://zapier.com/apps/webhook/integrations" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Set up →</a>
+            </div>
             <input className="form-input" value={form.zapierWebhookUrl} onChange={f('zapierWebhookUrl')} placeholder="https://hooks.zapier.com/hooks/catch/..." />
           </div>
+
         </div>
       </div>
 
