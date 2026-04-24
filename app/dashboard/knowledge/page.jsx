@@ -12,6 +12,8 @@ export default function KnowledgePage() {
   const [saving,   setSaving]  = useState(false)
   const [uploading,setUpl]     = useState(false)
   const [modal,    setModal]   = useState(null)  // null | 'add' | {id,name,description}
+  const [scrapeUrl,setScrapeUrl] = useState('')
+  const [scraping, setScraping]  = useState(false)
 
   useEffect(() => {
     tenantApi.get().then(r => {
@@ -69,14 +71,36 @@ export default function KnowledgePage() {
     setDocs(p => p.filter(d => d.id !== id))
   }
 
+  async function scrapeWebsite() {
+    if (!scrapeUrl.trim()) return
+    setScraping(true)
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('kaali_token') : ''
+      const r = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ url: scrapeUrl.trim() }),
+      })
+      const data = await r.json()
+      if (!r.ok) throw new Error(data.error)
+      setDocs(p => {
+        const exists = p.find(d => d.id === data.document.id)
+        return exists ? p.map(d => d.id === data.document.id ? data.document : d) : [...p, data.document]
+      })
+      setScrapeUrl('')
+      showToast(data.message || 'Page indexed!')
+    } catch(e) { showToast(e.message, true) }
+    finally { setScraping(false) }
+  }
+
   async function saveVbtns() {
     setSavingVB(true)
     try {
       await tenantApi.update({
-        visitorBtn1: vbtns.b1 !== undefined ? vbtns.b1 : '',
-        visitorBtn2: vbtns.b2 !== undefined ? vbtns.b2 : '',
-        visitorBtn3: vbtns.b3 !== undefined ? vbtns.b3 : '',
-        visitorBtn4: vbtns.b4 !== undefined ? vbtns.b4 : '',
+        visitorBtn1: vbtns.b1 || 'I am looking to build a product',
+        visitorBtn2: vbtns.b2 || 'I am your existing client',
+        visitorBtn3: vbtns.b3 || 'I am an investor',
+        visitorBtn4: vbtns.b4 || 'Just exploring',
       })
       showToast('Visitor buttons saved!')
     } catch(e) { showToast(e.message, true) }
@@ -149,6 +173,29 @@ export default function KnowledgePage() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Website URL Scraping */}
+      <div className="kb-card">
+        <div className="kb-header">
+          <span className="kb-title">Index a Website Page</span>
+        </div>
+        <div className="card-body">
+          <p style={{ fontSize:12, color:'var(--td)', marginBottom:12 }}>
+            Paste any public URL to extract its content and add it to your knowledge base. Each URL gets its own document — scraping the same URL again updates it.
+          </p>
+          <div style={{ display:'flex', gap:10 }}>
+            <input className="form-input" style={{ flex:1, marginBottom:0 }}
+              value={scrapeUrl}
+              onChange={e => setScrapeUrl(e.target.value)}
+              placeholder="https://yourwebsite.com/services"
+              onKeyDown={e => e.key === 'Enter' && scrapeWebsite()}
+            />
+            <button className="btn-pri" onClick={scrapeWebsite} disabled={scraping || !scrapeUrl.trim()} style={{ flexShrink:0 }}>
+              {scraping ? 'Indexing…' : 'Index Page'}
+            </button>
           </div>
         </div>
       </div>

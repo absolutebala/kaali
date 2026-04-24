@@ -28,6 +28,9 @@ export async function GET(request) {
 
     if (!convo) return NextResponse.json({ error: 'Conversation not found.' }, { status: 404 })
 
+    // Mark conversation as read
+    await supabaseAdmin.from('conversations').update({ is_read: true }).eq('id', id).eq('tenant_id', tenant.tenantId)
+
     const { data: messages } = await supabaseAdmin
       .from('messages')
       .select('id, role, content, created_at')
@@ -45,7 +48,7 @@ export async function GET(request) {
 
   const { data, count } = await supabaseAdmin
     .from('conversations')
-    .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device', { count: 'exact' })
+    .select('id, visitor_type, lead_captured, started_at, page_url, country, city, device, is_read', { count: 'exact' })
     .eq('tenant_id', tenant.tenantId)
     .order('started_at', { ascending: false })
     .range((page - 1) * limit, page * limit - 1)

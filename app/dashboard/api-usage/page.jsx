@@ -107,6 +107,18 @@ export default function ApiUsagePage() {
                 </button>
               </div>
               <p style={{ fontSize:11, color:'var(--td)', marginTop:4 }}>Encrypted before storage. Never exposed to visitors.</p>
+              {provider === 'claude' && (
+                <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener"
+                  style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', display:'inline-block', marginTop:4 }}>
+                  → Get your Anthropic API key from console.anthropic.com
+                </a>
+              )}
+              {provider === 'openai' && (
+                <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
+                  style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', display:'inline-block', marginTop:4 }}>
+                  → Get your OpenAI API key from platform.openai.com
+                </a>
+              )}
             </div>
             <div className="form-row" style={{ marginBottom:0 }}>
               <label className="form-label">Model</label>
@@ -155,8 +167,8 @@ export default function ApiUsagePage() {
               <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:8 }}>Upgrade your plan</div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 {[
-                  { plan:'growth',   label:'Growth',   price:'$99', limit:'2,000 conversations', docs:'10 PDFs' },
-                  { plan:'business', label:'Business',  price:'$199', limit:'Unlimited',           docs:'Unlimited PDFs' },
+                  { plan:'growth',   label:'Growth',   price:'$29', limit:'2,000 conversations', docs:'10 PDFs' },
+                  { plan:'business', label:'Business',  price:'$79', limit:'Unlimited',           docs:'Unlimited PDFs' },
                 ].map(p => (
                   <div key={p.plan} style={{ padding:12, background:'var(--s2)', borderRadius:8 }}>
                     <div style={{ fontSize:13, fontWeight:500, color:'var(--tx)', marginBottom:4 }}>{p.label} — {p.price}/mo</div>

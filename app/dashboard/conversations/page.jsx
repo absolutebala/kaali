@@ -110,7 +110,11 @@ export default function ConversationsPage() {
                     <div style={{ padding:'8px 13px', fontSize:10.5, fontWeight:500, letterSpacing:'1px', textTransform:'uppercase', color:'var(--td)', background:'var(--s2)', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       {group} ({items.length})
                     </div>
-                    {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>setSelId(c.id)} />)}
+                    {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>{
+                        setSelId(c.id)
+                        // Mark as read locally immediately
+                        setConvos(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
+                      }} />)}
                   </div>
                 )
               })
@@ -123,7 +127,11 @@ export default function ConversationsPage() {
                     <div style={{ padding:'8px 13px', fontSize:10.5, fontWeight:500, letterSpacing:'1px', textTransform:'uppercase', color:cfg.color, background:cfg.bg, borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       {cfg.label} ({items.length})
                     </div>
-                    {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>setSelId(c.id)} />)}
+                    {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>{
+                        setSelId(c.id)
+                        // Mark as read locally immediately
+                        setConvos(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
+                      }} />)}
                   </div>
                 )
               })
@@ -188,17 +196,20 @@ export default function ConversationsPage() {
 }
 
 function ConvoItem({ c, active, onClick }) {
-  const cfg = TYPE_LABELS[c.visitor_type] || TYPE_LABELS.GENERAL
+  const cfg    = TYPE_LABELS[c.visitor_type] || TYPE_LABELS.GENERAL
+  const unread = !c.is_read && !active
   return (
     <div onClick={onClick} style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)', cursor:'pointer',
-      background: active ? 'rgba(79,142,247,.1)' : 'none', transition:'background .15s' }}
+      background: active ? 'rgba(79,142,247,.1)' : unread ? 'rgba(79,142,247,.04)' : 'none',
+      transition:'background .15s', position:'relative' }}
       onMouseOver={e=>{ if(!active) e.currentTarget.style.background='var(--s2)' }}
-      onMouseOut={e=>{ if(!active) e.currentTarget.style.background='none' }}>
+      onMouseOut={e=>{ if(!active) e.currentTarget.style.background= unread ? 'rgba(79,142,247,.04)' : 'none' }}>
+      {unread && <div style={{ position:'absolute', top:'50%', right:12, transform:'translateY(-50%)', width:7, height:7, borderRadius:'50%', background:'var(--ac)', boxShadow:`0 0 6px var(--ac)` }} />}
       <div style={{ display:'flex', justifyContent:'space-between', marginBottom:3 }}>
         <span style={{ fontSize:11, fontWeight:500, color:cfg.color, background:cfg.bg, padding:'1px 7px', borderRadius:10 }}>{cfg.label}</span>
-        <span style={{ fontSize:10, color:'var(--td)' }}>{new Date(c.started_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+        <span style={{ fontSize:10, color: unread ? 'var(--ac)' : 'var(--td)' }}>{new Date(c.started_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
       </div>
-      <div style={{ fontSize:11.5, color:'var(--tm)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+      <div style={{ fontSize:11.5, color: unread ? 'var(--ts)' : 'var(--tm)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', fontWeight: unread ? 500 : 400 }}>
         {c.lead_captured ? '✓ Lead · ' : ''}{c.page_url || 'Direct'}
       </div>
     </div>

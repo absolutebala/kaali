@@ -5,9 +5,15 @@ import { useAuth }     from '@/lib/auth-context'
 import Link            from 'next/link'
 
 export default function LoginPage() {
-  const { login }             = useAuth()
-  const router                = useRouter()
-  const [form, setForm]       = useState({ email: '', password: '' })
+  const { login, user, loading } = useAuth()
+  const router                   = useRouter()
+  const [form, setForm]          = useState({ email: '', password: '' })
+
+  // Auto-redirect if already logged in
+  if (!loading && user) {
+    router.replace('/dashboard')
+    return null
+  }
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
 
