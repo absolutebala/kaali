@@ -16,8 +16,10 @@ export async function POST(request) {
     const { tenantId, conversationId, messages, visitorType, pageUrl, visitorData } = body
 
     if (!tenantId || !messages?.length) {
+      console.error('[Chat 400] tenantId:', tenantId, 'messages:', messages?.length, 'body keys:', Object.keys(body))
       return NextResponse.json({ error: 'tenantId and messages are required.' }, { status: 400 })
     }
+    console.log('[Chat] tenantId:', tenantId, 'convId:', conversationId, 'msgs:', messages?.length)
 
     // ── Load tenant ───────────────────────────────────────────
     const { data: tenant, error: tErr } = await supabaseAdmin
