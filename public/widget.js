@@ -501,16 +501,23 @@
 
       // If handoff initiated
       if (data.handoff) {
-        if (!convId && data.conversationId) convId = data.conversationId
-        addMsg('assistant', data.text)
+        // Save conversation ID - CRITICAL
+        if (data.conversationId) convId = data.conversationId
+        // Add bot response to history so next message has context
+        if (data.text) {
+          history.push({ role: 'assistant', content: data.text })
+          addMsg('assistant', data.text)
+        }
         const inp = document.getElementById('kaali-inp')
         const snd = document.getElementById('kaali-snd')
         if (inp) { inp.disabled = false; inp.placeholder = 'Type your message…' }
         if (snd) snd.disabled = false
         // Only start live polling when fully transferred (not during contact collection)
         if (data.handoff === true) {
+          window.__kaaliIsLive = true
           startLivePoll()
         }
+        isBusy = false
         return
       }
 
