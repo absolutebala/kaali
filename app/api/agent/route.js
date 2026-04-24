@@ -71,14 +71,22 @@ export async function POST(request) {
 
   if (action === 'send') {
     if (!message?.trim()) return NextResponse.json({ error: 'Empty message' }, { status: 400 })
-    const { data, error: dbErr } = await supabaseAdmin.from('messages').insert({
+    // Verify conversation belongs to this tenant
+    const { data: convo } = await supabaseAdmin.from('conversations')
+      .select('id').eq('id', conversationId).eq('tenant_id', tenant.tenantId).maybeSingle()
+    if (!convo) return NextResponse.json({ error: 'Conversation not found' }, { status: 404 })
+
+    const { data: msg, error: dbErr } = await supabaseAdmin.from('messages').insert({
       conversation_id: conversationId,
       role:            'assistant',
       content:         message.trim(),
       is_agent:        true,
-    }).select('id, content, created_at').single()
-    if (dbErr) return NextResponse.json({ error: dbErr.message }, { status: 500 })
-    return NextResponse.json({ ok: true, message: data })
+    }).select('id, role, content, is_agent, created_at').single()
+    if (dbErr) {
+      console.error('[Agent send]', dbErr)
+      return NextResponse.json({ error: dbErr.message }, { status: 500 })
+    }
+    return NextResponse.json({ ok: true, message: msg })
   }
 
   if (action === 'close') {
