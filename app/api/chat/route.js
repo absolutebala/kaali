@@ -177,43 +177,6 @@ export async function POST(request) {
       })
     }
 
-    // -- Check if waiting conversation timed out (30s)
-    if (conversationId) {
-      const { data: waitConvo } = await supabaseAdmin
-        .from('conversations').select('status, handoff_at')
-        .eq('id', conversationId).maybeSingle()
-      if (waitConvo?.status === 'waiting' && waitConvo.handoff_at) {
-        const waitSecs = (Date.now() - new Date(waitConvo.handoff_at).getTime()) / 1000
-        if (waitSecs > 30) {
-          await supabaseAdmin.from('conversations').update({ status: 'bot' }).eq('id', conversationId)
-          return NextResponse.json({
-            text: "It looks like our team is a bit busy right now. No worries — share your name and email and someone will follow up shortly!",
-            conversationId, timeout: true,
-          })
-        }
-      }
-    }
-
-    // -- Check for handoff request
-    const handoffRx = /talk to.*(human|person|agent|team|someone)|speak with.*(team|someone|human|person)|real person|live (agent|chat|support|help)|connect me|human support|human agent|speak to a person/i
-    const wantsHuman = handoffRx.test(lastUserMsg || '')
-    if (wantsHuman && rawText && !rawText.includes('__lead__')) {
-      if (convoId) {
-        await supabaseAdmin.from('conversations').update({
-          status: 'waiting', handoff_at: new Date().toISOString(), handoff_msg: lastUserMsg,
-        }).eq('id', convoId)
-        if (tenant.alert_email) {
-          sendHandoffAlert({ to: tenant.alert_email, companyName: tenant.company, visitorType, pageUrl, conversationId: convoId })
-            .catch(e => console.error('[Handoff email]', e.message))
-        }
-        return NextResponse.json({
-          text: agentsOnline
-            ? "Great! I'm connecting you to a team member now — they'll be with you shortly. While you wait, could I get your name and email? 😊"
-            : "Our team isn't available right now, but I'll make sure someone follows up with you soon. Could I get your name and email address?",
-          conversationId: convoId, handoff: true, agentsOnline,
-        })
-      }
-    }
 
     // ── Persist lead + fire integrations ─────────────────────
     let leadSaved = null
