@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState }       from 'react'
+import React, { useEffect, useState }       from 'react'
 import { useSearchParams }            from 'next/navigation'
 import { conversations as convApi }   from '@/lib/api-client'
 import { PageShell, fmtDate }         from '../page'
@@ -113,7 +113,7 @@ export default function ConversationsPage() {
                     {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>{
                         setSelId(c.id)
                         // Mark as read locally immediately
-                        setConvos(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
+                        setList(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
                       }} />)}
                   </div>
                 )
@@ -130,7 +130,7 @@ export default function ConversationsPage() {
                     {items.map(c => <ConvoItem key={c.id} c={c} active={selId===c.id} onClick={()=>{
                         setSelId(c.id)
                         // Mark as read locally immediately
-                        setConvos(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
+                        setList(prev => prev.map(x => x.id === c.id ? {...x, is_read: true} : x))
                       }} />)}
                   </div>
                 )
@@ -201,4 +201,94 @@ function ConvoItem({ c, active, onClick }) {
       </div>
     </div>
   )
+}
+
+function VisitorIntelPanel({ meta, tenantToken }) {
+  const [enriched, setEnriched] = React.useState(null)
+  const [enriching, setEnriching] = React.useState(false)
+  const lead     = meta?.lead
+  const country  = meta?.country || lead?.country || ''
+  const city     = meta?.city    || lead?.city    || ''
+  const device   = meta?.device  || lead?.device  || ''
+  const org      = meta?.org     || lead?.org     || ''
+  const browser  = meta?.browser || lead?.browser || ''
+  const os       = meta?.os      || lead?.os      || ''
+  const referrer = meta?.referrer|| lead?.referrer|| ''
+  const timezone = meta?.timezone|| lead?.timezone|| ''
+  const language = lead?.language || ''
+  const sessions = lead?.session_count || 0
+  const pages    = lead?.pages_visited || meta?.pages_visited || []
+  const utmSrc   = lead?.utm_source || ''
+  const utmCamp  = lead?.utm_campaign || ''
+  const screenW  = lead?.screen_width || 0
+  const ip       = lead?.ip_address || ''
+  const displayOrg = enriched?.company_name || org
+
+  async function enrich() {
+    if (!ip || enriching) return
+    setEnriching(true)
+    try {
+      const r = await fetch('/api/enrich', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', Authorization:'Bearer ' + tenantToken },
+        body: JSON.stringify({ ip, leadId: lead?.id }),
+      })
+      const d = await r.json()
+      if (d.enriched) setEnriched(d.enriched)
+    } catch(e) {}
+    finally { setEnriching(false) }
+  }
+
+  const chips = [
+    city || country ? '📍 ' + [city,country].filter(Boolean).join(', ') : null,
+    device   ? '💻 ' + device   : null,
+    browser  ? '🌐 ' + browser  : null,
+    os       ? '🖥 '  + os       : null,
+    timezone ? '🕐 ' + timezone : null,
+    language ? '🗣 ' + language : null,
+    screenW  ? '📐 ' + screenW + 'px' : null,
+    sessions > 1 ? '🔄 ' + sessions + ' visits' : null,
+    referrer && referrer !== 'direct' ? '↩ ' + referrer : null,
+    utmSrc   ? '📣 ' + utmSrc  : null,
+    utmCamp  ? '🎯 ' + utmCamp : null,
+  ].filter(Boolean)
+
+  if (!chips.length && !displayOrg) return null
+
+  return (
+    <div style={{ marginTop:8, padding:'10px 12px', background:'rgba(255,255,255,.03)', border:'0.5px solid rgba(255,255,255,.08)', borderRadius:8 }}>
+      {displayOrg && (
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8, flexWrap:'wrap' }}>
+          {enriched?.company_logo && <img src={enriched.company_logo} alt="" style={{ width:18, height:18, borderRadius:4, objectFit:'contain' }} />}
+          <span style={{ fontSize:12, fontWeight:500, color:'var(--tx)' }}>🏢 {displayOrg}</span>
+          {enriched?.linkedin_url && <a href={enriched.linkedin_url} target="_blank" rel="noopener" style={{ fontSize:10, color:'#0A66C2', textDecoration:'none' }}>LinkedIn →</a>}
+          {enriched?.twitter_url  && <a href={enriched.twitter_url}  target="_blank" rel="noopener" style={{ fontSize:10, color:'#1DA1F2', textDecoration:'none' }}>Twitter →</a>}
+          {enriched?.company_size && <span style={{ fontSize:10, color:'var(--td)' }}>{enriched.company_size} employees</span>}
+        </div>
+      )}
+      <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+        {chips.map((chip, i) => (
+          <span key={i} style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(255,255,255,.06)', color:'var(--tm)', whiteSpace:'nowrap' }}>{chip}</span>
+        ))}
+      </div>
+      {pages.length > 0 && (
+        <div style={{ marginTop:8, fontSize:10, color:'var(--td)' }}>
+          <span style={{ color:'var(--tm)', marginRight:4 }}>Pages:</span>
+          {pages.slice(0,5).join(' → ')}{pages.length > 5 ? ' +' + (pages.length-5) + ' more' : ''}
+        </div>
+      )}
+      {ip && !enriched && (
+        <button onClick={enrich} disabled={enriching}
+          style={{ marginTop:8, fontSize:10, color:'var(--ac)', background:'none', border:'0.5px solid rgba(79,142,247,.3)', borderRadius:6, padding:'2px 10px', cursor:'pointer' }}>
+          {enriching ? 'Enriching…' : '✨ Enrich with Clearbit'}
+        </button>
+      )}
+    </div>
+  )
+}
+
+function showToast(msg, isErr=false) {
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  if(isErr) t.style.color='var(--rd)';
+  document.body.appendChild(t); setTimeout(()=>t.remove(),2400);
 }
