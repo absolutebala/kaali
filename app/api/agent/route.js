@@ -11,13 +11,18 @@ export async function GET(request) {
   if (error) return error
 
   const [{ data: waiting }, { data: live }, { data: agents }] = await Promise.all([
-    supabaseAdmin.from('conversations').select('id, visitor_type, started_at, page_url, country, city, device, org, handoff_at, handoff_msg')
-      .eq('tenant_id', tenant.tenantId).eq('status', 'waiting').order('handoff_at', { ascending: true }),
-    supabaseAdmin.from('conversations').select('id, visitor_type, started_at, page_url, country, city, device, org, handoff_at, agent_id')
-      .eq('tenant_id', tenant.tenantId).eq('status', 'live').order('handoff_at', { ascending: true }),
-    supabaseAdmin.from('agent_sessions').select('id, member_id, is_online, last_seen')
+    supabaseAdmin.from('conversations')
+      .select('id, visitor_type, started_at, page_url, country, city, device, org, handoff_at, handoff_msg')
+      .eq('tenant_id', tenant.tenantId).eq('status', 'waiting')
+      .order('handoff_at', { ascending: true }),
+    supabaseAdmin.from('conversations')
+      .select('id, visitor_type, started_at, page_url, country, city, device, org, handoff_at, agent_id')
+      .eq('tenant_id', tenant.tenantId).eq('status', 'live')
+      .order('handoff_at', { ascending: true }),
+    supabaseAdmin.from('agent_sessions')
+      .select('id, member_id, is_online, last_seen')
       .eq('tenant_id', tenant.tenantId).eq('is_online', true)
-      .gt('last_seen', new Date(Date.now() - 60000).toISOString()),
+      .gt('last_seen', new Date(Date.now() - 120000).toISOString()),
   ])
 
   return NextResponse.json({ waiting: waiting || [], live: live || [], onlineCount: agents?.length || 0 })
@@ -31,14 +36,21 @@ export async function POST(request) {
   const { action, conversationId, message } = await request.json()
 
   if (action === 'heartbeat') {
-    // Update agent online status
     const memberId = tenant.memberId || null
-    await supabaseAdmin.from('agent_sessions').upsert({
-      tenant_id: tenant.tenantId,
-      member_id: memberId,
-      is_online: true,
-      last_seen: new Date().toISOString(),
-    }, { onConflict: 'tenant_id,member_id' })
+    // Check if session exists
+    const { data: existing } = await supabaseAdmin.from('agent_sessions')
+      .select('id').eq('tenant_id', tenant.tenantId)
+      .is(memberId ? 'member_id' : 'member_id', memberId)
+      .maybeSingle()
+
+    if (existing) {
+      await supabaseAdmin.from('agent_sessions')
+        .update({ is_online: true, last_seen: new Date().toISOString() })
+        .eq('id', existing.id)
+    } else {
+      await supabaseAdmin.from('agent_sessions')
+        .insert({ tenant_id: tenant.tenantId, member_id: memberId, is_online: true, last_seen: new Date().toISOString() })
+    }
     return NextResponse.json({ ok: true })
   }
 

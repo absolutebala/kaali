@@ -28,10 +28,12 @@ export default function LivePage() {
 
   // Load chats
   async function refresh() {
-    const d = await api('/api/agent')
-    setWaiting(d.waiting || [])
-    setLive(d.live || [])
-    setOnlineCount(d.onlineCount || 0)
+    try {
+      const d = await api('/api/agent')
+      setWaiting(d.waiting || [])
+      setLive(d.live || [])
+      setOnlineCount(d.onlineCount || 0)
+    } catch(e) { console.error('[Live] refresh error:', e) }
 
     // Ring if new waiting chat appeared
     const newChats = (d.waiting || []).filter(c => !prevWaiting.current.find(p => p.id === c.id))

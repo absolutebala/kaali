@@ -136,10 +136,11 @@ export async function POST(request) {
             .catch(e => console.error('[Handoff email]', e.message))
         }
         const agentsOnline = !!(onlineAgents && onlineAgents.length > 0)
+        // Always collect contact details before/during handoff
         return NextResponse.json({
           text: agentsOnline
-            ? 'Connecting you to a team member now. Please hold on... 🔄'
-            : "I'm letting our team know you want to speak with someone. While I find an agent, could I get your name and email so they can follow up?",
+            ? "I'm connecting you to a team member now! While they join, could I quickly get your name and email so they know who they're speaking with? 😊"
+            : "I'm alerting our team right now! Could I get your name and email so they can reach you? Our team typically responds within a few minutes.",
           conversationId: convoId, handoff: true, agentsOnline,
         })
       }
