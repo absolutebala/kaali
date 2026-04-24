@@ -10,11 +10,22 @@ export async function OPTIONS() {
 // ?id=<uuid>  → returns messages for that conversation
 // (no id)     → returns conversation list
 export async function GET(request) {
-  const { tenant, error } = await requireAuth(request)
-  if (error) return error
-
   const { searchParams } = new URL(request.url)
   const convoId = searchParams.get('id')
+  const isPublic = searchParams.get('public') === '1'
+
+  // Public endpoint for widget polling - only allows fetching by conversationId
+  if (isPublic && convoId) {
+    const { data: messages } = await supabaseAdmin
+      .from('messages').select('id, role, content, is_agent, created_at')
+      .eq('conversation_id', convoId).order('created_at', { ascending: true })
+    const { data: convo } = await supabaseAdmin
+      .from('conversations').select('status').eq('id', convoId).single()
+    return NextResponse.json({ messages: messages || [], conversation: convo || {} })
+  }
+
+  const { tenant, error } = await requireAuth(request)
+  if (error) return error
 
   if (convoId) {
     // ── Single conversation messages ──────────────────────

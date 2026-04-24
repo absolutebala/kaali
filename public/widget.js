@@ -506,7 +506,7 @@
         // Add bot response to history so next message has context
         if (data.text) {
           history.push({ role: 'assistant', content: data.text })
-          addMsg('assistant', data.text)
+          addMsg('bot', data.text)
         }
         const inp = document.getElementById('kaali-inp')
         const snd = document.getElementById('kaali-snd')
@@ -558,18 +558,18 @@
     liveInterval = setInterval(async () => {
       if (!convId) return
       try {
-        const r = await fetch(`${config.apiUrl.replace('/chat','/conversations')}?id=${convId}`)
+        const r = await fetch(`${config.apiUrl.replace('/chat','/conversations')}?id=${convId}&public=1`)
         const d = await r.json()
         const agentMsgs = (d.messages || []).filter(m => m.is_agent)
         if (agentMsgs.length > lastMsgCount) {
           const newMsgs = agentMsgs.slice(lastMsgCount)
-          newMsgs.forEach(m => addMsg('assistant', m.content + ' <span style="font-size:10px;opacity:.6">(Team)</span>'))
+          newMsgs.forEach(m => addMsg('bot', m.content + ' <span style="font-size:10px;color:#5EDFAC">— Team</span>'))
           lastMsgCount = agentMsgs.length
         }
         // Stop polling if conversation closed
         if (d.conversation?.status === 'closed') {
           clearInterval(liveInterval); liveInterval = null
-          addMsg('assistant', 'The chat session has ended. Is there anything else I can help you with?')
+          addMsg('bot', 'The chat session has ended. Is there anything else I can help you with?')
         }
       } catch(e) {}
     }, 3000)
