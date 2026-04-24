@@ -521,6 +521,16 @@
         return
       }
 
+      // If conversation is live (agent handling), suppress AI response
+      if (data.live || (!data.text && !data.error)) {
+        if (data.live && !window.__kaaliIsLive) {
+          window.__kaaliIsLive = true
+          startLivePoll()
+        }
+        isBusy = false
+        document.getElementById('kaali-snd').disabled = false
+        return
+      }
       if (!data.text) throw new Error(data.error || 'Empty response')
 
       // Persist conversation ID
