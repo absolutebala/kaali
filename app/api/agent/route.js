@@ -22,7 +22,7 @@ export async function GET(request) {
     supabaseAdmin.from('agent_sessions')
       .select('id, member_id, is_online, last_seen')
       .eq('tenant_id', tenant.tenantId).eq('is_online', true)
-      .gt('last_seen', new Date(Date.now() - 120000).toISOString()),
+      .gt('last_seen', new Date(Date.now() - 90000).toISOString()),
   ])
 
   return NextResponse.json({ waiting: waiting || [], live: live || [], onlineCount: agents?.length || 0 })
@@ -59,18 +59,26 @@ export async function POST(request) {
       status:   'live',
       agent_id: tenant.memberId || null,
     }).eq('id', conversationId).eq('tenant_id', tenant.tenantId)
+    // Send a message to widget that agent has joined
+    await supabaseAdmin.from('messages').insert({
+      conversation_id: conversationId,
+      role:            'assistant',
+      content:         '👋 A team member has joined the chat. How can I help you today?',
+      is_agent:        true,
+    })
     return NextResponse.json({ ok: true })
   }
 
   if (action === 'send') {
-    // Agent sends a message
-    await supabaseAdmin.from('messages').insert({
+    if (!message?.trim()) return NextResponse.json({ error: 'Empty message' }, { status: 400 })
+    const { data, error: dbErr } = await supabaseAdmin.from('messages').insert({
       conversation_id: conversationId,
       role:            'assistant',
-      content:         message,
+      content:         message.trim(),
       is_agent:        true,
-    })
-    return NextResponse.json({ ok: true })
+    }).select('id, content, created_at').single()
+    if (dbErr) return NextResponse.json({ error: dbErr.message }, { status: 500 })
+    return NextResponse.json({ ok: true, message: data })
   }
 
   if (action === 'close') {
