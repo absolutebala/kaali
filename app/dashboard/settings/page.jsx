@@ -244,8 +244,8 @@ export default function SettingsPage() {
             {' '}→ Self Client → Generate Token → Scope: <code style={{ background:'var(--s2)', padding:'1px 6px', borderRadius:4, fontSize:11 }}>ZohoCRM.modules.leads.CREATE,ZohoCRM.modules.contacts.CREATE</code>
           </div>
           <div style={{ display:'flex', justifyContent:'flex-end', gap:8 }}>
-            {form.zohoToken && <button className="btn-ghost btn-sm" onClick={() => { setForm(p => ({ ...p, zohoToken:'' })); saveSettings() }}>Disconnect</button>}
-            <button className="btn-pri btn-sm" onClick={saveSettings} disabled={saving}>Save</button>
+            {form.zohoToken && <button className="btn-ghost btn-sm" onClick={() => { setForm(p => ({ ...p, zohoToken:'' })); save() }}>Disconnect</button>}
+            <button className="btn-pri btn-sm" onClick={save} disabled={saving}>Save</button>
           </div>
         </div>
       </div>
