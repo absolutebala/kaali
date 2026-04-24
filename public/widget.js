@@ -512,10 +512,10 @@
         const snd = document.getElementById('kaali-snd')
         if (inp) { inp.disabled = false; inp.placeholder = 'Type your message…' }
         if (snd) snd.disabled = false
-        // Only start live polling when fully transferred (not during contact collection)
+        // Start polling immediately - will detect when agent accepts
+        startLivePoll()
         if (data.handoff === true) {
           window.__kaaliIsLive = true
-          startLivePoll()
         }
         isBusy = false
         return
@@ -565,24 +565,33 @@
 
   function startLivePoll() {
     if (liveInterval) return
+    // Initialize lastMsgCount from current history length
+    lastMsgCount = history.filter(m => m.role === 'assistant').length
     liveInterval = setInterval(async () => {
       if (!convId) return
       try {
         const r = await fetch(`${config.apiUrl.replace('/chat','/conversations')}?id=${convId}&public=1`)
         const d = await r.json()
-        const agentMsgs = (d.messages || []).filter(m => m.is_agent)
+        // Set live mode when agent accepts
+        if (d.conversation?.status === 'live' && !window.__kaaliIsLive) {
+          window.__kaaliIsLive = true
+        }
+        const allMsgs = (d.messages || [])
+        const agentMsgs = allMsgs.filter(m => m.is_agent)
         if (agentMsgs.length > lastMsgCount) {
           const newMsgs = agentMsgs.slice(lastMsgCount)
           newMsgs.forEach(m => addMsg('bot', m.content + ' <span style="font-size:10px;color:#5EDFAC">— Team</span>'))
           lastMsgCount = agentMsgs.length
+          scrollDown()
         }
         // Stop polling if conversation closed
         if (d.conversation?.status === 'closed') {
           clearInterval(liveInterval); liveInterval = null
+          window.__kaaliIsLive = false
           addMsg('bot', 'The chat session has ended. Is there anything else I can help you with?')
         }
       } catch(e) {}
-    }, 3000)
+    }, 2000)
   }
 
   // ── Fetch IP geolocation non-blocking ───────────────────────
