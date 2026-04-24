@@ -17,6 +17,7 @@ export default function SettingsPage() {
   })
   const [saving,      setSaving]      = useState(false)
   const [saved,       setSaved]       = useState(false)
+  const [activeIntg,  setActiveIntg]  = useState(null)
   const [hsVis,       setHsVis]       = useState(false)
   const [avatarUrl,   setAvatarUrl]   = useState('')
   const [uploading,   setUploading]   = useState(false)
@@ -208,68 +209,75 @@ export default function SettingsPage() {
         </div>
         <div style={{ padding:'0 18px 18px' }}>
 
-          {/* HubSpot */}
-          <div style={{ padding:'18px 0', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#FF7A59', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.164 7.93V5.084a2.198 2.198 0 0 0 1.269-1.978V3.07A2.199 2.199 0 0 0 17.236.873h-.036a2.199 2.199 0 0 0-2.197 2.197v.036a2.198 2.198 0 0 0 1.269 1.978V7.93a6.232 6.232 0 0 0-2.962 1.305L6.225 4.129a2.44 2.44 0 1 0-1.197 1.476l6.893 5.001a6.232 6.232 0 0 0-.896 3.242 6.23 6.23 0 0 0 .97 3.361l-2.098 2.098a1.907 1.907 0 1 0 1.162 1.086l2.012-2.012a6.267 6.267 0 0 0 9.136-5.533A6.263 6.263 0 0 0 18.164 7.93zm-1 9.87a3.266 3.266 0 1 1 0-6.532 3.266 3.266 0 0 1 0 6.531z"/></svg>
-              </div>
-              <div style={{ flex:1 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>HubSpot CRM</span>
-                  {form.hubspotToken && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
+          {/* 3 integration boxes */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:20 }}>
+            {[
+              { key:'hubspot', label:'HubSpot CRM', color:'#FF7A59', connected: !!form.hubspotToken,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.164 7.93V5.084a2.198 2.198 0 0 0 1.269-1.978V3.07A2.199 2.199 0 0 0 17.236.873h-.036a2.199 2.199 0 0 0-2.197 2.197v.036a2.198 2.198 0 0 0 1.269 1.978V7.93a6.232 6.232 0 0 0-2.962 1.305L6.225 4.129a2.44 2.44 0 1 0-1.197 1.476l6.893 5.001a6.232 6.232 0 0 0-.896 3.242 6.23 6.23 0 0 0 .97 3.361l-2.098 2.098a1.907 1.907 0 1 0 1.162 1.086l2.012-2.012a6.267 6.267 0 0 0 9.136-5.533A6.263 6.263 0 0 0 18.164 7.93zm-1 9.87a3.266 3.266 0 1 1 0-6.532 3.266 3.266 0 0 1 0 6.531z"/></svg> },
+              { key:'zoho',    label:'Zoho CRM',    color:'#E42527', connected: !!form.zohoToken,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5h-9v-2l5.5-6H7.5V7h9v2l-5.5 6h5.5v1.5z"/></svg> },
+              { key:'zapier',  label:'Zapier',      color:'#FF4A00', connected: !!form.zapierWebhookUrl,
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M14.5 2.5l-3 8H3l7 5-2.5 8 7-5 7 5-2.5-8 7-5h-8.5l-3-8z"/></svg> },
+            ].map(intg => (
+              <div key={intg.key}
+                onClick={() => setActiveIntg(intg.key === activeIntg ? null : intg.key)}
+                style={{ padding:'16px 14px', borderRadius:12, cursor:'pointer', transition:'all .15s', textAlign:'center',
+                  background: activeIntg === intg.key ? `${intg.color}18` : 'var(--s2)',
+                  border: `1.5px solid ${activeIntg === intg.key ? intg.color + '66' : 'rgba(255,255,255,.1)'}` }}>
+                <div style={{ width:44, height:44, borderRadius:12, background:intg.color, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 10px' }}>
+                  {intg.icon}
                 </div>
-                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Auto-creates/updates contacts on lead capture</div>
+                <div style={{ fontSize:13, fontWeight:600, color:'var(--tx)', marginBottom:4 }}>{intg.label}</div>
+                {intg.connected
+                  ? <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>
+                  : <span style={{ fontSize:10, color:'var(--td)' }}>Not connected</span>}
               </div>
-              <a href="https://app.hubspot.com/private-apps" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Get token →</a>
-            </div>
-            <div style={{ position:'relative' }}>
-              <input className="form-input" type={hsVis?'text':'password'} value={form.hubspotToken}
-                onChange={f('hubspotToken')} placeholder="pat-na1-xxxx..." style={{ paddingRight:60 }} />
-              <button onClick={() => setHsVis(v=>!v)} style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>{hsVis?'Hide':'Show'}</button>
-            </div>
+            ))}
           </div>
 
-          {/* Zoho CRM */}
-          <div style={{ padding:'18px 0', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#E42527', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5h-9v-2l5.5-6H7.5V7h9v2l-5.5 6h5.5v1.5z"/></svg>
+          {/* HubSpot panel */}
+          {activeIntg === 'hubspot' && (
+            <div style={{ padding:'16px', background:'rgba(255,122,89,.06)', border:'0.5px solid rgba(255,122,89,.2)', borderRadius:10, marginBottom:4 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+                <span style={{ fontSize:13, fontWeight:500, color:'var(--tx)' }}>HubSpot Private App Token</span>
+                <a href="https://app.hubspot.com/private-apps" target="_blank" rel="noopener" style={{ fontSize:11, color:'#FF7A59', textDecoration:'none' }}>Get token →</a>
               </div>
-              <div style={{ flex:1 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>Zoho CRM</span>
-                  {form.zohoToken && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
-                </div>
-                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Auto-creates lead records on lead capture</div>
+              <div style={{ position:'relative' }}>
+                <input className="form-input" type={hsVis?'text':'password'} value={form.hubspotToken}
+                  onChange={f('hubspotToken')} placeholder="pat-na1-xxxx..." style={{ paddingRight:60, marginBottom:0 }} />
+                <button onClick={() => setHsVis(v=>!v)} style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>{hsVis?'Hide':'Show'}</button>
               </div>
-              <a href="https://api-console.zoho.com" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Get token →</a>
+              <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>Auto-creates or updates contacts in HubSpot when a lead is captured</div>
             </div>
-            <input className="form-input" type="password" value={form.zohoToken}
-              onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
-              placeholder="Zoho OAuth access token" />
-            <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>
-              Scope needed: <code style={{ background:'var(--s2)', padding:'1px 5px', borderRadius:4 }}>ZohoCRM.modules.leads.CREATE</code>
-            </div>
-          </div>
+          )}
 
-          {/* Zapier */}
-          <div style={{ padding:'18px 0' }}>
-            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:14 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#FF4A00', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M14.5 2.5l-3 8H3l7 5-2.5 8 7-5 7 5-2.5-8 7-5h-8.5l-3-8z"/></svg>
+          {/* Zoho panel */}
+          {activeIntg === 'zoho' && (
+            <div style={{ padding:'16px', background:'rgba(228,37,39,.06)', border:'0.5px solid rgba(228,37,39,.2)', borderRadius:10, marginBottom:4 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+                <span style={{ fontSize:13, fontWeight:500, color:'var(--tx)' }}>Zoho CRM OAuth Access Token</span>
+                <a href="https://api-console.zoho.com" target="_blank" rel="noopener" style={{ fontSize:11, color:'#E42527', textDecoration:'none' }}>Get token →</a>
               </div>
-              <div style={{ flex:1 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                  <span style={{ fontSize:14, fontWeight:600, color:'var(--tx)' }}>Zapier</span>
-                  {form.zapierWebhookUrl && <span style={{ fontSize:10, padding:'2px 8px', borderRadius:10, background:'rgba(34,209,122,.12)', color:'#5EDFAC', fontWeight:500 }}>● Connected</span>}
-                </div>
-                <div style={{ fontSize:12, color:'var(--tm)', marginTop:2 }}>Sends lead data to 5,000+ apps via webhook</div>
+              <input className="form-input" type="password" value={form.zohoToken}
+                onChange={e => setForm(p => ({ ...p, zohoToken: e.target.value }))}
+                placeholder="Zoho OAuth access token" style={{ marginBottom:6 }} />
+              <div style={{ fontSize:11, color:'var(--td)' }}>
+                Scope: <code style={{ background:'var(--s2)', padding:'1px 5px', borderRadius:4 }}>ZohoCRM.modules.leads.CREATE</code>
               </div>
-              <a href="https://zapier.com/apps/webhook/integrations" target="_blank" rel="noopener" style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', flexShrink:0 }}>Set up →</a>
             </div>
-            <input className="form-input" value={form.zapierWebhookUrl} onChange={f('zapierWebhookUrl')} placeholder="https://hooks.zapier.com/hooks/catch/..." />
-          </div>
+          )}
+
+          {/* Zapier panel */}
+          {activeIntg === 'zapier' && (
+            <div style={{ padding:'16px', background:'rgba(255,74,0,.06)', border:'0.5px solid rgba(255,74,0,.2)', borderRadius:10, marginBottom:4 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+                <span style={{ fontSize:13, fontWeight:500, color:'var(--tx)' }}>Zapier Webhook URL</span>
+                <a href="https://zapier.com/apps/webhook/integrations" target="_blank" rel="noopener" style={{ fontSize:11, color:'#FF4A00', textDecoration:'none' }}>Set up →</a>
+              </div>
+              <input className="form-input" value={form.zapierWebhookUrl} onChange={f('zapierWebhookUrl')} placeholder="https://hooks.zapier.com/hooks/catch/..." />
+              <div style={{ fontSize:11, color:'var(--td)', marginTop:6 }}>Sends lead data to 5,000+ apps. Connect Google Sheets, Slack, Notion and more</div>
+            </div>
+          )}
 
         </div>
       </div>
