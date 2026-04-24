@@ -53,11 +53,16 @@ export async function POST(request) {
         .insert({
           tenant_id:    tenantId,
           visitor_type: visitorType || 'GENERAL',
-          page_url:     pageUrl || '',
+          page_url:     pageUrl     || '',
           country:      visitorData?.country      || '',
           city:         visitorData?.city         || '',
           device:       visitorData?.device       || '',
           pages_visited:visitorData?.pagesVisited || [],
+          org:          (visitorData?.org         || '').replace(/^AS\d+\s+/,''),
+          browser:      visitorData?.browser      || '',
+          os:           visitorData?.os           || '',
+          referrer:     visitorData?.referrer     || '',
+          timezone:     visitorData?.timezone     || '',
         })
         .select('id')
         .single()
@@ -126,6 +131,15 @@ export async function POST(request) {
           pages_visited:   visitorData?.pagesVisited || [],
           session_count:   visitorData?.sessionCount || 1,
           ip_address:      visitorData?.ip           || '',
+          org:             (visitorData?.org         || '').replace(/^AS\d+\s+/,''),
+          browser:         visitorData?.browser      || '',
+          os:              visitorData?.os           || '',
+          referrer:        visitorData?.referrer     || '',
+          timezone:        visitorData?.timezone     || '',
+          language:        visitorData?.language     || '',
+          screen_width:    visitorData?.screenWidth  || 0,
+          utm_source:      visitorData?.utmSource    || '',
+          utm_campaign:    visitorData?.utmCampaign  || '',
         })
         .select('id, name, email, visitor_type')
         .single()

@@ -155,20 +155,7 @@ export default function ConversationsPage() {
                     {meta.lead_captured && <span className="badge" style={{ background:'rgba(34,209,122,.12)', color:'#5EDFAC' }}>✓ Lead captured</span>}
                     <span style={{ fontSize:11, color:'var(--td)', marginLeft:'auto' }}>{fmtDate(meta.started_at)}</span>
                   </div>
-                  {(() => {
-                    const country = meta.country || meta.lead?.country
-                    const city    = meta.city    || meta.lead?.city
-                    const device  = meta.device  || meta.lead?.device
-                    const sessions = meta.lead?.session_count
-                    if (!country && !city && !device) return null
-                    return (
-                      <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-                        {(city || country) && <span style={{ fontSize:11, color:'var(--tm)' }}>📍 {[city, country].filter(Boolean).join(', ')}</span>}
-                        {device && <span style={{ fontSize:11, color:'var(--tm)' }}>💻 {device}</span>}
-                        {sessions > 1 && <span style={{ fontSize:11, color:'var(--tm)' }}>🔄 {sessions} visits</span>}
-                      </div>
-                    )
-                  })()}
+                  <VisitorIntelPanel meta={meta} tenantToken={typeof window !== 'undefined' ? localStorage.getItem('kaali_token') : ''} />
                 </div>
               )}
               {msgs.map(m => (
