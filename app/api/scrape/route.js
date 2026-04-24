@@ -1,6 +1,6 @@
 import { NextResponse }  from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
-import { requireAuth }   from '@/lib/auth'
+import { supabaseAdmin } from '../../../../lib/supabase'
+import { requireAuth }   from '../../../../lib/auth'
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204 })
@@ -60,10 +60,11 @@ export async function POST(request) {
 
     // Cap at 50k chars
     const extractedText = text.substring(0, 50000)
-    const domain = parsedUrl.hostname
-    const pagePath = parsedUrl.pathname === '/' ? '' : parsedUrl.pathname; const docName = 'Website: ' + domain + pagePath
+    const domain  = parsedUrl.hostname
+    const urlPath = parsedUrl.pathname !== '/' ? parsedUrl.pathname : ''
+    const docName = `Website: ${domain}${urlPath}`
 
-    // Check if we already have a doc for this domain — update it
+    // Check if we already have a doc for this exact URL — update it
     const { data: existing } = await supabaseAdmin
       .from('documents')
       .select('id')
@@ -103,7 +104,7 @@ export async function POST(request) {
     return NextResponse.json({
       document: doc,
       charCount: extractedText.length,
-      message: `Successfully extracted ${extractedText.length.toLocaleString()} characters from ${domain}`,
+      message: `Successfully extracted ${extractedText.length.toLocaleString()} characters from ${docName}`,
     }, { status: 201 })
 
   } catch (err) {
