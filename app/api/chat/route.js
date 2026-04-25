@@ -11,13 +11,20 @@ export async function OPTIONS() {
 }
 
 function extractContact(text) {
-  const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/)
-  if (!emailMatch) return null
-  const email = emailMatch[0]
-  const before = text.substring(0, text.indexOf(email)).replace(/[,\s]+$/, '').trim()
-  const nameParts = before.split(/\s+/).filter(Boolean)
-  const name = nameParts.slice(-3).join(' ') || 'Visitor'
-  return { name, email }
+  // Match valid emails with proper TLD
+  const validEmail = text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/)
+  if (validEmail) {
+    const email = validEmail[0]
+    const before = text.substring(0, text.indexOf(email)).replace(/[,\s]+$/, '').trim()
+    const name = before.split(/\s+/).filter(Boolean).slice(-3).join(' ') || 'Visitor'
+    return { name, email, valid: true }
+  }
+  // Detect email-like pattern but invalid (e.g. missing TLD)
+  const emailLike = text.match(/[\w.+-]+@[\w.-]+/)
+  if (emailLike) {
+    return { name: null, email: emailLike[0], valid: false }
+  }
+  return null
 }
 
 export async function POST(request) {
@@ -52,10 +59,20 @@ export async function POST(request) {
       // ── COLLECTING: extract contact directly ─────────────────
       if (convo?.status === 'collecting') {
         const contact = extractContact(lastMsg)
-        if (contact) {
+
+        // If email-like but invalid — ask to confirm
+        if (contact && !contact.valid) {
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg })
+          const confirmReply = `I want to make sure I have your email right — could you double-check it? It looks like \`${contact.email}\` might be missing something (e.g. the domain like .com). Please resend your email address.`
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'assistant', content: confirmReply })
+          return NextResponse.json({ text: confirmReply, conversationId, handoff: 'collecting' })
+        }
+
+        if (contact && contact.valid) {
           const summary = messages.filter(m => m.role === 'user').map(m => m.content).join(' ').substring(0, 120)
 
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg })
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId,
+            tenant_id: tenantId, role: 'user', content: lastMsg })
 
           await supabaseAdmin.from('leads').insert({
             tenant_id: tenantId, conversation_id: conversationId,
@@ -86,7 +103,7 @@ export async function POST(request) {
             tenant_id: tenantId, role: 'assistant', content: reply })
           return NextResponse.json({ text: reply, conversationId, handoff: true, agentsOnline })
         }
-        // No email yet — fall through to AI to ask again naturally
+        // No valid email yet — fall through to AI to ask again naturally
       }
     }
 
