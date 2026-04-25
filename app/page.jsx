@@ -8,9 +8,8 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
-    // Load live demo widget
     const s = document.createElement('script')
     s.src = `https://aichat.absoluteapplabs.com/widget.js?id=${TENANT_ID}`
     s.async = true
@@ -19,167 +18,190 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div style={{ fontFamily:"'DM Sans', sans-serif", background:'#0A0A0A', color:'#F5F0EB', minHeight:'100vh', overflowX:'hidden' }}>
+    <div style={{ fontFamily:"'Poppins', sans-serif", background:'#FAFAF8', color:'#1A1A1A', minHeight:'100vh', overflowX:'hidden' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
           --orange: #FF5C00;
-          --orange-light: #FF8A40;
-          --orange-glow: rgba(255,92,0,0.15);
-          --surface: #141414;
-          --border: rgba(255,255,255,0.08);
-          --text: #F5F0EB;
-          --muted: #8A8070;
+          --orange2: #FF8C42;
+          --orange-pale: #FFF4EE;
+          --dark: #1A1A1A;
+          --muted: #6B6B6B;
+          --border: #E8E4DF;
+          --surface: #FFFFFF;
+          --bg: #FAFAF8;
         }
         .btn-primary {
           display: inline-flex; align-items: center; gap: 8px;
-          background: var(--orange); color: #fff; padding: 14px 28px;
-          border-radius: 100px; font-size: 15px; font-weight: 500;
-          text-decoration: none; transition: all 0.2s;
-          border: none; cursor: pointer;
+          background: var(--orange); color: #fff; padding: 14px 32px;
+          border-radius: 8px; font-size: 15px; font-weight: 600;
+          text-decoration: none; transition: all 0.2s; font-family: Poppins, sans-serif;
+          border: none; cursor: pointer; letter-spacing: -0.01em;
         }
-        .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(255,92,0,0.4); }
-        .btn-ghost {
-          display: inline-flex; align-items: center;
-          background: transparent; color: var(--text); padding: 14px 28px;
-          border-radius: 100px; font-size: 15px; font-weight: 400;
-          text-decoration: none; transition: all 0.2s;
-          border: 1px solid var(--border);
+        .btn-primary:hover { background: #E64D00; transform: translateY(-1px); box-shadow: 0 12px 40px rgba(255,92,0,0.3); }
+        .btn-outline {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: transparent; color: var(--dark); padding: 14px 32px;
+          border-radius: 8px; font-size: 15px; font-weight: 500;
+          text-decoration: none; transition: all 0.2s; font-family: Poppins, sans-serif;
+          border: 1.5px solid var(--border); cursor: pointer;
         }
-        .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+        .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
         .feature-card {
           background: var(--surface); border: 1px solid var(--border);
-          border-radius: 16px; padding: 28px;
-          transition: all 0.2s;
+          border-radius: 16px; padding: 28px 24px; transition: all 0.25s;
         }
-        .feature-card:hover { border-color: rgba(255,92,0,0.3); transform: translateY(-2px); }
-        .section { padding: 100px 0; }
-        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-        .tag { display: inline-block; background: var(--orange-glow); color: var(--orange);
-          border: 1px solid rgba(255,92,0,0.2); padding: 6px 14px; border-radius: 100px;
-          font-size: 13px; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 20px; }
-        h1, h2 { font-family: 'Syne', sans-serif; }
-        .gradient-text { background: linear-gradient(135deg, var(--orange) 0%, #FFB347 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .divider { height: 1px; background: var(--border); }
-        @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
-        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6 } 100% { transform: scale(1.4); opacity: 0 } }
-        @keyframes fade-up { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
-        .fade-up { animation: fade-up 0.6s ease forwards; }
-        .step-line { position: absolute; left: 19px; top: 44px; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--orange), transparent); }
+        .feature-card:hover { border-color: var(--orange2); box-shadow: 0 8px 40px rgba(255,92,0,0.08); transform: translateY(-3px); }
+        .section { padding: 96px 0; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+        .tag { display: inline-block; background: var(--orange-pale); color: var(--orange);
+          border: 1px solid rgba(255,92,0,0.15); padding: 5px 14px; border-radius: 6px;
+          font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; }
+        .gradient-text { background: linear-gradient(135deg, var(--orange) 0%, var(--orange2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .plan-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px; padding: 36px 32px; transition: all 0.2s; }
+        .plan-card.featured { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,92,0,0.08); }
+        nav a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        nav a:hover { color: var(--orange); }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(24px) } to { opacity: 1; transform: translateY(0) } }
+        .fade-up { animation: fade-up 0.7s ease forwards; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        .chat-float { animation: float 4s ease-in-out infinite; }
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-visual { display: none !important; }
+          .plan-grid { grid-template-columns: 1fr !important; }
+          .feat-grid { grid-template-columns: 1fr 1fr !important; }
+        }
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:100, padding:'16px 24px', display:'flex', alignItems:'center', justifyContent:'space-between',
-        background: scrolled ? 'rgba(10,10,10,0.95)' : 'transparent', backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none', transition:'all 0.3s' }}>
-        <div style={{ fontFamily:'Syne, sans-serif', fontSize:20, fontWeight:800 }}>
-          Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
-        </div>
-        <div style={{ display:'flex', alignItems:'center', gap:32, fontSize:14, color:'var(--muted)' }}>
-          <a href="#features" style={{ color:'var(--muted)', textDecoration:'none' }}>Features</a>
-          <a href="#how" style={{ color:'var(--muted)', textDecoration:'none' }}>How it works</a>
-          <a href="#pricing" style={{ color:'var(--muted)', textDecoration:'none' }}>Pricing</a>
-        </div>
-        <div style={{ display:'flex', gap:12 }}>
-          <Link href="/auth/login" className="btn-ghost" style={{ padding:'10px 20px', fontSize:14 }}>Sign in</Link>
-          <Link href="/auth/register" className="btn-primary" style={{ padding:'10px 20px', fontSize:14 }}>Get started free</Link>
+      <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:100,
+        background: scrolled ? 'rgba(250,250,248,0.96)' : 'rgba(250,250,248,0.8)',
+        backdropFilter:'blur(16px)', borderBottom:`1px solid ${scrolled ? 'var(--border)' : 'transparent'}`,
+        transition:'all 0.3s', padding:'0 32px' }}>
+        <div style={{ maxWidth:1140, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between', height:68 }}>
+          <div style={{ fontFamily:'Poppins', fontSize:18, fontWeight:700, letterSpacing:'-0.02em' }}>
+            Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:36 }}>
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#pricing">Pricing</a>
+          </div>
+          <div style={{ display:'flex', gap:12 }}>
+            <Link href="/auth/login" className="btn-outline" style={{ padding:'10px 22px', fontSize:14 }}>Sign in</Link>
+            <Link href="/auth/register" className="btn-primary" style={{ padding:'10px 22px', fontSize:14 }}>Get started free</Link>
+          </div>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section style={{ paddingTop:160, paddingBottom:100, position:'relative', overflow:'hidden' }}>
-        {/* Background glow */}
-        <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:600, height:400, background:'radial-gradient(ellipse, rgba(255,92,0,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
-        <div className="container" style={{ textAlign:'center', position:'relative' }}>
-          <div className="tag fade-up">🤖 AI-powered chat for your business</div>
-          <h1 className="fade-up" style={{ fontSize:'clamp(48px,7vw,88px)', lineHeight:1.05, fontWeight:800, marginBottom:24, animationDelay:'0.1s' }}>
-            Turn visitors into<br /><span className="gradient-text">leads & customers</span>
-          </h1>
-          <p className="fade-up" style={{ fontSize:20, color:'var(--muted)', maxWidth:560, margin:'0 auto 40px', lineHeight:1.6, animationDelay:'0.2s' }}>
-            Deploy an intelligent AI chat assistant on your website in minutes. Powered by Claude or ChatGPT. Built on your knowledge base.
-          </p>
-          <div className="fade-up" style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap', animationDelay:'0.3s' }}>
-            <Link href="/auth/register" className="btn-primary" style={{ fontSize:16, padding:'16px 36px' }}>
-              Start for free →
-            </Link>
-            <a href="#how" className="btn-ghost" style={{ fontSize:16, padding:'16px 36px' }}>
-              See how it works
-            </a>
-          </div>
-          <p style={{ marginTop:20, fontSize:13, color:'var(--muted)' }}>No credit card required · Free plan available · Live in 5 minutes</p>
+      {/* HERO — full viewport rectangle */}
+      <section style={{ minHeight:'100vh', display:'flex', alignItems:'center', paddingTop:68, background:'linear-gradient(135deg, #FFFBF8 0%, #FFF4EE 50%, #FAFAF8 100%)' }}>
+        <div className="container" style={{ width:'100%' }}>
+          <div className="hero-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
 
-          {/* Hero visual */}
-          <div className="fade-up" style={{ marginTop:72, animationDelay:'0.4s' }}>
-            <div style={{ display:'inline-block', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:20, padding:3, boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
-              <div style={{ background:'#0D0D0D', borderRadius:18, padding:24, minWidth:320, textAlign:'left' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20, paddingBottom:16, borderBottom:'1px solid var(--border)' }}>
-                  <div style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg, var(--orange), #FF8A40)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Syne', fontWeight:800, fontSize:14, color:'#fff' }}>K</div>
-                  <div>
-                    <div style={{ fontSize:13, fontWeight:500 }}>Kaali</div>
-                    <div style={{ fontSize:11, color:'#5EDFAC' }}>● Online</div>
-                  </div>
-                </div>
-                {[
-                  { role:'bot', msg:"Hi! 👋 I'm Kaali. What brings you here today?" },
-                  { role:'user', msg:"I want to build a mobile app" },
-                  { role:'bot', msg:"Great! We've built 50+ apps. What type — iOS, Android, or both? I can connect you with our team." },
-                ].map((m, i) => (
-                  <div key={i} style={{ marginBottom:12, display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
-                    <div style={{ maxWidth:'80%', padding:'10px 14px', borderRadius:14, fontSize:13, lineHeight:1.5,
-                      background: m.role==='user' ? 'var(--orange)' : 'rgba(255,255,255,0.06)',
-                      color: m.role==='user' ? '#fff' : 'var(--text)' }}>
-                      {m.msg}
-                    </div>
+            {/* Left — text */}
+            <div>
+              <div className="tag fade-up">AI Chat Platform</div>
+              <h1 className="fade-up" style={{ fontSize:'clamp(36px,4.5vw,58px)', fontWeight:800, lineHeight:1.1, letterSpacing:'-0.03em', marginBottom:20, animationDelay:'0.05s' }}>
+                Turn every website<br />visitor into a <span className="gradient-text">paying customer</span>
+              </h1>
+              <p className="fade-up" style={{ fontSize:17, color:'var(--muted)', lineHeight:1.7, marginBottom:36, animationDelay:'0.1s', maxWidth:440 }}>
+                Deploy an AI chat assistant trained on your business in minutes. Capture leads, answer questions 24/7, and hand off to live agents — all from one platform.
+              </p>
+              <div className="fade-up" style={{ display:'flex', gap:14, flexWrap:'wrap', marginBottom:32, animationDelay:'0.15s' }}>
+                <Link href="/auth/register" className="btn-primary" style={{ fontSize:16, padding:'15px 36px' }}>
+                  Start free — no card needed
+                </Link>
+                <a href="#how" className="btn-outline" style={{ fontSize:16, padding:'15px 28px' }}>
+                  See how it works
+                </a>
+              </div>
+              <div className="fade-up" style={{ display:'flex', alignItems:'center', gap:24, animationDelay:'0.2s' }}>
+                {[['500+','Businesses'], ['24/7','AI support'], ['5 min','Setup time']].map(([n, l]) => (
+                  <div key={l}>
+                    <div style={{ fontSize:22, fontWeight:700, color:'var(--orange)' }}>{n}</div>
+                    <div style={{ fontSize:12, color:'var(--muted)', fontWeight:500 }}>{l}</div>
                   </div>
                 ))}
-                <div style={{ marginTop:16, background:'rgba(255,255,255,0.04)', borderRadius:10, padding:'10px 14px', fontSize:13, color:'var(--muted)', display:'flex', justifyContent:'space-between' }}>
-                  <span>Type your message…</span>
-                  <span style={{ color:'var(--orange)' }}>➤</span>
+              </div>
+            </div>
+
+            {/* Right — visual */}
+            <div className="hero-visual fade-up" style={{ animationDelay:'0.2s', position:'relative' }}>
+              {/* Background blob */}
+              <div style={{ position:'absolute', inset:'-20px', background:'radial-gradient(ellipse at 60% 40%, rgba(255,92,0,0.1) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(40px)' }} />
+
+              {/* Main chat window */}
+              <div className="chat-float" style={{ background:'#fff', borderRadius:20, boxShadow:'0 24px 80px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)', overflow:'hidden', position:'relative' }}>
+                {/* Header */}
+                <div style={{ background:'linear-gradient(135deg, var(--orange), var(--orange2))', padding:'16px 20px', display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:700, color:'#fff' }}>K</div>
+                  <div>
+                    <div style={{ fontSize:14, fontWeight:600, color:'#fff' }}>Kaali — AI Assistant</div>
+                    <div style={{ fontSize:11, color:'rgba(255,255,255,0.8)' }}>● Online · Replies instantly</div>
+                  </div>
                 </div>
+                {/* Messages */}
+                <div style={{ padding:20, display:'flex', flexDirection:'column', gap:12, background:'#F9F9F9', minHeight:220 }}>
+                  <div style={{ background:'#fff', borderRadius:'16px 16px 16px 4px', padding:'12px 16px', fontSize:14, maxWidth:'80%', boxShadow:'0 1px 3px rgba(0,0,0,0.06)', lineHeight:1.5 }}>
+                    Hi! 👋 I'm Kaali. What brings you here today?
+                  </div>
+                  <div style={{ background:'var(--orange)', borderRadius:'16px 16px 4px 16px', padding:'12px 16px', fontSize:14, maxWidth:'80%', alignSelf:'flex-end', color:'#fff', lineHeight:1.5 }}>
+                    I want to build a mobile app for my business
+                  </div>
+                  <div style={{ background:'#fff', borderRadius:'16px 16px 16px 4px', padding:'12px 16px', fontSize:14, maxWidth:'80%', boxShadow:'0 1px 3px rgba(0,0,0,0.06)', lineHeight:1.5 }}>
+                    Great! We've built 50+ apps. Could I get your name and email to connect you with our team? 🚀
+                  </div>
+                </div>
+                {/* Input */}
+                <div style={{ padding:'12px 16px', borderTop:'1px solid #EFEFEF', display:'flex', gap:10, alignItems:'center', background:'#fff' }}>
+                  <input readOnly placeholder="Type your message…" style={{ flex:1, border:'1px solid #E8E8E8', borderRadius:8, padding:'10px 14px', fontSize:14, color:'#999', outline:'none', background:'#FAFAFA', fontFamily:'Poppins' }} />
+                  <div style={{ width:36, height:36, background:'var(--orange)', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+                    <span style={{ color:'#fff', fontSize:14 }}>➤</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating stat badges */}
+              <div style={{ position:'absolute', top:-16, right:-16, background:'#fff', borderRadius:12, padding:'10px 16px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', fontSize:13, fontWeight:600, border:'1px solid var(--border)' }}>
+                ✅ Lead captured!
+              </div>
+              <div style={{ position:'absolute', bottom:24, left:-24, background:'#fff', borderRadius:12, padding:'10px 16px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', fontSize:13, fontWeight:600, border:'1px solid var(--border)' }}>
+                🔴 Live agent joined
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* LOGOS */}
-      <section style={{ padding:'40px 0', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
-        <div className="container" style={{ textAlign:'center' }}>
-          <p style={{ fontSize:13, color:'var(--muted)', marginBottom:24 }}>WORKS WITH YOUR FAVOURITE AI PROVIDERS</p>
-          <div style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:48, flexWrap:'wrap' }}>
-            {['Claude (Anthropic)', 'ChatGPT (OpenAI)', 'HubSpot', 'Zoho CRM', 'Zapier', 'Stripe'].map(name => (
-              <span key={name} style={{ fontSize:15, fontWeight:500, color:'var(--muted)' }}>{name}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* FEATURES */}
-      <section id="features" className="section">
+      <section id="features" className="section" style={{ background:'#fff' }}>
         <div className="container">
-          <div style={{ textAlign:'center', marginBottom:64 }}>
+          <div style={{ textAlign:'center', marginBottom:56 }}>
             <div className="tag">Features</div>
-            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800, lineHeight:1.1 }}>
-              Everything you need to<br />convert visitors into leads
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:800, letterSpacing:'-0.03em', marginBottom:12 }}>
+              Everything to convert visitors into leads
             </h2>
+            <p style={{ fontSize:17, color:'var(--muted)', maxWidth:500, margin:'0 auto' }}>One platform. Every tool you need to capture, qualify, and close.</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:16 }}>
+          <div className="feat-grid" style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:16 }}>
             {[
-              { icon:'🤖', title:'AI-Powered Chat', desc:'Claude or ChatGPT — bring your own API key. We never mark up AI usage.' },
-              { icon:'📚', title:'Smart Knowledge Base', desc:'Upload PDFs, scrape URLs, add Q&A pairs. Bot answers from your content only.' },
-              { icon:'👥', title:'Lead Capture', desc:'Automatically captures name, email, company from natural conversation.' },
-              { icon:'🔴', title:'Live Agent Handoff', desc:'Visitor requests a human — agent gets notified, takes over chat in real time.' },
-              { icon:'🏢', title:'Visitor Intelligence', desc:'Company name, location, device, browser, referrer — for every chat.' },
-              { icon:'🔗', title:'CRM Integrations', desc:'HubSpot, Zoho CRM, Zapier — leads sync automatically on capture.' },
-              { icon:'👤', title:'Team Access', desc:'Invite team members with Admin, Sales, or Custom role-based permissions.' },
-              { icon:'🎨', title:'Fully Customisable', desc:'Your bot name, avatar, bubble color, widget mode. Embed with one line of code.' },
-              { icon:'📊', title:'Lead Dashboard', desc:'Track leads, update status, export CSV, view full conversation transcripts.' },
+              { icon:'🤖', title:'Bring Your Own AI Key', desc:'Claude (Anthropic) or ChatGPT (OpenAI). We never charge for AI usage — full transparency.' },
+              { icon:'📚', title:'Smart Knowledge Base', desc:'Upload PDFs, scrape URLs, add Q&A pairs. Bot only answers from your content.' },
+              { icon:'👥', title:'Automatic Lead Capture', desc:'Bot naturally captures name, email, company mid-conversation. No popups.' },
+              { icon:'🔴', title:'Live Agent Handoff', desc:'Visitor requests a human — ring alert, agent takes over in real time with full context.' },
+              { icon:'🏢', title:'Visitor Intelligence', desc:'Company, location, device, browser, UTM — full profile for every chat visitor.' },
+              { icon:'🔗', title:'CRM Integrations', desc:'HubSpot, Zoho CRM, Zapier. Leads sync automatically the moment they're captured.' },
+              { icon:'👤', title:'Team Access', desc:'Invite team with Admin, Sales or Custom roles. Each sees only what they need.' },
+              { icon:'🎨', title:'Fully Customisable', desc:'Bot name, avatar, bubble color, widget mode. Embed with a single line of code.' },
+              { icon:'📊', title:'Lead & Chat Dashboard', desc:'Track leads, view transcripts, export CSV. Full analytics built in.' },
             ].map((f, i) => (
               <div key={i} className="feature-card">
-                <div style={{ fontSize:28, marginBottom:12 }}>{f.icon}</div>
-                <h3 style={{ fontFamily:'Syne', fontSize:18, fontWeight:700, marginBottom:8 }}>{f.title}</h3>
-                <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.6 }}>{f.desc}</p>
+                <div style={{ width:44, height:44, background:'var(--orange-pale)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, marginBottom:16 }}>{f.icon}</div>
+                <h3 style={{ fontSize:16, fontWeight:700, marginBottom:8, letterSpacing:'-0.01em' }}>{f.title}</h3>
+                <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.65 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -187,22 +209,22 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="section" style={{ background:'var(--surface)' }}>
+      <section id="how" className="section" style={{ background:'var(--bg)' }}>
         <div className="container">
-          <div style={{ textAlign:'center', marginBottom:64 }}>
+          <div style={{ textAlign:'center', marginBottom:56 }}>
             <div className="tag">How it works</div>
-            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Live in 5 minutes</h2>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:800, letterSpacing:'-0.03em' }}>Live in under 5 minutes</h2>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))', gap:32, maxWidth:800, margin:'0 auto' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24, maxWidth:960, margin:'0 auto' }}>
             {[
-              { n:'01', title:'Sign up free', desc:'Create your workspace. No credit card needed.' },
-              { n:'02', title:'Add your knowledge', desc:'Upload PDFs, paste your website URL, or type Q&A pairs.' },
-              { n:'03', title:'Connect your AI key', desc:'Paste your Anthropic or OpenAI API key. We encrypt it.' },
-              { n:'04', title:'Embed one line', desc:'Copy the script tag and paste it into your website. Done.' },
+              { n:'1', title:'Sign up free', desc:'Create your workspace. No credit card required.' },
+              { n:'2', title:'Train your bot', desc:'Upload PDFs, paste your URL, add Q&A pairs.' },
+              { n:'3', title:'Add your AI key', desc:'Claude or OpenAI. Encrypted. Never marked up.' },
+              { n:'4', title:'Embed one line', desc:'Copy the script tag. Paste into your site. Done.' },
             ].map((s, i) => (
-              <div key={i} style={{ position:'relative' }}>
-                <div style={{ width:40, height:40, borderRadius:'50%', background:'var(--orange-glow)', border:'1px solid rgba(255,92,0,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, color:'var(--orange)', marginBottom:16 }}>{s.n}</div>
-                <h3 style={{ fontFamily:'Syne', fontSize:18, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
+              <div key={i} style={{ textAlign:'center' }}>
+                <div style={{ width:52, height:52, borderRadius:14, background:'var(--orange)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, fontWeight:800, color:'#fff', margin:'0 auto 16px' }}>{s.n}</div>
+                <h3 style={{ fontSize:16, fontWeight:700, marginBottom:8, letterSpacing:'-0.01em' }}>{s.title}</h3>
                 <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.6 }}>{s.desc}</p>
               </div>
             ))}
@@ -211,25 +233,25 @@ export default function LandingPage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="section">
+      <section className="section" style={{ background:'#fff' }}>
         <div className="container">
-          <div style={{ textAlign:'center', marginBottom:64 }}>
+          <div style={{ textAlign:'center', marginBottom:56 }}>
             <div className="tag">Testimonials</div>
-            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Loved by businesses</h2>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:800, letterSpacing:'-0.03em' }}>Loved by businesses</h2>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:16 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
             {[
-              { quote:"We went live in under 10 minutes. Within the first week, the bot captured 14 qualified leads while we slept.", name:"Sarah Chen", role:"Founder, TechFlow", avatar:"SC" },
-              { quote:"The live handoff feature is incredible. Visitors get instant AI responses, and when they're ready, I jump in seamlessly.", name:"Marcus Rivera", role:"Sales Lead, Growthly", avatar:"MR" },
-              { quote:"Finally a chatbot that actually understands our business. The knowledge base training is a game changer.", name:"Priya Nair", role:"Head of Marketing, LaunchPad", avatar:"PN" },
+              { quote:"We went live in 10 minutes. The bot captured 14 qualified leads in the first week while we slept.", name:"Sarah Chen", role:"Founder, TechFlow", initials:"SC" },
+              { quote:"The live handoff is incredible. Visitors get instant AI responses, then I jump in when they're ready.", name:"Marcus Rivera", role:"Sales Lead, Growthly", initials:"MR" },
+              { quote:"Finally a chatbot that understands our business. The knowledge base training is a game changer.", name:"Priya Nair", role:"Head of Marketing, LaunchPad", initials:"PN" },
             ].map((t, i) => (
-              <div key={i} className="feature-card">
-                <div style={{ marginBottom:16, color:'var(--orange)', fontSize:20 }}>★★★★★</div>
-                <p style={{ fontSize:15, lineHeight:1.7, color:'rgba(245,240,235,0.85)', marginBottom:20 }}>"{t.quote}"</p>
-                <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                  <div style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg, var(--orange), #FF8A40)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, fontWeight:700, color:'#fff' }}>{t.avatar}</div>
+              <div key={i} style={{ background:'var(--bg)', border:'1px solid var(--border)', borderRadius:16, padding:28 }}>
+                <div style={{ color:'var(--orange)', fontSize:18, marginBottom:14, letterSpacing:2 }}>★★★★★</div>
+                <p style={{ fontSize:15, lineHeight:1.7, color:'#333', marginBottom:20 }}>"{t.quote}"</p>
+                <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                  <div style={{ width:40, height:40, borderRadius:'50%', background:'linear-gradient(135deg, var(--orange), var(--orange2))', display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, color:'#fff', flexShrink:0 }}>{t.initials}</div>
                   <div>
-                    <div style={{ fontSize:13, fontWeight:500 }}>{t.name}</div>
+                    <div style={{ fontSize:14, fontWeight:600 }}>{t.name}</div>
                     <div style={{ fontSize:12, color:'var(--muted)' }}>{t.role}</div>
                   </div>
                 </div>
@@ -240,36 +262,44 @@ export default function LandingPage() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className="section" style={{ background:'var(--surface)' }}>
+      <section id="pricing" className="section" style={{ background:'var(--bg)' }}>
         <div className="container">
-          <div style={{ textAlign:'center', marginBottom:64 }}>
+          <div style={{ textAlign:'center', marginBottom:56 }}>
             <div className="tag">Pricing</div>
-            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Simple, transparent pricing</h2>
-            <p style={{ marginTop:12, color:'var(--muted)', fontSize:16 }}>You bring your own AI key — we never mark up AI usage</p>
+            <h2 style={{ fontSize:'clamp(28px,4vw,44px)', fontWeight:800, letterSpacing:'-0.03em', marginBottom:12 }}>Simple, transparent pricing</h2>
+            <p style={{ fontSize:16, color:'var(--muted)' }}>Bring your own AI key — we never mark up AI usage</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:16, maxWidth:900, margin:'0 auto' }}>
+          <div className="plan-grid" style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20, maxWidth:960, margin:'0 auto' }}>
             {[
-              { name:'Starter', price:'$0', period:'forever', color:'var(--muted)', features:['100 messages/mo','1 PDF upload','Lead dashboard','Claude or ChatGPT'], cta:'Start free' },
-              { name:'Growth', price:'$29', period:'/month', color:'var(--orange)', featured:true, features:['2,000 messages/mo','10 PDF uploads','Full analytics','Usage alerts','HubSpot + Zapier'], cta:'Get started' },
-              { name:'Business', price:'$79', period:'/month', color:'#fff', features:['Unlimited messages','Unlimited PDFs','Priority support','Advanced analytics','All integrations','Team members'], cta:'Get started' },
+              { name:'Starter', price:'$0', period:'forever free', features:['100 messages/mo','1 PDF upload','Lead dashboard','Claude or ChatGPT'], cta:'Start free', featured:false },
+              { name:'Growth', price:'$29', period:'/month', features:['2,000 messages/mo','10 PDF uploads','Full analytics','Usage alerts at 80%','HubSpot + Zapier','Team members'], cta:'Get started', featured:true },
+              { name:'Business', price:'$79', period:'/month', features:['Unlimited messages','Unlimited PDFs','Priority support','Advanced analytics','All integrations','Zoho CRM','Live agent handoff'], cta:'Get started', featured:false },
             ].map((p, i) => (
-              <div key={i} style={{ background: p.featured ? 'linear-gradient(135deg, rgba(255,92,0,0.15), rgba(255,92,0,0.05))' : '#0D0D0D',
-                border: p.featured ? '1px solid rgba(255,92,0,0.4)' : '1px solid var(--border)',
-                borderRadius:20, padding:32, position:'relative' }}>
-                {p.featured && <div style={{ position:'absolute', top:-12, left:'50%', transform:'translateX(-50%)', background:'var(--orange)', color:'#fff', fontSize:11, fontWeight:600, padding:'4px 14px', borderRadius:100, letterSpacing:'0.05em' }}>MOST POPULAR</div>}
-                <div style={{ fontSize:15, fontWeight:500, color:p.color, marginBottom:16 }}>{p.name}</div>
-                <div style={{ display:'flex', alignItems:'baseline', gap:4, marginBottom:24 }}>
-                  <span style={{ fontFamily:'Syne', fontSize:48, fontWeight:800 }}>{p.price}</span>
-                  <span style={{ color:'var(--muted)', fontSize:15 }}>{p.period}</span>
+              <div key={i} className={`plan-card ${p.featured ? 'featured' : ''}`} style={{ position:'relative' }}>
+                {p.featured && (
+                  <div style={{ position:'absolute', top:-14, left:'50%', transform:'translateX(-50%)', background:'var(--orange)', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 16px', borderRadius:100, letterSpacing:'0.06em', whiteSpace:'nowrap' }}>
+                    MOST POPULAR
+                  </div>
+                )}
+                <div style={{ fontSize:14, fontWeight:600, color:p.featured ? 'var(--orange)' : 'var(--muted)', marginBottom:12 }}>{p.name}</div>
+                <div style={{ display:'flex', alignItems:'baseline', gap:4, marginBottom:8 }}>
+                  <span style={{ fontSize:44, fontWeight:800, letterSpacing:'-0.03em' }}>{p.price}</span>
+                  <span style={{ fontSize:14, color:'var(--muted)' }}>{p.period}</span>
                 </div>
+                <div style={{ height:1, background:'var(--border)', margin:'20px 0' }} />
                 <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:28 }}>
                   {p.features.map(f => (
-                    <div key={f} style={{ display:'flex', alignItems:'center', gap:10, fontSize:14, color:'rgba(245,240,235,0.8)' }}>
-                      <span style={{ color:'var(--orange)', fontSize:16 }}>✓</span>{f}
+                    <div key={f} style={{ display:'flex', alignItems:'center', gap:10, fontSize:14, color:'#333' }}>
+                      <div style={{ width:18, height:18, background:p.featured ? 'var(--orange)' : 'var(--orange-pale)', borderRadius:4, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                        <span style={{ color:p.featured ? '#fff' : 'var(--orange)', fontSize:10, fontWeight:700 }}>✓</span>
+                      </div>
+                      {f}
                     </div>
                   ))}
                 </div>
-                <Link href="/auth/register" className="btn-primary" style={{ width:'100%', justifyContent:'center', background: p.featured ? 'var(--orange)' : 'rgba(255,255,255,0.08)', color: p.featured ? '#fff' : 'var(--text)' }}>
+                <Link href="/auth/register" className="btn-primary" style={{ display:'block', textAlign:'center', width:'100%',
+                  background:p.featured ? 'var(--orange)' : 'var(--dark)',
+                  boxSizing:'border-box' }}>
                   {p.cta}
                 </Link>
               </div>
@@ -278,33 +308,29 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section">
+      {/* CTA BANNER */}
+      <section className="section" style={{ background:'var(--orange)' }}>
         <div className="container" style={{ textAlign:'center' }}>
-          <div style={{ background:'linear-gradient(135deg, rgba(255,92,0,0.12), rgba(255,92,0,0.04))', border:'1px solid rgba(255,92,0,0.2)', borderRadius:24, padding:'80px 40px' }}>
-            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800, marginBottom:16 }}>
-              Ready to turn visitors<br />into <span className="gradient-text">customers?</span>
-            </h2>
-            <p style={{ fontSize:18, color:'var(--muted)', marginBottom:36 }}>Start free. No credit card. Live in 5 minutes.</p>
-            <Link href="/auth/register" className="btn-primary" style={{ fontSize:17, padding:'18px 44px' }}>
-              Get started free →
-            </Link>
-          </div>
+          <h2 style={{ fontSize:'clamp(28px,4vw,48px)', fontWeight:800, color:'#fff', letterSpacing:'-0.03em', marginBottom:12 }}>
+            Start capturing leads today
+          </h2>
+          <p style={{ fontSize:17, color:'rgba(255,255,255,0.8)', marginBottom:32 }}>Free plan. No credit card. Live in 5 minutes.</p>
+          <Link href="/auth/register" style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#fff', color:'var(--orange)', padding:'16px 40px', borderRadius:8, fontSize:16, fontWeight:700, textDecoration:'none', transition:'all 0.2s', letterSpacing:'-0.01em' }}
+            onMouseOver={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 12px 40px rgba(0,0,0,0.15)' }}
+            onMouseOut={e => { e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='none' }}>
+            Get started free →
+          </Link>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop:'1px solid var(--border)', padding:'40px 24px' }}>
-        <div className="container" style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
-          <div style={{ fontFamily:'Syne', fontSize:18, fontWeight:800 }}>
+      <footer style={{ background:'var(--dark)', padding:'40px 32px' }}>
+        <div style={{ maxWidth:1140, margin:'0 auto', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
+          <div style={{ fontFamily:'Poppins', fontSize:16, fontWeight:700, color:'#fff' }}>
             Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
+            <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontWeight:400, marginTop:4 }}>by Absolute App Labs</div>
           </div>
-          <div style={{ display:'flex', gap:32, fontSize:14, color:'var(--muted)' }}>
-            <Link href="/auth/login" style={{ color:'var(--muted)', textDecoration:'none' }}>Sign in</Link>
-            <Link href="/auth/register" style={{ color:'var(--muted)', textDecoration:'none' }}>Register</Link>
-            <a href="https://absoluteapplabs.com" target="_blank" rel="noopener" style={{ color:'var(--muted)', textDecoration:'none' }}>Absolute App Labs</a>
-          </div>
-          <div style={{ fontSize:13, color:'var(--muted)' }}>© 2026 Absolute App Labs</div>
+          <div style={{ fontSize:13, color:'rgba(255,255,255,0.4)' }}>© 2026 Absolute App Labs. All rights reserved.</div>
         </div>
       </footer>
     </div>
