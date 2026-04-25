@@ -2,19 +2,13 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-const TENANT_ID = '837d7fc7-cd93-437c-957d-9a7dbbab4214'
-
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
-    const s = document.createElement('script')
-    s.src = `https://aichat.absoluteapplabs.com/widget.js?id=${TENANT_ID}`
-    s.async = true
-    document.body.appendChild(s)
-    return () => { window.removeEventListener('scroll', onScroll); s.remove() }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
