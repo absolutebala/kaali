@@ -22,6 +22,7 @@ export default function LivePage() {
   const [isOnline, setIsOnline]           = useState(false)
   const [onlineCount, setOnlineCount]     = useState(0)
   const [timers,   setTimers]             = useState({})
+  const [summary,  setSummary]            = useState({})
   const pingRef   = useRef(null)
   const audioRef  = useRef(null)
   const prevWaiting = useRef([])
@@ -118,7 +119,8 @@ export default function LivePage() {
   }
 
   async function acceptChat(id) {
-    await api('/api/agent', { method:'POST', body: JSON.stringify({ action:'accept', conversationId: id }) })
+    const d = await api('/api/agent', { method:'POST', body: JSON.stringify({ action:'accept', conversationId: id }) })
+    if (d.summary) setSummary(prev => ({ ...prev, [id]: d.summary }))
     setSelected(id)
     refresh()
   }
@@ -254,6 +256,14 @@ export default function LivePage() {
                   End Chat
                 </button>
               </div>
+
+              {/* AI Summary Panel */}
+              {(summary[selected] || selectedChat?.handoff_msg) && (
+                <div style={{ padding:'10px 16px', background:'rgba(79,142,247,.08)', borderBottom:'0.5px solid rgba(79,142,247,.15)' }}>
+                  <div style={{ fontSize:10, fontWeight:600, color:'var(--ac)', letterSpacing:'1px', textTransform:'uppercase', marginBottom:4 }}>📋 Chat Summary</div>
+                  <div style={{ fontSize:12, color:'var(--tm)', lineHeight:1.6 }}>{summary[selected] || selectedChat?.handoff_msg}</div>
+                </div>
+              )}
 
               {/* Messages */}
               <div style={{ flex:1, overflowY:'auto', padding:14, display:'flex', flexDirection:'column', gap:8 }}>
