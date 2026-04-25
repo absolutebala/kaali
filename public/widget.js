@@ -446,6 +446,17 @@
     inp.value = ''; inp.style.height = 'auto'
     addMsg('usr', txt)
     history.push({ role: 'user', content: txt })
+
+    // If live agent mode, store message directly without AI
+    if (window.__kaaliIsLive && convId) {
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tenantId, conversationId: convId, messages: [{ role: 'user', content: txt }], visitorType, pageUrl: location.href, visitorData: {} })
+      }).catch(() => {})
+      return
+    }
+
     callAPI()
   }
 
