@@ -55,8 +55,7 @@ export async function POST(request) {
         if (contact) {
           const summary = messages.filter(m => m.role === 'user').map(m => m.content).join(' ').substring(0, 120)
 
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId,
-            tenant_id: tenantId, role: 'user', content: lastMsg })
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg })
 
           await supabaseAdmin.from('leads').insert({
             tenant_id: tenantId, conversation_id: conversationId,
