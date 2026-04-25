@@ -74,15 +74,9 @@ export async function POST(request) {
       const transcript = (msgs || [])
         .filter(m => !m.is_agent)
         .map(m => `${m.role === 'user' ? 'Visitor' : 'Bot'}: ${m.content}`)
-        .join('
-')
+        .join('\n')
 
-      const summaryPrompt = `Summarize this chat conversation in 2-3 sentences for a team member who is about to take over. Focus on: what the visitor wants, any key details they shared, and why they requested a live agent.
-
-Conversation:
-${transcript}
-
-Summary:`
+      const summaryPrompt = `Summarize this chat in 2-3 sentences for a team member taking over. Focus on: what the visitor wants, key details shared, and why they requested a live agent.\n\nConversation:\n${transcript}\n\nSummary:`
 
       // Call tenant's AI
       const apiKey = tenant.api_key ? decryptKey(tenant.api_key) : null
