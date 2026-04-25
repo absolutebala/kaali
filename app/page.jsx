@@ -119,7 +119,7 @@ export default function LandingPage() {
                 </a>
               </div>
               <div className="fade-up" style={{ display:'flex', alignItems:'center', gap:24, animationDelay:'0.2s' }}>
-                {[['500+','Businesses'], ['24/7','AI support'], ['5 min','Setup time']].map(([n, l]) => (
+                {[['100+','Businesses'], ['24/7','AI support'], ['5 min','Setup time']].map(([n, l]) => (
                   <div key={l}>
                     <div style={{ fontSize:22, fontWeight:700, color:'var(--orange)' }}>{n}</div>
                     <div style={{ fontSize:12, color:'var(--muted)', fontWeight:500 }}>{l}</div>
@@ -186,17 +186,14 @@ export default function LandingPage() {
             </h2>
             <p style={{ fontSize:17, color:'var(--muted)', maxWidth:500, margin:'0 auto' }}>One platform. Every tool you need to capture, qualify, and close.</p>
           </div>
-          <div className="feat-grid" style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:16 }}>
+          <div className="feat-grid" style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:20 }}>
             {[
-              { icon:'🤖', title:'Bring Your Own AI Key', desc:'Claude (Anthropic) or ChatGPT (OpenAI). We never charge for AI usage — full transparency.' },
-              { icon:'📚', title:'Smart Knowledge Base', desc:'Upload PDFs, scrape URLs, add Q&A pairs. Bot only answers from your content.' },
-              { icon:'👥', title:'Automatic Lead Capture', desc:'Bot naturally captures name, email, company mid-conversation. No popups.' },
-              { icon:'🔴', title:'Live Agent Handoff', desc:'Visitor requests a human — ring alert, agent takes over in real time with full context.' },
-              { icon:'🏢', title:'Visitor Intelligence', desc:'Company, location, device, browser, UTM — full profile for every chat visitor.' },
-              { icon:'🔗', title:'CRM Integrations', desc:'HubSpot, Zoho CRM, Zapier. Leads sync automatically the moment they are captured.' },
-              { icon:'👤', title:'Team Access', desc:'Invite team with Admin, Sales or Custom roles. Each sees only what they need.' },
-              { icon:'🎨', title:'Fully Customisable', desc:'Bot name, avatar, bubble color, widget mode. Embed with a single line of code.' },
-              { icon:'📊', title:'Lead & Chat Dashboard', desc:'Track leads, view transcripts, export CSV. Full analytics built in.' },
+              { icon:'📚', title:'Smart Knowledge Base', desc:'Upload PDFs, scrape URLs, add Q&A pairs. Bot answers only from your content — never goes off-topic.' },
+              { icon:'👥', title:'Automatic Lead Capture', desc:'Bot naturally captures name, email and company mid-conversation. No popups, no friction.' },
+              { icon:'🔴', title:'Live Agent Handoff', desc:'Visitor requests a human — agent gets a ring alert and takes over in real time with full context.' },
+              { icon:'🏢', title:'Visitor Intelligence & Dashboard', desc:'Company, location, device, UTM source — full profile for every visitor. Track leads, view transcripts, export CSV.' },
+              { icon:'🔗', title:'CRM & Automation', desc:'HubSpot, Zoho CRM, Zapier. Leads sync automatically the moment they are captured.' },
+              { icon:'🎨', title:'Fully Customisable', desc:'Your bot name, avatar, bubble color and display mode. Three widget modes — floating, always open, popup.' },
             ].map((f, i) => (
               <div key={i} className="feature-card">
                 <div style={{ width:44, height:44, background:'var(--orange-pale)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, marginBottom:16 }}>{f.icon}</div>
@@ -242,7 +239,7 @@ export default function LandingPage() {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
             {[
               { quote:"We went live in 10 minutes. The bot captured 14 qualified leads in the first week while we slept.", name:"Sarah Chen", role:"Founder, TechFlow", initials:"SC" },
-              { quote:"The live handoff is incredible. Visitors get instant AI responses, then I jump in when they are ready.", name:"Marcus Rivera", role:"Sales Lead, Growthly", initials:"MR" },
+              { quote:"The live handoff is incredible. Visitors get instant AI responses, then I jump in when they're ready.", name:"Marcus Rivera", role:"Sales Lead, Growthly", initials:"MR" },
               { quote:"Finally a chatbot that understands our business. The knowledge base training is a game changer.", name:"Priya Nair", role:"Head of Marketing, LaunchPad", initials:"PN" },
             ].map((t, i) => (
               <div key={i} style={{ background:'var(--bg)', border:'1px solid var(--border)', borderRadius:16, padding:28 }}>
