@@ -40,21 +40,25 @@ export async function POST(request) {
       .from('tenants').select('*').eq('id', tenantId).single()
     if (tErr || !tenant) return NextResponse.json({ error: 'Workspace not found.' }, { status: 404 })
 
-    if (tenant.conversations_used >= tenant.conversations_limit) {
-      return NextResponse.json({ text: "I'm currently unavailable. Please contact us directly.", limitReached: true })
-    }
-
     const lastMsg = [...messages].reverse().find(m => m.role === 'user')?.content || ''
 
-    // ── LIVE MODE: agent handling ─────────────────────────────
+    // ── LIVE MODE: agent handling (checked before usage limit) ──
     if (conversationId) {
       const { data: convo } = await supabaseAdmin
         .from('conversations').select('status').eq('id', conversationId).single()
 
       if (convo?.status === 'live') {
-        await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg })
+        const { error: insertErr } = await supabaseAdmin.from('messages').insert({
+          conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg
+        })
+        if (insertErr) console.error('[Live insert]', insertErr.message)
         return NextResponse.json({ text: null, live: true, conversationId })
       }
+
+      // ── USAGE LIMIT (not applied to live conversations) ────────
+    if (tenant.conversations_used >= tenant.conversations_limit) {
+      return NextResponse.json({ text: "I'm currently unavailable. Please contact us directly.", limitReached: true })
+    }
 
       // ── COLLECTING: extract contact directly ─────────────────
       if (convo?.status === 'collecting') {
