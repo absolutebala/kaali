@@ -55,11 +55,7 @@ export default function DashboardLayout({ children }) {
   }, [user?.id])
 
   if (loading || !user) {
-    return (
-      <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--tm)', fontSize:14 }}>
-        Loading…
-      </div>
-    )
+    return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--tm)', fontSize:14 }}>Loading…</div>
   }
 
   const allowedPages = user?.allowedPages || null
@@ -78,6 +74,9 @@ export default function DashboardLayout({ children }) {
     logout()
   }
 
+  const kbIdx = NAV.findIndex(n=>n.href==='/dashboard/knowledge')
+  const splitAt = kbIdx === -1 ? 4 : kbIdx
+
   return (
     <div style={{ display:'flex', minHeight:'100vh' }}>
       <aside style={{ width:224, background:'#080C17', borderRight:'0.5px solid rgba(255,255,255,.07)', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
@@ -94,7 +93,6 @@ export default function DashboardLayout({ children }) {
             {(user.plan||'starter').charAt(0).toUpperCase()+(user.plan||'starter').slice(1)}
           </div>
         </div>
-
         <nav style={{ padding:'10px 8px', flex:1 }}>
           {isImpersonating ? (
             <>
@@ -104,21 +102,18 @@ export default function DashboardLayout({ children }) {
                 <div style={{ fontSize:11, color:'#F87171', marginBottom:4 }}>👁 Admin View</div>
                 <div style={{ fontSize:11, color:'#6B7A99', lineHeight:1.5, marginBottom:6 }}>Leads and chats are hidden.</div>
                 <button onClick={() => { localStorage.removeItem('kaali_token'); localStorage.removeItem('sa_token'); localStorage.removeItem('sa_impersonating'); window.location.href = '/superadmin/dashboard' }}
-                  style={{ fontSize:11, color:'#F87171', background:'none', border:'none', cursor:'pointer', padding:0 }}>
-                  ← Back to Admin
-                </button>
+                  style={{ fontSize:11, color:'#F87171', background:'none', border:'none', cursor:'pointer', padding:0 }}>← Back to Admin</button>
               </div>
             </>
           ) : (
             <>
               <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'var(--td)', padding:'4px 10px 6px', marginTop:8 }}>Overview</div>
-              {NAV.slice(0, NAV.findIndex(n=>n.href==='/dashboard/knowledge') === -1 ? 3 : NAV.findIndex(n=>n.href==='/dashboard/knowledge')).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
+              {NAV.slice(0, splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
               <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'var(--td)', padding:'4px 10px 6px', marginTop:8 }}>Configuration</div>
-              {NAV.slice(NAV.findIndex(n=>n.href==='/dashboard/knowledge') === -1 ? 3 : NAV.findIndex(n=>n.href==='/dashboard/knowledge')).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
+              {NAV.slice(splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
             </>
           )}
         </nav>
-
         <div style={{ padding:'10px 8px', borderTop:'0.5px solid rgba(255,255,255,.07)' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 10px' }}>
             <div style={{ width:30, height:30, borderRadius:'50%', background:'linear-gradient(145deg,#1D4FD8,#4F8EF7)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:12, fontWeight:700, color:'#fff', flexShrink:0 }}>
@@ -129,9 +124,7 @@ export default function DashboardLayout({ children }) {
               <div style={{ fontSize:11, color:'var(--td)' }}>{user.email}</div>
             </div>
           </div>
-          <button onClick={handleLogout} style={{ width:'100%', fontSize:12, color:'var(--tm)', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left', marginTop:2 }}>
-            Sign out
-          </button>
+          <button onClick={handleLogout} style={{ width:'100%', fontSize:12, color:'var(--tm)', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left', marginTop:2 }}>Sign out</button>
         </div>
       </aside>
       <div style={{ flex:1, overflowY:'auto' }}>{children}</div>

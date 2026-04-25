@@ -53,8 +53,10 @@ export default function LivePage() {
   }
 
   useEffect(() => {
+    // Clear stale online status on mount
+    api('/api/agent', { method:'POST', body: JSON.stringify({ action:'offline' }) }).catch(()=>{})
     refresh()
-    const interval = setInterval(refresh, 5000) // poll every 5s
+    const interval = setInterval(refresh, 5000)
     return () => clearInterval(interval)
   }, [isOnline])
 
@@ -123,10 +125,22 @@ export default function LivePage() {
 
   async function sendMsg() {
     if (!draft.trim() || !selected || sending) return
+    const text = draft.trim()
     setSending(true)
+    setDraft('')
+    // Add message locally immediately
+    const tempMsg = { id: 'temp-' + Date.now(), role:'assistant', content: text, is_agent: true, created_at: new Date().toISOString() }
+    setMsgs(prev => [...prev, tempMsg])
     try {
-      await api('/api/agent', { method:'POST', body: JSON.stringify({ action:'send', conversationId: selected, message: draft.trim() }) })
-      setDraft('')
+      const d = await api('/api/agent', { method:'POST', body: JSON.stringify({ action:'send', conversationId: selected, message: text }) })
+      if (d.ok && d.message) {
+        // Replace temp message with real one
+        setMsgs(prev => prev.map(m => m.id === tempMsg.id ? { ...d.message, is_agent: true, role:'assistant' } : m))
+      }
+    } catch(e) {
+      // Remove temp message on error
+      setMsgs(prev => prev.filter(m => m.id !== tempMsg.id))
+      setDraft(text)
     } finally { setSending(false) }
   }
 
@@ -244,12 +258,13 @@ export default function LivePage() {
               {/* Messages */}
               <div style={{ flex:1, overflowY:'auto', padding:14, display:'flex', flexDirection:'column', gap:8 }}>
                 {msgs.map(m => (
-                  <div key={m.id} style={{ display:'flex', flexDirection:'column', maxWidth:'80%', alignSelf: m.role==='assistant'?'flex-start':'flex-end' }}>
-                    {m.is_agent && <div style={{ fontSize:10, color:'var(--gr)', marginBottom:2, paddingLeft:4 }}>You</div>}
+                  <div key={m.id} style={{ display:'flex', flexDirection:'column', maxWidth:'80%', alignSelf: m.role==='user'?'flex-end':'flex-start' }}>
+                    {m.is_agent && <div style={{ fontSize:10, color:'var(--gr)', marginBottom:2, paddingLeft:4 }}>You (Agent)</div>}
+                    {m.role==='assistant' && !m.is_agent && <div style={{ fontSize:10, color:'var(--td)', marginBottom:2, paddingLeft:4 }}>Bot</div>}
                     <div style={{ padding:'8px 12px', borderRadius:12, fontSize:13, lineHeight:1.5, wordBreak:'break-word',
-                      background:   m.role==='assistant' ? (m.is_agent ? 'rgba(34,209,122,.15)' : 'var(--s2)') : '#1B3FA0',
-                      color:        m.role==='assistant' ? 'var(--tx)' : '#DDE9FF',
-                      border:       m.is_agent ? '0.5px solid rgba(34,209,122,.3)' : m.role==='assistant' ? '0.5px solid rgba(255,255,255,.07)' : 'none',
+                      background: m.is_agent ? 'rgba(34,209,122,.15)' : m.role==='assistant' ? 'var(--s2)' : '#1B3FA0',
+                      color:      m.role==='user' ? '#DDE9FF' : 'var(--tx)',
+                      border:     m.is_agent ? '0.5px solid rgba(34,209,122,.3)' : m.role==='assistant' ? '0.5px solid rgba(255,255,255,.07)' : 'none',
                     }}>
                       {m.content}
                     </div>

@@ -45,7 +45,7 @@ export async function POST(request) {
         .from('conversations').select('status').eq('id', conversationId).single()
 
       if (convo?.status === 'live') {
-        await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'user', content: lastMsg })
+        await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, tenant_id: tenantId, role: 'user', content: lastMsg })
         return NextResponse.json({ text: null, live: true, conversationId })
       }
 
@@ -55,7 +55,8 @@ export async function POST(request) {
         if (contact) {
           const summary = messages.filter(m => m.role === 'user').map(m => m.content).join(' ').substring(0, 120)
 
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'user', content: lastMsg })
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId,
+            tenant_id: tenantId, role: 'user', content: lastMsg })
 
           await supabaseAdmin.from('leads').insert({
             tenant_id: tenantId, conversation_id: conversationId,
@@ -82,7 +83,8 @@ export async function POST(request) {
             ? `Thanks ${contact.name}! Connecting you to our team now... 🔄 A team member will be with you shortly.`
             : `Thanks ${contact.name}! I've alerted our team and they'll follow up with you at ${contact.email} soon.`
 
-          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId, role: 'assistant', content: reply })
+          await supabaseAdmin.from('messages').insert({ conversation_id: conversationId,
+            tenant_id: tenantId, role: 'assistant', content: reply })
           return NextResponse.json({ text: reply, conversationId, handoff: true, agentsOnline })
         }
         // No email yet — fall through to AI to ask again naturally
@@ -116,7 +118,8 @@ export async function POST(request) {
     }
 
     if (lastMsg && convoId) {
-      await supabaseAdmin.from('messages').insert({ conversation_id: convoId, role: 'user', content: lastMsg })
+      await supabaseAdmin.from('messages').insert({ conversation_id: convoId,
+            tenant_id: tenantId, role: 'user', content: lastMsg })
     }
 
     // ── HANDOFF DETECTION ─────────────────────────────────────
@@ -129,7 +132,8 @@ export async function POST(request) {
       }).eq('id', convoId)
 
       const reply = "Of course! Before I connect you, could I get your name and email address? That way our team member will know who they're speaking with. 😊"
-      await supabaseAdmin.from('messages').insert({ conversation_id: convoId, role: 'assistant', content: reply })
+      await supabaseAdmin.from('messages').insert({ conversation_id: convoId,
+            tenant_id: tenantId, role: 'assistant', content: reply })
       return NextResponse.json({ text: reply, conversationId: convoId, handoff: 'collecting' })
     }
 
@@ -143,7 +147,8 @@ export async function POST(request) {
     const { lead, cleanText } = extractLead(rawText)
 
     if (convoId) {
-      await supabaseAdmin.from('messages').insert({ conversation_id: convoId, role: 'assistant', content: cleanText })
+      await supabaseAdmin.from('messages').insert({ conversation_id: convoId,
+            tenant_id: tenantId, role: 'assistant', content: cleanText })
     }
 
     // ── LEAD CAPTURE ──────────────────────────────────────────

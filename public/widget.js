@@ -522,11 +522,8 @@
       }
 
       // If conversation is live (agent handling), suppress AI response
-      if (data.live || (!data.text && !data.error)) {
-        if (data.live && !window.__kaaliIsLive) {
-          window.__kaaliIsLive = true
-          startLivePoll()
-        }
+      if (data.live) {
+        window.__kaaliIsLive = true
         isBusy = false
         document.getElementById('kaali-snd').disabled = false
         return
