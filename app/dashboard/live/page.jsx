@@ -257,18 +257,21 @@ export default function LivePage() {
 
               {/* Messages */}
               <div style={{ flex:1, overflowY:'auto', padding:14, display:'flex', flexDirection:'column', gap:8 }}>
-                {msgs.map(m => (
+                {msgs
+                  .filter(m => !(m.is_agent && m.content?.includes('A team member has joined')))
+                  .map(m => (
                   <div key={m.id} style={{ display:'flex', flexDirection:'column', maxWidth:'80%', alignSelf: m.role==='user'?'flex-end':'flex-start' }}>
-                    {m.is_agent && <div style={{ fontSize:10, color:'var(--gr)', marginBottom:2, paddingLeft:4 }}>You (Agent)</div>}
+                    {m.is_agent && <div style={{ fontSize:10, color:'var(--gr)', marginBottom:2, paddingLeft:4 }}>You</div>}
                     {m.role==='assistant' && !m.is_agent && <div style={{ fontSize:10, color:'var(--td)', marginBottom:2, paddingLeft:4 }}>Bot</div>}
+                    {m.role==='user' && <div style={{ fontSize:10, color:'var(--td)', marginBottom:2, paddingRight:4, textAlign:'right' }}>Visitor</div>}
                     <div style={{ padding:'8px 12px', borderRadius:12, fontSize:13, lineHeight:1.5, wordBreak:'break-word',
-                      background: m.is_agent ? 'rgba(34,209,122,.15)' : m.role==='assistant' ? 'var(--s2)' : '#1B3FA0',
+                      background: m.is_agent ? 'rgba(34,209,122,.15)' : m.role==='user' ? '#1B3FA0' : 'var(--s2)',
                       color:      m.role==='user' ? '#DDE9FF' : 'var(--tx)',
                       border:     m.is_agent ? '0.5px solid rgba(34,209,122,.3)' : m.role==='assistant' ? '0.5px solid rgba(255,255,255,.07)' : 'none',
                     }}>
                       {m.content}
                     </div>
-                    <div style={{ fontSize:10, color:'var(--td)', marginTop:2, padding:'0 3px', alignSelf: m.role==='assistant'?'flex-start':'flex-end' }}>
+                    <div style={{ fontSize:10, color:'var(--td)', marginTop:2, padding:'0 3px', alignSelf: m.role==='user'?'flex-end':'flex-start' }}>
                       {new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
                     </div>
                   </div>

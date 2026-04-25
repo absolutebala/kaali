@@ -457,13 +457,17 @@
     showTyping()
 
     try {
-      // If conversation is live (agent took over), send directly without AI response indicator
+      // If conversation is live (agent took over), send to chat API which stores msg silently
       if (convId && window.__kaaliIsLive) {
-        const tk2 = config.apiUrl.includes('vercel') ? '' : ''
-        await fetch(config.apiUrl, {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ tenantId, conversationId:convId, messages:[{role:'user',content:text}], visitorType, pageUrl:location.href, visitorData:{} })
-        })
+        hideTyping()
+        try {
+          await fetch(config.apiUrl, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ tenantId, conversationId:convId, messages:[{role:'user',content:text}], visitorType, pageUrl:location.href, visitorData:{} })
+          })
+        } catch(e) { /* silent fail - message stored, agent will see it */ }
+        isBusy = false
+        document.getElementById('kaali-snd').disabled = false
         return
       }
 
@@ -562,8 +566,8 @@
 
   function startLivePoll() {
     if (liveInterval) return
-    // Initialize lastMsgCount from current history length
-    lastMsgCount = history.filter(m => m.role === 'assistant').length
+    // Will be initialized on first poll based on actual DB messages
+    lastMsgCount = -1
     liveInterval = setInterval(async () => {
       if (!convId) return
       try {
@@ -573,8 +577,13 @@
         if (d.conversation?.status === 'live' && !window.__kaaliIsLive) {
           window.__kaaliIsLive = true
         }
-        const allMsgs = (d.messages || [])
-        const agentMsgs = allMsgs.filter(m => m.is_agent)
+        const agentMsgs = (d.messages || []).filter(m => m.is_agent)
+        // On first poll, set baseline (don't show existing messages)
+        if (lastMsgCount === -1) {
+          lastMsgCount = agentMsgs.length
+          return
+        }
+        // Show only NEW agent messages since last poll
         if (agentMsgs.length > lastMsgCount) {
           const newMsgs = agentMsgs.slice(lastMsgCount)
           newMsgs.forEach(m => addMsg('bot', m.content + ' <span style="font-size:10px;color:#5EDFAC">— Team</span>'))
