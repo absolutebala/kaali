@@ -11,7 +11,7 @@ fi
 
 # Check 2: NAV_FULL in layout
 if ! grep -q "const NAV_FULL" app/dashboard/layout.jsx 2>/dev/null; then
-  echo "❌ NAV_FULL missing from layout.jsx! Run: cat > app/dashboard/layout.jsx"
+  echo "❌ NAV_FULL missing from layout.jsx!"
   ERRORS=$((ERRORS+1))
 else
   echo "✓ NAV_FULL present"
@@ -25,11 +25,16 @@ if grep -rq "from 'bcrypt'" app/api/ 2>/dev/null; then
   echo "✓ Fixed"
 fi
 
-# Check 4: messages inserts missing tenant_id
-MISSING=$(grep -rn "from('messages').insert" app/api/ 2>/dev/null | grep -v "tenant_id" | head -3)
-if [ -n "$MISSING" ]; then
-  echo "⚠️  Messages insert missing tenant_id:"
-  echo "$MISSING"
+# Check 4: messages inserts missing tenant_id (multiline aware)
+MISSING=$(python3 -c "
+import re, sys
+content = open('app/api/chat/route.js').read()
+inserts = re.findall(r\"supabaseAdmin\.from\('messages'\)\.insert\(\{.+?\}\)\", content, re.DOTALL)
+missing = [i for i in inserts if 'tenant_id' not in i]
+print(len(missing))
+" 2>/dev/null)
+if [ "$MISSING" != "0" ] && [ -n "$MISSING" ]; then
+  echo "❌ $MISSING messages insert(s) missing tenant_id"
   ERRORS=$((ERRORS+1))
 else
   echo "✓ All messages inserts have tenant_id"
@@ -46,17 +51,15 @@ fi
 # Check 6: duplicate handoffRx
 COUNT=$(grep -c "const handoffRx" app/api/chat/route.js 2>/dev/null || echo 0)
 if [ "$COUNT" -gt "1" ]; then
-  echo "❌ Duplicate handoffRx in chat route! ($COUNT found)"
+  echo "❌ Duplicate handoffRx ($COUNT found)"
   ERRORS=$((ERRORS+1))
 else
-  echo "✓ handoffRx count OK"
+  echo "✓ handoffRx OK"
 fi
 
 if [ $ERRORS -gt 0 ]; then
-  echo ""
-  echo "❌ $ERRORS issue(s) need fixing before push"
+  echo "❌ $ERRORS issue(s) need fixing"
   exit 1
 else
-  echo ""
   echo "✓ All checks passed — safe to push"
 fi
