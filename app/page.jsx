@@ -1,191 +1,312 @@
 'use client'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
+
+const TENANT_ID = '837d7fc7-cd93-437c-957d-9a7dbbab4214'
 
 export default function LandingPage() {
-  const router = useRouter()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll)
+    // Load live demo widget
+    const s = document.createElement('script')
+    s.src = `https://aichat.absoluteapplabs.com/widget.js?id=${TENANT_ID}`
+    s.async = true
+    document.body.appendChild(s)
+    return () => { window.removeEventListener('scroll', onScroll); s.remove() }
+  }, [])
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background effects */}
-      <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:0,
-        background:'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(79,142,247,.11) 0%, transparent 70%)' }} />
-      <div style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:0,
-        backgroundImage:'radial-gradient(rgba(79,142,247,.08) 1px, transparent 1px)',
-        backgroundSize:'28px 28px' }} />
+    <div style={{ fontFamily:"'DM Sans', sans-serif", background:'#0A0A0A', color:'#F5F0EB', minHeight:'100vh', overflowX:'hidden' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --orange: #FF5C00;
+          --orange-light: #FF8A40;
+          --orange-glow: rgba(255,92,0,0.15);
+          --surface: #141414;
+          --border: rgba(255,255,255,0.08);
+          --text: #F5F0EB;
+          --muted: #8A8070;
+        }
+        .btn-primary {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: var(--orange); color: #fff; padding: 14px 28px;
+          border-radius: 100px; font-size: 15px; font-weight: 500;
+          text-decoration: none; transition: all 0.2s;
+          border: none; cursor: pointer;
+        }
+        .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(255,92,0,0.4); }
+        .btn-ghost {
+          display: inline-flex; align-items: center;
+          background: transparent; color: var(--text); padding: 14px 28px;
+          border-radius: 100px; font-size: 15px; font-weight: 400;
+          text-decoration: none; transition: all 0.2s;
+          border: 1px solid var(--border);
+        }
+        .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+        .feature-card {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 16px; padding: 28px;
+          transition: all 0.2s;
+        }
+        .feature-card:hover { border-color: rgba(255,92,0,0.3); transform: translateY(-2px); }
+        .section { padding: 100px 0; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        .tag { display: inline-block; background: var(--orange-glow); color: var(--orange);
+          border: 1px solid rgba(255,92,0,0.2); padding: 6px 14px; border-radius: 100px;
+          font-size: 13px; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 20px; }
+        h1, h2 { font-family: 'Syne', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, var(--orange) 0%, #FFB347 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .divider { height: 1px; background: var(--border); }
+        @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6 } 100% { transform: scale(1.4); opacity: 0 } }
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
+        .fade-up { animation: fade-up 0.6s ease forwards; }
+        .step-line { position: absolute; left: 19px; top: 44px; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--orange), transparent); }
+      `}</style>
 
-      {/* Nav */}
-      <nav style={{ position:'sticky', top:0, zIndex:100, display:'flex', alignItems:'center', justifyContent:'space-between',
-        padding:'16px 56px', borderBottom:'0.5px solid rgba(255,255,255,.07)',
-        backdropFilter:'blur(14px)', background:'rgba(5,8,15,.82)' }}>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:19, letterSpacing:'-.3px', display:'flex', alignItems:'center', gap:8 }}>
-          <div style={{ width:8, height:8, background:'var(--ac)', borderRadius:'50%' }} />
-          Absolute AIChat
+      {/* NAV */}
+      <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:100, padding:'16px 24px', display:'flex', alignItems:'center', justifyContent:'space-between',
+        background: scrolled ? 'rgba(10,10,10,0.95)' : 'transparent', backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none', transition:'all 0.3s' }}>
+        <div style={{ fontFamily:'Syne, sans-serif', fontSize:20, fontWeight:800 }}>
+          Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
         </div>
-        <div style={{ display:'flex', gap:30, listStyle:'none' }}>
-          {['Features','Pricing','Docs'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize:13.5, color:'var(--tm)', transition:'color .18s' }}
-               onMouseOver={e=>e.target.style.color='var(--tx)'}
-               onMouseOut={e=>e.target.style.color='var(--tm)'}>{l}</a>
-          ))}
+        <div style={{ display:'flex', alignItems:'center', gap:32, fontSize:14, color:'var(--muted)' }}>
+          <a href="#features" style={{ color:'var(--muted)', textDecoration:'none' }}>Features</a>
+          <a href="#how" style={{ color:'var(--muted)', textDecoration:'none' }}>How it works</a>
+          <a href="#pricing" style={{ color:'var(--muted)', textDecoration:'none' }}>Pricing</a>
         </div>
-        <div style={{ display:'flex', gap:10 }}>
-          <button className="btn-ghost" onClick={() => router.push('/auth/login')}>Log in</button>
-          <button className="btn-pri"  onClick={() => router.push('/auth/register')}>Start Free →</button>
+        <div style={{ display:'flex', gap:12 }}>
+          <Link href="/auth/login" className="btn-ghost" style={{ padding:'10px 20px', fontSize:14 }}>Sign in</Link>
+          <Link href="/auth/register" className="btn-primary" style={{ padding:'10px 20px', fontSize:14 }}>Get started free</Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <div style={{ position:'relative', zIndex:1, display:'grid', gridTemplateColumns:'1fr 1fr',
-        alignItems:'center', gap:48, maxWidth:1160, margin:'0 auto', padding:'80px 56px 60px' }}>
-        <div>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, fontSize:11, fontWeight:500,
-            letterSpacing:'2px', textTransform:'uppercase', color:'var(--ac)', marginBottom:22,
-            background:'rgba(79,142,247,.12)', border:'0.5px solid rgba(79,142,247,.25)',
-            padding:'5px 12px', borderRadius:20 }}>
-            <div style={{ width:5, height:5, background:'var(--ac)', borderRadius:'50%',
-              animation:'pulse 2s ease-in-out infinite' }} />
-            AI Chat Platform for Businesses
-          </div>
-          <h1 style={{ fontFamily:'var(--font-brand)', fontSize:'clamp(36px,4.5vw,58px)',
-            fontWeight:700, lineHeight:1.07, letterSpacing:'-1.4px', marginBottom:18 }}>
-            Your Website.<br />Your AI.<br />
-            <span style={{ color:'var(--ac)' }}>Live in Minutes.</span>
+      {/* HERO */}
+      <section style={{ paddingTop:160, paddingBottom:100, position:'relative', overflow:'hidden' }}>
+        {/* Background glow */}
+        <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:600, height:400, background:'radial-gradient(ellipse, rgba(255,92,0,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
+        <div className="container" style={{ textAlign:'center', position:'relative' }}>
+          <div className="tag fade-up">🤖 AI-powered chat for your business</div>
+          <h1 className="fade-up" style={{ fontSize:'clamp(48px,7vw,88px)', lineHeight:1.05, fontWeight:800, marginBottom:24, animationDelay:'0.1s' }}>
+            Turn visitors into<br /><span className="gradient-text">leads & customers</span>
           </h1>
-          <p style={{ fontSize:15.5, color:'var(--tm)', lineHeight:1.72, maxWidth:420, marginBottom:32 }}>
-            Absolute AIChat gives your visitors instant, intelligent answers from your own content — and turns them into leads, bookings, and clients.
+          <p className="fade-up" style={{ fontSize:20, color:'var(--muted)', maxWidth:560, margin:'0 auto 40px', lineHeight:1.6, animationDelay:'0.2s' }}>
+            Deploy an intelligent AI chat assistant on your website in minutes. Powered by Claude or ChatGPT. Built on your knowledge base.
           </p>
-          <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginBottom:14 }}>
-            <button className="btn-pri" style={{ padding:'11px 28px', fontSize:14 }}
-              onClick={() => router.push('/auth/register')}>Start for Free →</button>
-            <button className="btn-sec" onClick={() => router.push('/auth/register')}>See Live Demo</button>
+          <div className="fade-up" style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap', animationDelay:'0.3s' }}>
+            <Link href="/auth/register" className="btn-primary" style={{ fontSize:16, padding:'16px 36px' }}>
+              Start for free →
+            </Link>
+            <a href="#how" className="btn-ghost" style={{ fontSize:16, padding:'16px 36px' }}>
+              See how it works
+            </a>
           </div>
-          <p style={{ fontSize:12, color:'var(--td)' }}>No credit card required · Bring your own API key · Works on any website</p>
-        </div>
+          <p style={{ marginTop:20, fontSize:13, color:'var(--muted)' }}>No credit card required · Free plan available · Live in 5 minutes</p>
 
-        {/* Mock browser */}
-        <div style={{ display:'flex', justifyContent:'center' }}>
-          <MockBrowser />
-        </div>
-      </div>
-
-      <hr style={{ border:'none', borderTop:'0.5px solid rgba(255,255,255,.07)', maxWidth:1160, margin:'0 auto' }} />
-
-      {/* Features */}
-      <section id="features" style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'0 auto', padding:'72px 56px' }}>
-        <div style={{ fontSize:11, fontWeight:500, letterSpacing:'2px', textTransform:'uppercase', color:'var(--ac)', marginBottom:10 }}>Features</div>
-        <h2 style={{ fontFamily:'var(--font-brand)', fontSize:'clamp(26px,3vw,38px)', fontWeight:700, letterSpacing:'-.7px', marginBottom:12 }}>Everything your chatbot needs</h2>
-        <p style={{ fontSize:15, color:'var(--tm)', maxWidth:460, lineHeight:1.7, marginBottom:44 }}>Built for businesses that want more than a generic widget.</p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'1px', background:'rgba(255,255,255,.07)', border:'0.5px solid rgba(255,255,255,.07)', borderRadius:16, overflow:'hidden' }}>
-          {[
-            { ic:'🧠', nm:'AI from Your Content', ds:'Learns from your company info, services, and PDFs. Every answer is accurate and on-brand.' },
-            { ic:'👥', nm:'Smart Lead Capture',    ds:'Detects potential clients and captures their contact at exactly the right moment.' },
-            { ic:'📅', nm:'Meeting Scheduling',    ds:'Offers Calendly bookings to qualified visitors — without leaving the chat.' },
-            { ic:'🔑', nm:'Your Own API Key',      ds:'Claude or ChatGPT — your key, your data, no markup on AI usage. Ever.' },
-            { ic:'📊', nm:'Full Dashboard',        ds:'Transcripts, leads, usage tracking, status management, and CSV export.' },
-            { ic:'🚀', nm:'One-Line Embed',        ds:'A single script tag. Works on WordPress, Webflow, Wix, or any custom site.' },
-          ].map(f => (
-            <div key={f.nm} style={{ background:'var(--bg)', padding:26, transition:'background .2s', cursor:'default' }}
-              onMouseOver={e=>e.currentTarget.style.background='var(--s1)'}
-              onMouseOut={e=>e.currentTarget.style.background='var(--bg)'}>
-              <div style={{ fontSize:20, marginBottom:12 }}>{f.ic}</div>
-              <div style={{ fontSize:14, fontWeight:500, color:'var(--tx)', marginBottom:5 }}>{f.nm}</div>
-              <div style={{ fontSize:13, color:'var(--tm)', lineHeight:1.6 }}>{f.ds}</div>
+          {/* Hero visual */}
+          <div className="fade-up" style={{ marginTop:72, animationDelay:'0.4s' }}>
+            <div style={{ display:'inline-block', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:20, padding:3, boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
+              <div style={{ background:'#0D0D0D', borderRadius:18, padding:24, minWidth:320, textAlign:'left' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20, paddingBottom:16, borderBottom:'1px solid var(--border)' }}>
+                  <div style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg, var(--orange), #FF8A40)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Syne', fontWeight:800, fontSize:14, color:'#fff' }}>K</div>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:500 }}>Kaali</div>
+                    <div style={{ fontSize:11, color:'#5EDFAC' }}>● Online</div>
+                  </div>
+                </div>
+                {[
+                  { role:'bot', msg:"Hi! 👋 I'm Kaali. What brings you here today?" },
+                  { role:'user', msg:"I want to build a mobile app" },
+                  { role:'bot', msg:"Great! We've built 50+ apps. What type — iOS, Android, or both? I can connect you with our team." },
+                ].map((m, i) => (
+                  <div key={i} style={{ marginBottom:12, display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
+                    <div style={{ maxWidth:'80%', padding:'10px 14px', borderRadius:14, fontSize:13, lineHeight:1.5,
+                      background: m.role==='user' ? 'var(--orange)' : 'rgba(255,255,255,0.06)',
+                      color: m.role==='user' ? '#fff' : 'var(--text)' }}>
+                      {m.msg}
+                    </div>
+                  </div>
+                ))}
+                <div style={{ marginTop:16, background:'rgba(255,255,255,0.04)', borderRadius:10, padding:'10px 14px', fontSize:13, color:'var(--muted)', display:'flex', justifyContent:'space-between' }}>
+                  <span>Type your message…</span>
+                  <span style={{ color:'var(--orange)' }}>➤</span>
+                </div>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      <hr style={{ border:'none', borderTop:'0.5px solid rgba(255,255,255,.07)', maxWidth:1160, margin:'0 auto' }} />
-
-      {/* Pricing */}
-      <section id="pricing" style={{ position:'relative', zIndex:1, maxWidth:1160, margin:'0 auto', padding:'72px 56px' }}>
-        <div style={{ fontSize:11, fontWeight:500, letterSpacing:'2px', textTransform:'uppercase', color:'var(--ac)', marginBottom:10 }}>Pricing</div>
-        <h2 style={{ fontFamily:'var(--font-brand)', fontSize:'clamp(26px,3vw,38px)', fontWeight:700, letterSpacing:'-.7px', marginBottom:12 }}>Simple, honest pricing</h2>
-        <p style={{ fontSize:15, color:'var(--tm)', maxWidth:460, lineHeight:1.7, marginBottom:44 }}>You bring your own API key — we only charge for the platform.</p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14 }}>
-          {[
-            { plan:'Starter',  price:'$0',  sub:'Free forever', features:['100 messages/mo','1 PDF upload','Leads dashboard','Claude or ChatGPT'], featured:false },
-            { plan:'Growth',   price:'$29', sub:'Per workspace', features:['2,000 messages/mo','10 PDF uploads','Full analytics & export','Usage alerts at 80%'], featured:true },
-            { plan:'Business', price:'$79', sub:'Per workspace', features:['Unlimited messages','Unlimited PDFs','Priority support','Advanced analytics'], featured:false },
-          ].map(p => (
-            <div key={p.plan} style={{ background:'var(--s1)', border:`0.5px solid ${p.featured ? 'rgba(79,142,247,.4)' : 'rgba(255,255,255,.07)'}`, borderRadius:16, padding:26, position:'relative' }}>
-              {p.featured && <div style={{ position:'absolute', top:-11, left:'50%', transform:'translateX(-50%)', fontSize:10, fontWeight:500, color:'#fff', background:'var(--ac)', padding:'3px 12px', borderRadius:20, whiteSpace:'nowrap' }}>Most Popular</div>}
-              <div style={{ fontSize:12, fontWeight:500, color:'var(--tm)', marginBottom:7, textTransform:'uppercase', letterSpacing:'.5px' }}>{p.plan}</div>
-              <div style={{ fontFamily:'var(--font-brand)', fontSize:38, fontWeight:700, color:'var(--tx)', lineHeight:1, marginBottom:3 }}>{p.price}<span style={{ fontSize:13, color:'var(--tm)', fontFamily:'var(--font-body)', fontWeight:400 }}>/mo</span></div>
-              <div style={{ fontSize:11, color:'var(--td)', marginBottom:20 }}>{p.sub}</div>
-              <ul style={{ listStyle:'none', marginBottom:24, display:'flex', flexDirection:'column', gap:9 }}>
-                {p.features.map(f => <li key={f} style={{ fontSize:13, color:'var(--tm)', display:'flex', alignItems:'center', gap:8 }}><span style={{ color:'var(--gr)', fontWeight:700 }}>✓</span>{f}</li>)}
-              </ul>
-              <button onClick={() => router.push('/auth/register')}
-                style={{ width:'100%', padding:10, borderRadius:8, fontSize:13, fontWeight:500, cursor:'pointer', transition:'all .15s',
-                  background: p.featured ? 'var(--ac)' : 'var(--s2)',
-                  color: p.featured ? '#fff' : 'var(--tm)',
-                  border: p.featured ? 'none' : '0.5px solid rgba(255,255,255,.13)' }}>
-                {p.plan === 'Starter' ? 'Get Started Free' : `Start ${p.plan} →`}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ borderTop:'0.5px solid rgba(255,255,255,.07)', padding:'32px 56px', display:'flex', alignItems:'center', justifyContent:'space-between', maxWidth:1160, margin:'0 auto' }}>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:15, color:'var(--tm)' }}>Absolute AIChat by <span style={{ color:'var(--ac)' }}>Absolute App Labs</span></div>
-        <div style={{ display:'flex', gap:22 }}>
-          {['Features','Pricing','Docs','Privacy'].map(l => (
-            <a key={l} href="#" style={{ fontSize:13, color:'var(--td)', transition:'color .15s' }}
-               onMouseOver={e=>e.target.style.color='var(--tm)'} onMouseOut={e=>e.target.style.color='var(--td)'}>{l}</a>
-          ))}
-        </div>
-        <div style={{ fontSize:12, color:'var(--td)' }}>© 2025 Absolute App Labs. All rights reserved.</div>
-      </footer>
-
-      <style>{`@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }`}</style>
-    </div>
-  )
-}
-
-function MockBrowser() {
-  return (
-    <div style={{ width:'100%', maxWidth:420, background:'var(--s1)', border:'0.5px solid rgba(255,255,255,.13)', borderRadius:14, overflow:'hidden', boxShadow:'0 32px 80px rgba(0,0,0,.7)' }}>
-      <div style={{ background:'var(--s2)', padding:'10px 14px', display:'flex', alignItems:'center', gap:8, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-        <div style={{ display:'flex', gap:5 }}>
-          {['#EF4444','#FBBF24','#22D17A'].map(c => <div key={c} style={{ width:9, height:9, borderRadius:'50%', background:c }} />)}
-        </div>
-        <div style={{ flex:1, background:'var(--s3)', borderRadius:5, height:20, margin:'0 8px', display:'flex', alignItems:'center', padding:'0 10px', fontSize:10, color:'var(--td)' }}>yourcompany.com</div>
-      </div>
-      <div style={{ padding:24, minHeight:300, position:'relative' }}>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:13, color:'var(--tx)', marginBottom:16 }}>YourBrand</div>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:19, color:'var(--tx)', lineHeight:1.2, marginBottom:8 }}>Solutions that<br />Move Business</div>
-        <div style={{ fontSize:11, color:'var(--tm)', lineHeight:1.6, maxWidth:200, marginTop:8 }}>Enterprise software for modern teams. Built to scale.</div>
-        {/* Mini chat panel */}
-        <div style={{ position:'absolute', bottom:60, right:10, width:196, background:'var(--s1)', border:'0.5px solid rgba(255,255,255,.13)', borderRadius:12, overflow:'hidden', boxShadow:'0 12px 36px rgba(0,0,0,.6)' }}>
-          <div style={{ background:'var(--s2)', padding:'8px 10px', display:'flex', alignItems:'center', gap:7, borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
-            <div style={{ width:22, height:22, background:'linear-gradient(145deg,#1D4FD8,#4F8EF7)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:9, fontWeight:700, color:'#fff', flexShrink:0 }}>K</div>
-            <div><div style={{ fontSize:11, fontWeight:500, color:'var(--tx)' }}>Absolute AIChat</div><div style={{ fontSize:9, color:'var(--gr)' }}>● Online</div></div>
-          </div>
-          <div style={{ padding:8, display:'flex', flexDirection:'column', gap:5 }}>
-            {[
-              { b:true,  t:"Hi! 👋 What brings you here today?" },
-              { b:false, t:"I need a software solution" },
-              { b:true,  t:"Great! Tell me more about your team." },
-            ].map((m, i) => (
-              <div key={i} style={{ padding:'6px 8px', borderRadius:8, fontSize:10, lineHeight:1.4, maxWidth:'88%',
-                alignSelf: m.b ? 'flex-start' : 'flex-end',
-                background: m.b ? 'var(--s2)' : '#1B3FA0',
-                color: m.b ? 'var(--tx)' : '#DDE9FF',
-                border: m.b ? '0.5px solid rgba(255,255,255,.07)' : 'none',
-                borderBottomLeftRadius: m.b ? 2 : 8,
-                borderBottomRightRadius: m.b ? 8 : 2,
-              }}>{m.t}</div>
+      {/* LOGOS */}
+      <section style={{ padding:'40px 0', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)' }}>
+        <div className="container" style={{ textAlign:'center' }}>
+          <p style={{ fontSize:13, color:'var(--muted)', marginBottom:24 }}>WORKS WITH YOUR FAVOURITE AI PROVIDERS</p>
+          <div style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:48, flexWrap:'wrap' }}>
+            {['Claude (Anthropic)', 'ChatGPT (OpenAI)', 'HubSpot', 'Zoho CRM', 'Zapier', 'Stripe'].map(name => (
+              <span key={name} style={{ fontSize:15, fontWeight:500, color:'var(--muted)' }}>{name}</span>
             ))}
           </div>
         </div>
-        {/* Bubble */}
-        <div style={{ position:'absolute', bottom:14, right:14, width:38, height:38, background:'linear-gradient(145deg,#1D4FD8,#4F8EF7)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 14px rgba(30,79,216,.5)' }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" className="section">
+        <div className="container">
+          <div style={{ textAlign:'center', marginBottom:64 }}>
+            <div className="tag">Features</div>
+            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800, lineHeight:1.1 }}>
+              Everything you need to<br />convert visitors into leads
+            </h2>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:16 }}>
+            {[
+              { icon:'🤖', title:'AI-Powered Chat', desc:'Claude or ChatGPT — bring your own API key. We never mark up AI usage.' },
+              { icon:'📚', title:'Smart Knowledge Base', desc:'Upload PDFs, scrape URLs, add Q&A pairs. Bot answers from your content only.' },
+              { icon:'👥', title:'Lead Capture', desc:'Automatically captures name, email, company from natural conversation.' },
+              { icon:'🔴', title:'Live Agent Handoff', desc:'Visitor requests a human — agent gets notified, takes over chat in real time.' },
+              { icon:'🏢', title:'Visitor Intelligence', desc:'Company name, location, device, browser, referrer — for every chat.' },
+              { icon:'🔗', title:'CRM Integrations', desc:'HubSpot, Zoho CRM, Zapier — leads sync automatically on capture.' },
+              { icon:'👤', title:'Team Access', desc:'Invite team members with Admin, Sales, or Custom role-based permissions.' },
+              { icon:'🎨', title:'Fully Customisable', desc:'Your bot name, avatar, bubble color, widget mode. Embed with one line of code.' },
+              { icon:'📊', title:'Lead Dashboard', desc:'Track leads, update status, export CSV, view full conversation transcripts.' },
+            ].map((f, i) => (
+              <div key={i} className="feature-card">
+                <div style={{ fontSize:28, marginBottom:12 }}>{f.icon}</div>
+                <h3 style={{ fontFamily:'Syne', fontSize:18, fontWeight:700, marginBottom:8 }}>{f.title}</h3>
+                <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.6 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section id="how" className="section" style={{ background:'var(--surface)' }}>
+        <div className="container">
+          <div style={{ textAlign:'center', marginBottom:64 }}>
+            <div className="tag">How it works</div>
+            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Live in 5 minutes</h2>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))', gap:32, maxWidth:800, margin:'0 auto' }}>
+            {[
+              { n:'01', title:'Sign up free', desc:'Create your workspace. No credit card needed.' },
+              { n:'02', title:'Add your knowledge', desc:'Upload PDFs, paste your website URL, or type Q&A pairs.' },
+              { n:'03', title:'Connect your AI key', desc:'Paste your Anthropic or OpenAI API key. We encrypt it.' },
+              { n:'04', title:'Embed one line', desc:'Copy the script tag and paste it into your website. Done.' },
+            ].map((s, i) => (
+              <div key={i} style={{ position:'relative' }}>
+                <div style={{ width:40, height:40, borderRadius:'50%', background:'var(--orange-glow)', border:'1px solid rgba(255,92,0,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, color:'var(--orange)', marginBottom:16 }}>{s.n}</div>
+                <h3 style={{ fontFamily:'Syne', fontSize:18, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
+                <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.6 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign:'center', marginBottom:64 }}>
+            <div className="tag">Testimonials</div>
+            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Loved by businesses</h2>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:16 }}>
+            {[
+              { quote:"We went live in under 10 minutes. Within the first week, the bot captured 14 qualified leads while we slept.", name:"Sarah Chen", role:"Founder, TechFlow", avatar:"SC" },
+              { quote:"The live handoff feature is incredible. Visitors get instant AI responses, and when they're ready, I jump in seamlessly.", name:"Marcus Rivera", role:"Sales Lead, Growthly", avatar:"MR" },
+              { quote:"Finally a chatbot that actually understands our business. The knowledge base training is a game changer.", name:"Priya Nair", role:"Head of Marketing, LaunchPad", avatar:"PN" },
+            ].map((t, i) => (
+              <div key={i} className="feature-card">
+                <div style={{ marginBottom:16, color:'var(--orange)', fontSize:20 }}>★★★★★</div>
+                <p style={{ fontSize:15, lineHeight:1.7, color:'rgba(245,240,235,0.85)', marginBottom:20 }}>"{t.quote}"</p>
+                <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                  <div style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg, var(--orange), #FF8A40)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, fontWeight:700, color:'#fff' }}>{t.avatar}</div>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:500 }}>{t.name}</div>
+                    <div style={{ fontSize:12, color:'var(--muted)' }}>{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section id="pricing" className="section" style={{ background:'var(--surface)' }}>
+        <div className="container">
+          <div style={{ textAlign:'center', marginBottom:64 }}>
+            <div className="tag">Pricing</div>
+            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800 }}>Simple, transparent pricing</h2>
+            <p style={{ marginTop:12, color:'var(--muted)', fontSize:16 }}>You bring your own AI key — we never mark up AI usage</p>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:16, maxWidth:900, margin:'0 auto' }}>
+            {[
+              { name:'Starter', price:'$0', period:'forever', color:'var(--muted)', features:['100 messages/mo','1 PDF upload','Lead dashboard','Claude or ChatGPT'], cta:'Start free' },
+              { name:'Growth', price:'$29', period:'/month', color:'var(--orange)', featured:true, features:['2,000 messages/mo','10 PDF uploads','Full analytics','Usage alerts','HubSpot + Zapier'], cta:'Get started' },
+              { name:'Business', price:'$79', period:'/month', color:'#fff', features:['Unlimited messages','Unlimited PDFs','Priority support','Advanced analytics','All integrations','Team members'], cta:'Get started' },
+            ].map((p, i) => (
+              <div key={i} style={{ background: p.featured ? 'linear-gradient(135deg, rgba(255,92,0,0.15), rgba(255,92,0,0.05))' : '#0D0D0D',
+                border: p.featured ? '1px solid rgba(255,92,0,0.4)' : '1px solid var(--border)',
+                borderRadius:20, padding:32, position:'relative' }}>
+                {p.featured && <div style={{ position:'absolute', top:-12, left:'50%', transform:'translateX(-50%)', background:'var(--orange)', color:'#fff', fontSize:11, fontWeight:600, padding:'4px 14px', borderRadius:100, letterSpacing:'0.05em' }}>MOST POPULAR</div>}
+                <div style={{ fontSize:15, fontWeight:500, color:p.color, marginBottom:16 }}>{p.name}</div>
+                <div style={{ display:'flex', alignItems:'baseline', gap:4, marginBottom:24 }}>
+                  <span style={{ fontFamily:'Syne', fontSize:48, fontWeight:800 }}>{p.price}</span>
+                  <span style={{ color:'var(--muted)', fontSize:15 }}>{p.period}</span>
+                </div>
+                <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:28 }}>
+                  {p.features.map(f => (
+                    <div key={f} style={{ display:'flex', alignItems:'center', gap:10, fontSize:14, color:'rgba(245,240,235,0.8)' }}>
+                      <span style={{ color:'var(--orange)', fontSize:16 }}>✓</span>{f}
+                    </div>
+                  ))}
+                </div>
+                <Link href="/auth/register" className="btn-primary" style={{ width:'100%', justifyContent:'center', background: p.featured ? 'var(--orange)' : 'rgba(255,255,255,0.08)', color: p.featured ? '#fff' : 'var(--text)' }}>
+                  {p.cta}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section">
+        <div className="container" style={{ textAlign:'center' }}>
+          <div style={{ background:'linear-gradient(135deg, rgba(255,92,0,0.12), rgba(255,92,0,0.04))', border:'1px solid rgba(255,92,0,0.2)', borderRadius:24, padding:'80px 40px' }}>
+            <h2 style={{ fontSize:'clamp(32px,5vw,56px)', fontWeight:800, marginBottom:16 }}>
+              Ready to turn visitors<br />into <span className="gradient-text">customers?</span>
+            </h2>
+            <p style={{ fontSize:18, color:'var(--muted)', marginBottom:36 }}>Start free. No credit card. Live in 5 minutes.</p>
+            <Link href="/auth/register" className="btn-primary" style={{ fontSize:17, padding:'18px 44px' }}>
+              Get started free →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ borderTop:'1px solid var(--border)', padding:'40px 24px' }}>
+        <div className="container" style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
+          <div style={{ fontFamily:'Syne', fontSize:18, fontWeight:800 }}>
+            Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
+          </div>
+          <div style={{ display:'flex', gap:32, fontSize:14, color:'var(--muted)' }}>
+            <Link href="/auth/login" style={{ color:'var(--muted)', textDecoration:'none' }}>Sign in</Link>
+            <Link href="/auth/register" style={{ color:'var(--muted)', textDecoration:'none' }}>Register</Link>
+            <a href="https://absoluteapplabs.com" target="_blank" rel="noopener" style={{ color:'var(--muted)', textDecoration:'none' }}>Absolute App Labs</a>
+          </div>
+          <div style={{ fontSize:13, color:'var(--muted)' }}>© 2026 Absolute App Labs</div>
+        </div>
+      </footer>
     </div>
   )
 }
