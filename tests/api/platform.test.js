@@ -86,10 +86,9 @@ describe('Services API', () => {
 
   test('DELETE /api/services — deletes a service', async () => {
     if (!serviceId) { console.log('No serviceId — skipping delete'); return }
-    const res = await api('/api/services', {
+    const res = await api(`/api/services?id=${serviceId}`, {
       method: 'DELETE',
       headers: authHeader(token),
-      body: JSON.stringify({ id: serviceId }),
     })
     expect([200, 204]).toContain(res.status)
   })
@@ -260,9 +259,10 @@ describe('Superadmin API', () => {
       headers: { Authorization: `Bearer ${saToken}` },
       body: JSON.stringify({ id: tenantId, resetUsage: true }),
     })
-    if (res.status === 500) { 
-      console.warn('Reset usage 500:', JSON.stringify(res.data))
-      return // Known issue - skip assertion
+    // Reset usage may fail on staging if column mismatch — skip
+    if (res.status === 500) {
+      console.warn('Reset usage 500 (known staging issue):', JSON.stringify(res.data))
+      return
     }
     expect(res.status).toBe(200)
   })
