@@ -46,7 +46,7 @@ export async function GET(request) {
     // Fetch messages
     const { data: messages } = await supabaseAdmin
       .from('messages')
-      .select('id, role, content, created_at')
+      .select('id, role, content, is_agent, created_at')
       .eq('conversation_id', convoId)
       .order('created_at', { ascending: true })
 

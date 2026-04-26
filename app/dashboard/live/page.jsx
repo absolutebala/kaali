@@ -123,6 +123,8 @@ export default function LivePage() {
     if (d.summary) setSummary(prev => ({ ...prev, [id]: d.summary }))
     setSelected(id)
     refresh()
+    // Refresh again after 2s to pick up summary stored in DB
+    setTimeout(refresh, 2000)
   }
 
   async function sendMsg() {
