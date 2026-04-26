@@ -33,7 +33,6 @@ export function AuthProvider({ children }) {
     const data = await authApi.register({ name, company, email, password })
     token.set(data.token)
     setUser(data.tenant)
-    router.push('/dashboard')
     return data
   }, [router])
 
