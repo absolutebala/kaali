@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:api": "jest --testPathPattern=tests/api",
-    "test:api:smoke": "jest --testPathPattern=tests/api/auth --testPathPattern=tests/api/chat",
+    "test": "jest --forceExit",
+    "test:api": "jest --testPathPattern=tests/api --forceExit",
+    "test:api:smoke": "jest --testPathPattern=tests/api/auth --forceExit",
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --grep @smoke",
     "test:all": "jest && playwright test"
