@@ -24,6 +24,7 @@ async function api(path, opts = {}) {
     ...opts,
     headers: {
       'Content-Type': 'application/json',
+      ...(process.env.VERCEL_BYPASS_TOKEN ? { 'x-vercel-protection-bypass': process.env.VERCEL_BYPASS_TOKEN } : {}),
       ...(opts.headers || {}),
     },
   })
