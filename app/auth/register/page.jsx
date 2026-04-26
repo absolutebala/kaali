@@ -29,7 +29,8 @@ export default function RegisterPage() {
         name: (form.firstName + ' ' + form.lastName).trim(),
         company: form.company, email: form.email, password: form.password,
       })
-    } catch (err) { setError(err.message) }
+      return true
+    } catch (err) { setError(err.message); return false }
     finally { setLoading(false) }
   }
 
@@ -51,7 +52,7 @@ export default function RegisterPage() {
   }
 
   async function nextStep() {
-    if (step === 1) { await handleRegister(); if (!error) setStep(2) }
+    if (step === 1) { const ok = await handleRegister(); if (ok) setStep(2) }
     else if (step === 2) setStep(3)
     else await finishWizard()
   }
