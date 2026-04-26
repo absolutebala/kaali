@@ -31,17 +31,17 @@ describe('Tenant API', () => {
   test('GET /api/tenant — returns tenant settings', async () => {
     const res = await api('/api/tenant', { headers: authHeader(token) })
     expect(res.status).toBe(200)
-    expect(res.data.tenant?.company || res.data.company).toBe('Test Company Automation')
+    expect(res.data.tenant.company).toBe('Test Company Automation')
   })
 
   test('PATCH /api/tenant — updates bot name', async () => {
     const res = await api('/api/tenant', {
       method: 'PATCH',
       headers: authHeader(token),
-      body: JSON.stringify({ bot_name: 'TestBot' }),
+      body: JSON.stringify({ botName: 'TestBot' }),
     })
     expect(res.status).toBe(200)
-    expect(res.data.tenant?.bot_name || res.data.bot_name).toBe('TestBot')
+    expect(res.data.tenant.bot_name).toBe('TestBot')
   })
 
   test('GET /api/tenant — no auth returns 401', async () => {
@@ -72,14 +72,14 @@ describe('Services API', () => {
       body: JSON.stringify({ name: 'Test Service', description: 'Automated test service' }),
     })
     expect([200, 201]).toContain(res.status)
-    serviceId = res.data.id
+    serviceId = res.data.service?.id || res.data.id
     expect(serviceId).toBeTruthy()
   })
 
   test('GET /api/services — lists services', async () => {
     const res = await api('/api/services', { headers: authHeader(token) })
     expect(res.status).toBe(200)
-    const services = Array.isArray(res.data) ? res.data : (res.data.services || [])
+    const services = res.data.services || res.data
     expect(Array.isArray(services)).toBe(true)
     expect(services.length).toBeGreaterThan(0)
   })

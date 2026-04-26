@@ -39,7 +39,7 @@ export async function PATCH(request) {
   const updates = {}
   if (plan !== undefined) { updates.plan = plan; updates.conversations_limit = planLimits[plan] || 100 }
   if (conversationsLimit !== undefined) updates.conversations_limit = conversationsLimit
-  if (resetUsage) { updates.conversations_used = 0; updates.alert_sent = false }
+  if (resetUsage) { updates.conversations_used = 0 }
 
   const { data, error: dbErr } = await supabaseAdmin.from('tenants').update(updates).eq('id', id).select('id, company, plan, conversations_limit').single()
   if (dbErr) return NextResponse.json({ error: 'Update failed.' }, { status: 500 })
