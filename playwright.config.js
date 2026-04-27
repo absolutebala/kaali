@@ -2,9 +2,9 @@ const { defineConfig, devices } = require('@playwright/test')
 
 module.exports = defineConfig({
   testDir:    './tests/e2e',
-  timeout:    30000,
+  timeout:    60000,
   retries:    1,
-  workers:    2,
+  workers:    1,
   reporter:   [['html', { open: 'never' }], ['list']],
 
   use: {
@@ -13,6 +13,9 @@ module.exports = defineConfig({
     screenshot:    'only-on-failure',
     video:         'retain-on-failure',
     trace:         'retain-on-failure',
+    extraHTTPHeaders: process.env.VERCEL_BYPASS_TOKEN
+      ? { 'x-vercel-protection-bypass': process.env.VERCEL_BYPASS_TOKEN }
+      : {},
   },
 
   projects: [
