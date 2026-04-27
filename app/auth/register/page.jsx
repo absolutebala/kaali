@@ -4,6 +4,10 @@ import { useRouter }     from 'next/navigation'
 import { useAuth }       from '@/lib/auth-context'
 import Link              from 'next/link'
 
+function isValidEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+}
+
 export default function RegisterPage() {
   const { register }          = useAuth()
   const router                = useRouter()
@@ -13,7 +17,7 @@ export default function RegisterPage() {
   const [provider, setProv]   = useState('claude')
   const [form, setForm]       = useState({
     firstName:'', lastName:'', company:'', email:'', password:'',
-    description:'', botName:'Kaali', tone:'friendly',
+    description:'', botName:'', tone:'friendly',
     apiKey:'', model:'claude-sonnet-4-20250514',
   })
 
@@ -22,29 +26,51 @@ export default function RegisterPage() {
     chatgpt: [['gpt-4o-mini','GPT-4o Mini (Recommended)'],['gpt-4o','GPT-4o']],
   }
 
+  // ── Step 1: validate + register ─────────────────────────────────────────
   async function handleRegister() {
-    setError(''); setLoading(true)
+    setError('')
+    if (!form.firstName.trim())    { setError('First name is required');  return false }
+    if (!form.lastName.trim())     { setError('Last name is required');   return false }
+    if (!form.company.trim())      { setError('Company name is required'); return false }
+    if (!form.email.trim())        { setError('Email is required');        return false }
+    if (!isValidEmail(form.email)) { setError('Please enter a valid email address'); return false }
+    if (!form.password)            { setError('Password is required');     return false }
+    if (form.password.length < 6)  { setError('Password must be at least 6 characters'); return false }
+
+    setLoading(true)
     try {
       await register({
-        name: (form.firstName + ' ' + form.lastName).trim(),
-        company: form.company, email: form.email, password: form.password,
+        name:     `${form.firstName.trim()} ${form.lastName.trim()}`,
+        company:  form.company.trim(),
+        email:    form.email.trim(),
+        password: form.password,
       })
       return true
-    } catch (err) { setError(err.message); return false }
+    } catch (err) { setError(err.message || 'Registration failed. Please try again.'); return false }
     finally { setLoading(false) }
   }
 
+  // ── Step 3: save bot settings + API key then go to dashboard ────────────
   async function finishWizard() {
     setError(''); setLoading(true)
     try {
       const token = localStorage.getItem('kaali_token')
-      if (form.description || form.botName !== 'Kaali' || form.tone !== 'friendly') {
-        await fetch('/api/tenant', { method:'PATCH', headers:{ 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
-          body: JSON.stringify({ description: form.description, bot_name: form.botName, response_tone: form.tone }) })
-      }
+      // Always save bot settings using correct camelCase field names
+      await fetch('/api/tenant', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          botName:     form.botName.trim() || 'Kaali',
+          description: form.description,
+          tone:        form.tone,
+        }),
+      })
       if (form.apiKey) {
-        await fetch('/api/tenant', { method:'PATCH', headers:{ 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
-          body: JSON.stringify({ ai_provider: provider, api_key: form.apiKey, ai_model: form.model }) })
+        await fetch('/api/tenant', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ aiProvider: provider, apiKey: form.apiKey, aiModel: form.model }),
+        })
       }
       router.replace('/dashboard')
     } catch (err) { setError(err.message) }
@@ -63,7 +89,7 @@ export default function RegisterPage() {
     <div style={{ minHeight:'100vh', display:'flex', fontFamily:"'Poppins', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-        .auth-input { width:100%; padding:12px 16px; border:1.5px solid #E8E4DF; border-radius:8px; font-size:14px; font-family:Poppins,sans-serif; outline:none; transition:border-color 0.2s; color:#1A1A1A; background:#fff; }
+        .auth-input { width:100%; padding:12px 16px; border:1.5px solid #E8E4DF; border-radius:8px; font-size:14px; font-family:Poppins,sans-serif; outline:none; transition:border-color 0.2s; color:#1A1A1A; background:#fff; box-sizing:border-box; }
         .auth-input:focus { border-color:#FF5C00; }
         .auth-btn { padding:13px 24px; background:#FF5C00; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; font-family:Poppins,sans-serif; cursor:pointer; transition:all 0.2s; }
         .auth-btn:hover { background:#E64D00; }
@@ -73,20 +99,14 @@ export default function RegisterPage() {
         label { font-size:12px; font-weight:600; color:#1A1A1A; margin-bottom:5px; display:block; }
       `}</style>
 
-      {/* Left — brand panel */}
+      {/* Left brand panel */}
       <div style={{ width:'44%', background:'linear-gradient(145deg, #FF5C00 0%, #FF8C42 100%)', display:'flex', flexDirection:'column', justifyContent:'center', padding:'60px 56px', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-80, right:-80, width:300, height:300, borderRadius:'50%', background:'rgba(255,255,255,0.08)' }} />
         <div style={{ position:'absolute', bottom:-60, left:-60, width:240, height:240, borderRadius:'50%', background:'rgba(255,255,255,0.06)' }} />
         <div style={{ position:'relative' }}>
-          <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:48 }}>
-            Absolute <span style={{ opacity:0.8 }}>AIChat</span>
-          </div>
-          <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:16 }}>
-            Your AI assistant, live in 5 minutes
-          </h2>
-          <p style={{ fontSize:16, color:'rgba(255,255,255,0.8)', lineHeight:1.7, marginBottom:48 }}>
-            Set up your workspace, train your bot, and start capturing leads today.
-          </p>
+          <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:48 }}>Absolute <span style={{ opacity:0.8 }}>AIChat</span></div>
+          <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:16 }}>Your AI assistant, live in 5 minutes</h2>
+          <p style={{ fontSize:16, color:'rgba(255,255,255,0.8)', lineHeight:1.7, marginBottom:48 }}>Set up your workspace, train your bot, and start capturing leads today.</p>
           {[['1','Create account'],['2','Add business info'],['3','Connect AI']].map(([n, label], i) => (
             <div key={n} style={{ display:'flex', alignItems:'center', gap:14, marginBottom:16 }}>
               <div style={{ width:32, height:32, borderRadius:'50%', flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700,
@@ -100,7 +120,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Right — wizard */}
+      {/* Right wizard */}
       <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', background:'#FAFAF8', padding:40 }}>
         <div style={{ width:'100%', maxWidth:440 }}>
 
@@ -112,25 +132,25 @@ export default function RegisterPage() {
               {error && <div style={{ background:'#FFF0EE', border:'1px solid rgba(255,92,0,0.2)', color:'#CC3D00', padding:'12px 16px', borderRadius:8, fontSize:14, marginBottom:20 }}>{error}</div>}
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:14 }}>
                 <div>
-                  <label>First name</label>
-                  <input {...inp} placeholder="Bala" value={form.firstName} onChange={e=>setForm(p=>({...p,firstName:e.target.value}))} />
+                  <label>First name *</label>
+                  <input {...inp} placeholder="Jane" value={form.firstName} onChange={e=>setForm(p=>({...p,firstName:e.target.value}))} />
                 </div>
                 <div>
-                  <label>Last name</label>
-                  <input {...inp} placeholder="K" value={form.lastName} onChange={e=>setForm(p=>({...p,lastName:e.target.value}))} />
+                  <label>Last name *</label>
+                  <input {...inp} placeholder="Smith" value={form.lastName} onChange={e=>setForm(p=>({...p,lastName:e.target.value}))} />
                 </div>
               </div>
               <div style={{ marginBottom:14 }}>
-                <label>Company name</label>
-                <input {...inp} placeholder="Absolute App Labs" value={form.company} onChange={e=>setForm(p=>({...p,company:e.target.value}))} />
+                <label>Company name *</label>
+                <input {...inp} placeholder="Your company" value={form.company} onChange={e=>setForm(p=>({...p,company:e.target.value}))} />
               </div>
               <div style={{ marginBottom:14 }}>
-                <label>Work email</label>
+                <label>Work email *</label>
                 <input {...inp} type="email" placeholder="you@company.com" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} />
               </div>
               <div style={{ marginBottom:28 }}>
-                <label>Password</label>
-                <input {...inp} type="password" placeholder="Min 8 characters" value={form.password} onChange={e=>setForm(p=>({...p,password:e.target.value}))} />
+                <label>Password *</label>
+                <input {...inp} type="password" placeholder="Min 6 characters" value={form.password} onChange={e=>setForm(p=>({...p,password:e.target.value}))} />
               </div>
               <button className="auth-btn" onClick={nextStep} disabled={loading} style={{ width:'100%' }}>
                 {loading ? 'Creating account…' : 'Create account →'}
@@ -147,13 +167,14 @@ export default function RegisterPage() {
             <>
               <h1 style={{ fontSize:28, fontWeight:800, color:'#1A1A1A', marginBottom:6, letterSpacing:'-0.02em' }}>Tell us about your business</h1>
               <p style={{ fontSize:15, color:'#6B6B6B', marginBottom:28 }}>This trains your bot's personality and knowledge.</p>
+              {error && <div style={{ background:'#FFF0EE', border:'1px solid rgba(255,92,0,0.2)', color:'#CC3D00', padding:'12px 16px', borderRadius:8, fontSize:14, marginBottom:20 }}>{error}</div>}
               <div style={{ marginBottom:14 }}>
                 <label>What does your company do?</label>
                 <textarea {...inp} rows={4} placeholder="We are a software development company specialising in…" value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} style={{ resize:'vertical' }} />
               </div>
               <div style={{ marginBottom:14 }}>
                 <label>Bot name</label>
-                <input {...inp} placeholder="Kaali" value={form.botName} onChange={e=>setForm(p=>({...p,botName:e.target.value}))} />
+                <input {...inp} placeholder="e.g. Aria, Max, Alex" value={form.botName} onChange={e=>setForm(p=>({...p,botName:e.target.value}))} />
               </div>
               <div style={{ marginBottom:28 }}>
                 <label>Response tone</label>
@@ -167,6 +188,9 @@ export default function RegisterPage() {
                 <button className="back-btn" onClick={()=>setStep(1)} style={{ flex:1 }}>← Back</button>
                 <button className="auth-btn" onClick={nextStep} style={{ flex:2 }}>Continue →</button>
               </div>
+              <p style={{ textAlign:'center', marginTop:16, fontSize:13, color:'#6B6B6B' }}>
+                <Link href="/dashboard" style={{ color:'#FF5C00', textDecoration:'none' }}>Skip for now →</Link>
+              </p>
             </>
           )}
 
@@ -205,7 +229,6 @@ export default function RegisterPage() {
               </p>
             </>
           )}
-
         </div>
       </div>
     </div>

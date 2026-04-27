@@ -351,6 +351,9 @@
     if (icoChat)  icoChat.style.display  = 'block'
     if (icoClose) icoClose.style.display = 'none'
 
+    // Remember that user manually closed this session
+    try { sessionStorage.setItem('kaali_closed_' + (config && config.tenantId || ''), '1') } catch(e) {}
+
     // In always_open mode, show bubble so user can reopen
     if (config && config.widgetMode === 'always_open') {
       const bubble = document.getElementById('kaali-bubble')
@@ -659,7 +662,9 @@
     if (cfg.widgetMode === 'always_open') {
       // Don't auto-open in dashboard preview (same origin)
       const isDashboard = window.location.pathname.startsWith('/dashboard')
-      if (!isDashboard) setTimeout(openPanel, 800)
+      // Don't auto-open if user manually closed it this session
+      const wasClosed = (() => { try { return sessionStorage.getItem('kaali_closed_' + cfg.tenantId) } catch(e) { return null } })()
+      if (!isDashboard && !wasClosed) setTimeout(openPanel, 800)
     } else if (cfg.widgetMode === 'popup') {
       // Popup mode: hide bubble, show panel centered with backdrop
       if (bubble) bubble.style.display = 'none'
@@ -701,7 +706,8 @@
           }
           document.body.appendChild(bd)
         }
-        setTimeout(openPanel, 800)
+        const wasClosedPopup = (() => { try { return sessionStorage.getItem('kaali_closed_' + cfg.tenantId) } catch(e) { return null } })()
+        if (!wasClosedPopup) setTimeout(openPanel, 800)
       }
     }
   }

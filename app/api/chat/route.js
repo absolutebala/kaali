@@ -42,6 +42,14 @@ export async function POST(request) {
 
     const lastMsg = [...messages].reverse().find(m => m.role === 'user')?.content || ''
 
+    // ── NO API KEY: return friendly message ──────────────────
+    if (!tenant.api_key) {
+      return NextResponse.json({
+        text: "Hi! I'd love to help, but the AI isn't configured yet. Please contact us directly for assistance.",
+        conversationId: null,
+      })
+    }
+
     // ── LIVE MODE: agent handling (checked before usage limit) ──
     if (conversationId) {
       const { data: convo } = await supabaseAdmin
