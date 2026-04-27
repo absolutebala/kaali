@@ -158,8 +158,8 @@ export async function POST(request) {
     }
 
     // ── CALL AI ───────────────────────────────────────────────
-    // Check API key exists before calling AI
-    if (!tenant.api_key) {
+    // Check API key exists before calling AI (stored as api_key_enc)
+    if (!tenant.api_key_enc) {
       const noKeyMsg = "Hi! I'd love to help, but the AI isn't configured for this chat yet. Please contact us directly for assistance."
       if (convoId) await supabaseAdmin.from('messages').insert({ conversation_id: convoId, tenant_id: tenantId, role: 'assistant', content: noKeyMsg })
       return NextResponse.json({ text: noKeyMsg, conversationId: convoId || null })
