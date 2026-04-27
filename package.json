@@ -11,7 +11,7 @@
     "test:api": "jest --testPathPattern=tests/api --forceExit",
     "test:api:smoke": "jest --testPathPattern=tests/api/auth --forceExit",
     "test:e2e": "playwright test",
-    "test:e2e:smoke": "playwright test --grep @smoke",
+    "test:e2e:smoke": "playwright test --grep \"Landing Page|Auth\"",
     "test:all": "jest && playwright test"
   },
   "dependencies": {
