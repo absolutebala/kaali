@@ -67,6 +67,31 @@ describe('Chat API', () => {
     expect(res.data).toBeDefined()
   })
 
+  test('POST /api/chat — no API key returns friendly message not crash', async () => {
+    // Test tenant has no API key (api_key_enc is null) — should return friendly text, not 500
+    const res = await api('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        tenantId,
+        messages: [{ role: 'user', content: 'Hello' }],
+        visitorType: 'GENERAL',
+      }),
+    })
+    expect(res.status).toBe(200)
+    // Must return a text field — not crash with 500
+    expect(res.data.text).toBeDefined()
+    expect(typeof res.data.text).toBe('string')
+    expect(res.data.text.length).toBeGreaterThan(0)
+    // Must NOT return a server error
+    expect(res.data.error).toBeUndefined()
+    // Should return the friendly no-API-key message (not a generic crash)
+    // The message should mention contact or configuration
+    const txt = res.data.text.toLowerCase()
+    const isFriendly = txt.includes('contact') || txt.includes('configured') || txt.includes('help') || txt.includes('unavailable')
+    expect(isFriendly).toBe(true)
+    console.log('No-API-key message:', res.data.text)
+  })
+
   test('POST /api/chat — handoff detection', async () => {
     const res = await api('/api/chat', {
       method: 'POST',
