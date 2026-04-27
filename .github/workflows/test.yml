@@ -44,9 +44,9 @@ jobs:
           path: test-results/
           retention-days: 7
 
-  # ── JOB 2: E2E TESTS (STAGING) ─────────────────────────────────────────
+  # ── JOB 2: E2E TESTS (PRODUCTION) ───────────────────────────────────────
   e2e-tests-staging:
-    name: E2E Tests — Staging
+    name: E2E Tests — Production
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: api-tests-staging
@@ -65,9 +65,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run E2E tests against staging
+      - name: Run E2E tests against production
         env:
-          TEST_BASE_URL: ${{ secrets.TEST_BASE_URL_STAGING || 'https://kaali-complete-git-staging-oohads.vercel.app' }}
+          TEST_BASE_URL: ${{ secrets.TEST_BASE_URL_PROD || 'https://aichat.absoluteapplabs.com' }}
         run: npm run test:e2e
 
       - name: Upload Playwright report
