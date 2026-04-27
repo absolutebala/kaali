@@ -42,14 +42,6 @@ export async function POST(request) {
 
     const lastMsg = [...messages].reverse().find(m => m.role === 'user')?.content || ''
 
-    // ── NO API KEY: return friendly message ──────────────────
-    if (!tenant.api_key) {
-      return NextResponse.json({
-        text: "Hi! I'd love to help, but the AI isn't configured yet. Please contact us directly for assistance.",
-        conversationId: null,
-      })
-    }
-
     // ── LIVE MODE: agent handling (checked before usage limit) ──
     if (conversationId) {
       const { data: convo } = await supabaseAdmin
@@ -166,6 +158,13 @@ export async function POST(request) {
     }
 
     // ── CALL AI ───────────────────────────────────────────────
+    // Check API key exists before calling AI
+    if (!tenant.api_key) {
+      const noKeyMsg = "Hi! I'd love to help, but the AI isn't configured for this chat yet. Please contact us directly for assistance."
+      if (convoId) await supabaseAdmin.from('messages').insert({ conversation_id: convoId, tenant_id: tenantId, role: 'assistant', content: noKeyMsg })
+      return NextResponse.json({ text: noKeyMsg, conversationId: convoId || null })
+    }
+
     const { text: rawText, error: aiError } = await callAI({
       tenant, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline,
     })
