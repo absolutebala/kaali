@@ -79,16 +79,16 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div style={{ display:'flex', minHeight:'100vh' }}>
-      <aside style={{ width:224, background:'#080C17', borderRight:'0.5px solid rgba(255,255,255,.07)', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
-        <div style={{ padding:'20px 16px 16px', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>
+      <aside style={{ width:224, background:'#080C17', borderRight:'1px solid #E8E4DF', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
+        <div style={{ padding:'20px 16px 16px', borderBottom:'1px solid #E8E4DF' }}>
           {logoUrl ? (
             <img src={logoUrl} alt="Absolute AIChat" style={{ maxWidth:'160px', maxHeight:'36px', objectFit:'contain', marginBottom:4 }} />
           ) : (
-            <div style={{ fontFamily:'var(--font-brand)', fontSize:13, color:'var(--tx)', letterSpacing:'-.3px', marginBottom:4 }}>
+            <div style={{ fontFamily:'var(--font-brand)', fontSize:13, color:'#1A1A1A', letterSpacing:'-.3px', marginBottom:4, fontWeight:600 }}>
               Absolute <span style={{ color:'var(--ac)' }}>AIChat</span>
             </div>
           )}
-          <div style={{ fontSize:12, color:'var(--tm)', marginBottom:8 }}>{user.company}</div>
+          <div style={{ fontSize:12, color:'#6B6B6B', marginBottom:8 }}>{user.company}</div>
           <div style={{ display:'inline-block', fontSize:11, fontWeight:500, color:'var(--ac)', background:'rgba(79,142,247,.12)', border:'0.5px solid rgba(79,142,247,.25)', padding:'2px 10px', borderRadius:10 }}>
             {(user.plan||'starter').charAt(0).toUpperCase()+(user.plan||'starter').slice(1)}
           </div>
@@ -107,21 +107,21 @@ export default function DashboardLayout({ children }) {
             </>
           ) : (
             <>
-              <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'var(--td)', padding:'4px 10px 6px', marginTop:8 }}>Overview</div>
+              <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'#9B9B9B', padding:'4px 10px 6px', marginTop:8 }}>Overview</div>
               {NAV.slice(0, splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
-              <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'var(--td)', padding:'4px 10px 6px', marginTop:8 }}>Configuration</div>
+              <div style={{ fontSize:10, fontWeight:500, letterSpacing:'1.4px', textTransform:'uppercase', color:'#9B9B9B', padding:'4px 10px 6px', marginTop:8 }}>Configuration</div>
               {NAV.slice(splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
             </>
           )}
         </nav>
-        <div style={{ padding:'10px 8px', borderTop:'0.5px solid rgba(255,255,255,.07)' }}>
+        <div style={{ padding:'10px 8px', borderTop:'1px solid #E8E4DF' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 10px' }}>
             <div style={{ width:30, height:30, borderRadius:'50%', background:'linear-gradient(145deg,#1D4FD8,#4F8EF7)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-brand)', fontSize:12, fontWeight:700, color:'#fff', flexShrink:0 }}>
               {(user.name||'?').charAt(0).toUpperCase()}
             </div>
             <div>
               <div style={{ fontSize:13, color:'var(--ts)' }}>{user.name}</div>
-              <div style={{ fontSize:11, color:'var(--td)' }}>{user.email}</div>
+              <div style={{ fontSize:11, color:'#9B9B9B' }}>{user.email}</div>
             </div>
           </div>
           <button onClick={handleLogout} style={{ width:'100%', fontSize:12, color:'var(--tm)', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left', marginTop:2 }}>Sign out</button>
@@ -134,7 +134,7 @@ export default function DashboardLayout({ children }) {
 
 function NavItem({ href, icon, label, active }) {
   return (
-    <Link href={href} style={{ display:'flex', alignItems:'center', gap:9, padding:'9px 10px', borderRadius:8, fontSize:13, color: active ? 'var(--tx)' : 'var(--tm)', background: active ? 'rgba(79,142,247,.12)' : 'none', borderRight: active ? '2px solid var(--ac)' : '2px solid transparent', marginBottom:2, transition:'all .15s', textDecoration:'none' }}>
+    <Link href={href} style={{ display:'flex', alignItems:'center', gap:9, padding:'9px 10px', borderRadius:8, fontSize:13, color: active ? '#FF5C00' : '#6B6B6B', background: active ? 'rgba(79,142,247,.12)' : 'none', borderRight: active ? '2px solid var(--ac)' : '2px solid transparent', marginBottom:2, transition:'all .15s', textDecoration:'none' }}>
       <span style={{ width:16, textAlign:'center', fontSize:14, flexShrink:0 }}>{icon}</span>
       <span>{label}</span>
     </Link>
