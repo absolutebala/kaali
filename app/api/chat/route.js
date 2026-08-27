@@ -140,6 +140,22 @@ export async function POST(request) {
     if (lastMsg && convoId) {
       await supabaseAdmin.from('messages').insert({ conversation_id: convoId,
             tenant_id: tenantId, role: 'user', content: lastMsg })
+
+      // ── NEW CHAT EMAIL (first message only — no conversationId in request) ──
+      if (!conversationId && tenant.alert_email) {
+        sendNewChatAlert({
+          to:           tenant.alert_email,
+          companyName:  tenant.company,
+          visitorType:  visitorType || 'GENERAL',
+          visitorLabel: visitorLabel || null,
+          pageUrl:      pageUrl || '',
+          country:      visitorData?.country || '',
+          city:         visitorData?.city || '',
+          device:       visitorData?.device || '',
+          browser:      visitorData?.browser || '',
+          conversationId: convoId,
+        }).catch(e => console.error('[NewChatEmail]', e.message))
+      }
     }
 
     // ── HANDOFF DETECTION ─────────────────────────────────────

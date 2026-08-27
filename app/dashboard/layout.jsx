@@ -9,6 +9,7 @@ const NAV_FULL = [
   { href:'/dashboard/leads',         icon:'👥', label:'Leads'         },
   { href:'/dashboard/conversations', icon:'💬', label:'Chats'         },
   { href:'/dashboard/live',          icon:'🔴', label:'Live'          },
+  { href:'/dashboard/analytics',     icon:'📈', label:'Analytics'     },
   { href:'/dashboard/knowledge',     icon:'📚', label:'Knowledge Base'},
   { href:'/dashboard/training',      icon:'🧠', label:'Training'      },
   { href:'/dashboard/api-usage',     icon:'🔑', label:'API & Usage'   },
