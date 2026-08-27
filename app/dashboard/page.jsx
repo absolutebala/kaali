@@ -121,7 +121,7 @@ function StatCard({ label, value, sub }) {
 export function PageShell({ title, action, children }) {
   return (
     <>
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 24px', borderBottom:'0.5px solid rgba(255,255,255,.07)', background:'var(--s1)', position:'sticky', top:0, zIndex:10 }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 24px', borderBottom:'0.5px solid var(--b1)', background:'var(--s1)', position:'sticky', top:0, zIndex:10 }}>
         <div style={{ fontFamily:'var(--font-brand)', fontSize:17, fontWeight:700, color:'var(--tx)' }}>{title}</div>
         {action && <div>{action}</div>}
       </div>
