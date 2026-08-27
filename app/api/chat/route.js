@@ -30,7 +30,7 @@ function extractContact(text) {
 export async function POST(request) {
   try {
     const body = await request.json()
-    const { tenantId, conversationId, messages, visitorType, pageUrl, visitorData } = body
+    const { tenantId, conversationId, messages, visitorType, visitorLabel, pageUrl, visitorData } = body
 
     if (!tenantId || !messages?.length) {
       return NextResponse.json({ error: 'tenantId and messages are required.' }, { status: 400 })
