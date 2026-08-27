@@ -1,7 +1,7 @@
 import { NextResponse }                  from 'next/server'
 import { supabaseAdmin }                 from '@/lib/supabase'
 import { callAI, extractLead }           from '@/lib/ai'
-import { sendUsageAlert, sendLeadAlert, sendHandoffAlert } from '@/lib/email'
+import { sendUsageAlert, sendLeadAlert, sendHandoffAlert, sendNewChatAlert } from '@/lib/email'
 import { pushLeadToHubSpot }             from '@/lib/hubspot'
 import { pushLeadToZoho }               from '@/lib/zoho'
 import { fireZapierWebhook }            from '@/lib/zapier'
