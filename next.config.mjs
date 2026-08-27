@@ -4,6 +4,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["pdf-parse", "bcryptjs", "jsonwebtoken", "@anthropic-ai/sdk", "openai"],
   images: {
     domains: ['lyeihbjpmgweylnaqevg.supabase.co'],
   },
