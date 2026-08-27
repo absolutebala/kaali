@@ -4,7 +4,7 @@ import { PageShell } from '../page'
 
 export default function EmbedPage() {
   const { user } = useAuth()
-  const appUrl   = process.env.NEXT_PUBLIC_APP_URL || 'https://kaali.absoluteapplabs.com'
+  const appUrl   = process.env.NEXT_PUBLIC_APP_URL || 'https://nivochat.idataone.com'
   const tid      = user?.id || '—'
   const snippet  = `<script src="${appUrl}/widget.js?id=${tid}" async></script>`
 
@@ -52,7 +52,7 @@ export default function EmbedPage() {
               },
               {
                 title: "You're live — no re-embed needed ever",
-                desc:  'Kaali appears immediately. Any changes you make here (bot name, knowledge base, tone) take effect in real time. No code changes required.',
+                desc:  'NivoChat appears immediately. Any changes you make here (bot name, knowledge base, tone) take effect in real time. No code changes required.',
                 code:  null,
               },
             ].map((step, i) => (

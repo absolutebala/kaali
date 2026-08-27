@@ -20,7 +20,7 @@ export async function GET(request) {
     return NextResponse.json({ tenant: {
       id: payload.tenantId, name: member.name, email: member.email,
       company: tenantData?.company || '', plan: tenantData?.plan || 'starter',
-      botName: tenantData?.bot_name || 'Kaali', avatarUrl: tenantData?.avatar_url || '',
+      botName: tenantData?.bot_name || 'Assistant', avatarUrl: tenantData?.avatar_url || '',
       bubbleColor: tenantData?.bubble_color || '#4F8EF7', widgetMode: tenantData?.widget_mode || 'bubble',
       isMember: true, memberRole: member.role, allowedPages: member.allowed_pages || [],
     }})

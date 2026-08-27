@@ -26,7 +26,7 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!user) return
     setForm({
-      botName:         user.botName          || 'Kaali',
+      botName:         user.botName          || 'NivoChat',
       tone:            user.tone             || 'friendly',
       calendly:        user.calendly         || '',
       company:         user.company          || '',
@@ -114,7 +114,7 @@ export default function SettingsPage() {
             <div style={{ flex:1, display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
               <div className="form-row" style={{ marginBottom:0 }}>
                 <label className="form-label">Bot Name</label>
-                <input className="form-input" value={form.botName} onChange={f('botName')} placeholder="Kaali" />
+                <input className="form-input" value={form.botName} onChange={f('botName')} placeholder="NivoChat" />
               </div>
               <div className="form-row" style={{ marginBottom:0 }}>
                 <label className="form-label">Company Name</label>

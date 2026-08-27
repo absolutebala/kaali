@@ -32,7 +32,7 @@ export async function PATCH(request) {
   // Build the update object — only accept known fields
   const updates = {}
 
-  if (body.botName    !== undefined) updates.bot_name     = body.botName.trim() || 'Kaali'
+  if (body.botName    !== undefined) updates.bot_name     = body.botName.trim() || 'Assistant'
   if (body.description !== undefined) updates.description  = body.description
   if (body.tone       !== undefined) updates.tone          = body.tone
   if (body.calendly   !== undefined) updates.calendly_url  = body.calendly.trim()

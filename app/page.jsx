@@ -139,14 +139,14 @@ export default function LandingPage() {
                 <div style={{ background:'linear-gradient(135deg, var(--orange), var(--orange2))', padding:'16px 20px', display:'flex', alignItems:'center', gap:12 }}>
                   <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:700, color:'#fff' }}>K</div>
                   <div>
-                    <div style={{ fontSize:14, fontWeight:600, color:'#fff' }}>Kaali — AI Assistant</div>
+                    <div style={{ fontSize:14, fontWeight:600, color:'#fff' }}>NivoChat — AI Assistant</div>
                     <div style={{ fontSize:11, color:'rgba(255,255,255,0.8)' }}>● Online · Replies instantly</div>
                   </div>
                 </div>
                 {/* Messages */}
                 <div style={{ padding:20, display:'flex', flexDirection:'column', gap:12, background:'#F9F9F9', minHeight:220 }}>
                   <div style={{ background:'#fff', borderRadius:'16px 16px 16px 4px', padding:'12px 16px', fontSize:14, maxWidth:'80%', boxShadow:'0 1px 3px rgba(0,0,0,0.06)', lineHeight:1.5 }}>
-                    Hi! 👋 I'm Kaali. What brings you here today?
+                    Hi! 👋 I'm your AI assistant. What brings you here today?
                   </div>
                   <div style={{ background:'var(--orange)', borderRadius:'16px 16px 4px 16px', padding:'12px 16px', fontSize:14, maxWidth:'80%', alignSelf:'flex-end', color:'#fff', lineHeight:1.5 }}>
                     I want to build a mobile app for my business

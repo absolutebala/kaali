@@ -158,7 +158,7 @@ export default function ApiUsagePage() {
                 <span>{pct}% used</span><span>{Math.max(0, usage.limit - usage.used)} remaining</span>
               </div>
               {pct >= 80 && <div style={{ fontSize:12, color:'var(--am)', marginTop:8 }}>⚠ Approaching monthly limit. Consider upgrading your plan.</div>}
-              {pct >= 100 && <div style={{ fontSize:12, color:'var(--rd)', marginTop:4 }}>🚫 Limit reached. Kaali will stop responding until you upgrade or the month resets.</div>}
+              {pct >= 100 && <div style={{ fontSize:12, color:'var(--rd)', marginTop:4 }}>🚫 Limit reached. NivoChat will stop responding until you upgrade or the month resets.</div>}
             </>
           )}
           {/* Plan comparison */}

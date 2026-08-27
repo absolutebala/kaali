@@ -60,7 +60,7 @@ export default function RegisterPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          botName:     form.botName.trim() || 'Kaali',
+          botName:     form.botName.trim() || 'Assistant',
           description: form.description,
           tone:        form.tone,
         }),

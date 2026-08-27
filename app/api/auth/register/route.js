@@ -40,7 +40,7 @@ export async function POST(request) {
         email:              email.toLowerCase().trim(),
         password_hash:      passwordHash,
         plan:               'starter',
-        bot_name:           'Kaali',
+        bot_name:           'Assistant',
         tone:               'friendly',
         ai_provider:        'claude',
         ai_model:           'claude-sonnet-4-20250514',
