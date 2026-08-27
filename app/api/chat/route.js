@@ -185,7 +185,14 @@ export async function POST(request) {
       tenant, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline,
     })
 
-    if (aiError) return NextResponse.json({ text: "I'm having a small issue right now. Please try again in a moment." })
+    if (aiError) {
+      console.error('[Chat] AI Error:', aiError)
+      const isKeyError = aiError.includes('API key') || aiError.includes('authentication') || aiError.includes('auth') || aiError.includes('401')
+      const userMsg = isKeyError
+        ? 'The AI API key appears to be invalid. Please check your API key in the dashboard.'
+        : "I'm having a small issue right now. Please try again in a moment."
+      return NextResponse.json({ text: userMsg })
+    }
 
     const { lead, cleanText } = extractLead(rawText)
 
