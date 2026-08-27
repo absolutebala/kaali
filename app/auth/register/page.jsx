@@ -18,11 +18,11 @@ export default function RegisterPage() {
   const [form, setForm]       = useState({
     firstName:'', lastName:'', company:'', email:'', password:'',
     description:'', botName:'', tone:'friendly',
-    apiKey:'', model:'claude-sonnet-4-20250514',
+    apiKey:'', model:'claude-sonnet-4-5',
   })
 
   const modelOpts = {
-    claude:  [['claude-sonnet-4-20250514','Claude Sonnet 4 (Recommended)'],['claude-opus-4-20250514','Claude Opus 4'],['claude-haiku-4-5-20251001','Claude Haiku 4.5']],
+    claude:  [['claude-sonnet-4-5','Claude Sonnet 4 (Recommended)'],['claude-opus-4-5','Claude Opus 4'],['claude-haiku-4-5-20251001','Claude Haiku 4.5']],
     chatgpt: [['gpt-4o-mini','GPT-4o Mini (Recommended)'],['gpt-4o','GPT-4o']],
   }
 

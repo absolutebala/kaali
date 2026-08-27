@@ -43,7 +43,7 @@ export async function POST(request) {
         bot_name:           'Assistant',
         tone:               'friendly',
         ai_provider:        'claude',
-        ai_model:           'claude-sonnet-4-20250514',
+        ai_model:           'claude-sonnet-4-5',
         conversations_used:  0,
         conversations_limit: 100,
         alert_email:        email.toLowerCase().trim(),

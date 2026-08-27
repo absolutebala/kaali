@@ -5,7 +5,7 @@ import { useAuth }   from '@/lib/auth-context'
 import { PageShell } from '../page'
 
 const MODELS = {
-  claude:  [['claude-sonnet-4-20250514','Claude Sonnet 4 (Recommended)'],['claude-opus-4-20250514','Claude Opus 4'],['claude-haiku-4-5-20251001','Claude Haiku 4.5 (Fastest)']],
+  claude:  [['claude-sonnet-4-5','Claude Sonnet 4 (Recommended)'],['claude-opus-4-5','Claude Opus 4'],['claude-haiku-4-5','Claude Haiku 4.5 (Fastest)']],
   chatgpt: [['gpt-4o-mini','GPT-4o Mini (Recommended)'],['gpt-4o','GPT-4o']],
 }
 
@@ -15,7 +15,7 @@ export default function ApiUsagePage() {
   const [provider, setProv]     = useState('claude')
   const [apiKey,   setApiKey]   = useState('')
   const [keyVis,   setKeyVis]   = useState(false)
-  const [model,    setModel]    = useState('claude-sonnet-4-20250514')
+  const [model,    setModel]    = useState('claude-sonnet-4-5')
   const [alertEm,  setAlertEm]  = useState('')
   const [alertThr, setAlertThr] = useState(80)
   const [saving,   setSaving]   = useState(false)
@@ -28,7 +28,7 @@ export default function ApiUsagePage() {
       const [t, s] = await Promise.all([tenantApi.get(), statsApi.get()])
       const ten = t.tenant
       setProv(ten.aiProvider || 'claude')
-      setModel(ten.aiModel   || 'claude-sonnet-4-20250514')
+      setModel(ten.aiModel   || 'claude-sonnet-4-5')
       setAlertEm(ten.alertEmail || '')
       setAlertThr(ten.alertThreshold || 80)
       setUsage(s)
