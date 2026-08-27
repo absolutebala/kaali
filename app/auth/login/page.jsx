@@ -46,7 +46,7 @@ export default function LoginPage() {
         <div style={{ position:'absolute', bottom:-60, left:-60, width:240, height:240, borderRadius:'50%', background:'rgba(255,255,255,0.06)' }} />
         <div style={{ position:'relative' }}>
           <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:48 }}>
-            Absolute <span style={{ opacity:0.8 }}>AIChat</span>
+            NivoChat
           </div>
           <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:16 }}>
             Your AI-powered chat assistant is waiting

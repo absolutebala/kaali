@@ -82,7 +82,7 @@ export default function LandingPage() {
         transition:'all 0.3s', padding:'0 32px' }}>
         <div style={{ maxWidth:1140, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between', height:68 }}>
           <div style={{ fontFamily:'Poppins', fontSize:18, fontWeight:700, letterSpacing:'-0.02em' }}>
-            Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
+            NivoChat
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:36 }}>
             <a href="#features">Features</a>
@@ -324,7 +324,7 @@ export default function LandingPage() {
       <footer style={{ background:'var(--dark)', padding:'40px 32px' }}>
         <div style={{ maxWidth:1140, margin:'0 auto', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
           <div style={{ fontFamily:'Poppins', fontSize:16, fontWeight:700, color:'#fff' }}>
-            Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
+            NivoChat
             <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontWeight:400, marginTop:4 }}>by NivoChat</div>
           </div>
           <div style={{ fontSize:13, color:'rgba(255,255,255,0.4)' }}>© 2026 NivoChat. All rights reserved.</div>

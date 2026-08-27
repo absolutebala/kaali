@@ -104,7 +104,7 @@ export default function RegisterPage() {
         <div style={{ position:'absolute', top:-80, right:-80, width:300, height:300, borderRadius:'50%', background:'rgba(255,255,255,0.08)' }} />
         <div style={{ position:'absolute', bottom:-60, left:-60, width:240, height:240, borderRadius:'50%', background:'rgba(255,255,255,0.06)' }} />
         <div style={{ position:'relative' }}>
-          <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:48 }}>Absolute <span style={{ opacity:0.8 }}>AIChat</span></div>
+          <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:48 }}>NivoChat</div>
           <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', lineHeight:1.2, marginBottom:16 }}>Your AI assistant, live in 5 minutes</h2>
           <p style={{ fontSize:16, color:'rgba(255,255,255,0.8)', lineHeight:1.7, marginBottom:48 }}>Set up your workspace, train your bot, and start capturing leads today.</p>
           {[['1','Create account'],['2','Add business info'],['3','Connect AI']].map(([n, label], i) => (
