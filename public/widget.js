@@ -1,7 +1,7 @@
 /**
  * Kaali Widget — v1.0.0
- * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
- * Powered by Absolute App Labs
+ * Embed: <script src="https://nivochat.idataone.com/widget.js?id=TENANT_ID" async></script>
+ * Powered by NivoChat
  */
 ;(function () {
   'use strict'
@@ -301,7 +301,7 @@
           </button>
         </div>
         <div class="kaali-byline">
-          Powered by <a href="https://nivochat.idataone.com" target="_blank" rel="noopener">Absolute App Labs</a>
+          Powered by <a href="https://nivochat.idataone.com" target="_blank" rel="noopener">NivoChat</a>
         </div>
       </div>
     `
