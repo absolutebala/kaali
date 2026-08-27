@@ -126,12 +126,12 @@ test.describe('Dashboard', () => {
 // ── WIDGET ─────────────────────────────────────────────────────────────────
 test.describe('Widget on Homepage', () => {
   test('homepage loads', async ({ page }) => {
-    await page.goto('https://aichat.absoluteapplabs.com')
+    await page.goto('https://nivochat.idataone.com')
     await expect(page.locator('body')).toBeVisible()
   })
 
   test('chat bubble appears', async ({ page }) => {
-    await page.goto('https://aichat.absoluteapplabs.com')
+    await page.goto('https://nivochat.idataone.com')
     await page.waitForTimeout(5000)
     const bubble = page.locator('div#kaali-bubble')
     const visible = await bubble.isVisible().catch(() => false)
@@ -144,7 +144,7 @@ test.describe('Widget on Homepage', () => {
   })
 
   test('widget opens on bubble click', async ({ page }) => {
-    await page.goto('https://aichat.absoluteapplabs.com')
+    await page.goto('https://nivochat.idataone.com')
     await page.waitForTimeout(5000)
     const bubble = page.locator('div#kaali-bubble')
     const visible = await bubble.isVisible().catch(() => false)
@@ -161,7 +161,7 @@ test.describe('Widget on Homepage', () => {
 // ── CHAT FLOW (requires API key) ───────────────────────────────────────────
 test.describe('Chat Widget Flow', () => {
   test('widget responds to message', async ({ page }) => {
-    await page.goto('https://aichat.absoluteapplabs.com')
+    await page.goto('https://nivochat.idataone.com')
     await page.waitForTimeout(5000)
 
     const bubble = page.locator('div#kaali-bubble')

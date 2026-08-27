@@ -11,7 +11,7 @@ export default function LandingPage() {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll)
     const s = document.createElement('script')
-    s.src = `https://aichat.absoluteapplabs.com/widget.js?id=${TENANT_ID}`
+    s.src = `https://nivochat.idataone.com/widget.js?id=${TENANT_ID}`
     s.async = true
     document.body.appendChild(s)
     return () => { window.removeEventListener('scroll', onScroll); s.remove() }

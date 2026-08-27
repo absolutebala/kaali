@@ -301,7 +301,7 @@
           </button>
         </div>
         <div class="kaali-byline">
-          Powered by <a href="https://aichat.absoluteapplabs.com" target="_blank" rel="noopener">Absolute App Labs</a>
+          Powered by <a href="https://nivochat.idataone.com" target="_blank" rel="noopener">Absolute App Labs</a>
         </div>
       </div>
     `
