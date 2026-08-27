@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div style={{ display:'flex', minHeight:'100vh' }}>
-      <aside style={{ width:224, background:'#080C17', borderRight:'1px solid #E8E4DF', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
+      <aside style={{ width:224, background:'#1F1B4B', borderRight:'1px solid #E8E4DF', display:'flex', flexDirection:'column', flexShrink:0, position:'sticky', top:0, height:'100vh', overflowY:'auto' }}>
         <div style={{ padding:'20px 16px 16px', borderBottom:'1px solid #E8E4DF' }}>
           {logoUrl ? (
             <img src={logoUrl} alt="Absolute AIChat" style={{ maxWidth:'160px', maxHeight:'36px', objectFit:'contain', marginBottom:4 }} />

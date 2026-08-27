@@ -2,7 +2,7 @@ import './globals.css'
 import { AuthProvider } from '@/lib/auth-context'
 
 export const metadata = {
-  title:       'Absolute AIChat — AI Chat Platform',
+  title:       'NivoChat — AI Chat Platform',
   description: 'Give your visitors intelligent answers from your own content. Powered by Absolute App Labs.',
 }
 

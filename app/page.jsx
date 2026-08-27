@@ -325,9 +325,9 @@ export default function LandingPage() {
         <div style={{ maxWidth:1140, margin:'0 auto', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:20 }}>
           <div style={{ fontFamily:'Poppins', fontSize:16, fontWeight:700, color:'#fff' }}>
             Absolute <span style={{ color:'var(--orange)' }}>AIChat</span>
-            <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontWeight:400, marginTop:4 }}>by Absolute App Labs</div>
+            <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontWeight:400, marginTop:4 }}>by NivoChat</div>
           </div>
-          <div style={{ fontSize:13, color:'rgba(255,255,255,0.4)' }}>© 2026 Absolute App Labs. All rights reserved.</div>
+          <div style={{ fontSize:13, color:'rgba(255,255,255,0.4)' }}>© 2026 NivoChat. All rights reserved.</div>
         </div>
       </footer>
     </div>

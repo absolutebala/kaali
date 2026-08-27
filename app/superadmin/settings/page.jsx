@@ -51,7 +51,7 @@ export default function SASettingsPage() {
         </div>
         <div style={{ padding:20 }}>
           <p style={{ fontSize:13, color:'#6B7A99', marginBottom:16, lineHeight:1.6 }}>
-            Upload your company logo. It will appear in the dashboard sidebar instead of the "Absolute AIChat" text.
+            Upload your company logo. It will appear in the dashboard sidebar instead of the "NivoChat" text.
             Recommended: PNG or SVG, transparent background, max 2MB.
           </p>
 

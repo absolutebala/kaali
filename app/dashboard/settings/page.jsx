@@ -118,7 +118,7 @@ export default function SettingsPage() {
               </div>
               <div className="form-row" style={{ marginBottom:0 }}>
                 <label className="form-label">Company Name</label>
-                <input className="form-input" value={form.company} onChange={f('company')} placeholder="Absolute App Labs" />
+                <input className="form-input" value={form.company} onChange={f('company')} placeholder="NivoChat" />
               </div>
               <div className="form-row" style={{ marginBottom:0 }}>
                 <label className="form-label">Response Tone</label>
@@ -320,7 +320,7 @@ export default function SettingsPage() {
       </div>
 
       <div style={{ textAlign:'center', fontSize:12, color:'var(--td)', marginTop:16 }}>
-        Powered by <a href="https://absoluteapplabs.com" target="_blank" rel="noopener" style={{ color:'var(--ac)' }}>Absolute App Labs</a>
+        Powered by <a href="https://absoluteapplabs.com" target="_blank" rel="noopener" style={{ color:'var(--ac)' }}>NivoChat</a>
       </div>
     </PageShell>
   )
