@@ -1,7 +1,7 @@
 /**
  * Kaali Widget — v1.0.0
  * Embed: <script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
- * Powered by NivoChat
+ * Powered by Absolute App Labs
  */
 ;(function () {
   'use strict'
