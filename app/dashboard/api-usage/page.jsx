@@ -21,6 +21,8 @@ export default function ApiUsagePage() {
   const [saving,   setSaving]   = useState(false)
   const [testMsg,  setTestMsg]  = useState('')
 
+  const [hasKey, setHasKey] = useState(false)
+
   useEffect(() => {
     async function load() {
       const [t, s] = await Promise.all([tenantApi.get(), statsApi.get()])
@@ -30,6 +32,7 @@ export default function ApiUsagePage() {
       setAlertEm(ten.alertEmail || '')
       setAlertThr(ten.alertThreshold || 80)
       setUsage(s)
+      setHasKey(!!ten.hasApiKey) // server tells us if key exists
     }
     load()
   }, [])
@@ -46,10 +49,18 @@ export default function ApiUsagePage() {
 
   async function testConnection() {
     setTestMsg('Testing…')
-    try {
-      await tenantApi.update({ aiProvider: provider })
-      setTimeout(() => setTestMsg(apiKey ? '✓ Key accepted — test a chat to confirm it works' : '✕ Enter your API key first'), 600)
-    } catch { setTestMsg('✕ Error — check your key') }
+    // If user typed a new key, save it first then test
+    if (apiKey) {
+      try {
+        await tenantApi.update({ aiProvider: provider, apiKey, aiModel: model })
+        setHasKey(true)
+        setTestMsg('✓ Key saved and accepted — test a chat to confirm it works')
+      } catch { setTestMsg('✕ Error saving key') }
+    } else if (hasKey) {
+      setTestMsg('✓ API key is configured — test a chat to confirm it works')
+    } else {
+      setTestMsg('✕ Enter your API key first')
+    }
   }
 
   async function saveAlerts() {
@@ -100,6 +111,9 @@ export default function ApiUsagePage() {
             <div className="form-row" style={{ marginBottom:0 }}>
               <label className="form-label">{provider==='claude'?'Anthropic':'OpenAI'} API Key</label>
               <div style={{ position:'relative' }}>
+                {hasKey && !apiKey && (
+                  <div style={{ fontSize:11, color:'var(--gr)', marginBottom:6 }}>✓ API key configured — enter a new key to replace it</div>
+                )}
                 <input className="form-input" type={keyVis?'text':'password'} value={apiKey} onChange={e=>setApiKey(e.target.value)}
                   placeholder={provider==='claude'?'sk-ant-...':'sk-...'} style={{ paddingRight:60 }} />
                 <button onClick={() => setKeyVis(v=>!v)} style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>

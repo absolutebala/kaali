@@ -13,13 +13,15 @@ export async function GET(request) {
 
   const { data, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url, zoho_token, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode')
+    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, api_key_enc, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, alert_sent, hubspot_token, zapier_webhook_url, zoho_token, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode')
     .eq('id', payload.tenantId)
     .single()
 
   if (dbErr) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  return NextResponse.json({ tenant: data })
+  // Never expose encrypted key — just tell client if one exists
+  const { api_key_enc, ...tenantSafe } = data
+  return NextResponse.json({ tenant: { ...tenantSafe, hasApiKey: !!api_key_enc } })
 }
 
 // ── PATCH /api/tenant — update settings ───────────────────
