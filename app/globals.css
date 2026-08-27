@@ -1,19 +1,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:   #0F0F0F;
-  --s1:   #1A1A1A;
-  --s2:   #222222;
-  --s3:   #1A2438;
-  --b1:   rgba(255,255,255,.06);
-  --b2:   rgba(255,255,255,.10);
+  --bg:   #12102A;
+  --s1:   #1A1836;
+  --s2:   #221F42;
+  --s3:   #2A2650;
+  --b1:   rgba(255,255,255,.07);
+  --b2:   rgba(255,255,255,.12);
   --ac:   #FF5C00;
   --acd:  rgba(255,92,0,.12);
   --acg:  rgba(255,92,0,.22);
-  --tx:   #F0F4FF;
-  --ts:   #C8D4F0;
-  --tm:   #8896B3;
-  --td:   #3A4A6A;
+  --tx:   #EDE9FF;
+  --ts:   #C4BCFF;
+  --tm:   #8B82CC;
+  --td:   #4A4480;
   --gr:   #22D17A;
   --rd:   #F87171;
   --am:   #FBBF24;
