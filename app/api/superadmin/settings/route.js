@@ -22,7 +22,8 @@ export async function POST(request) {
     if (!allowed.includes(file.type)) return NextResponse.json({ error: 'Only PNG, JPG, WebP or SVG.' }, { status: 400 })
     if (file.size > 2 * 1024 * 1024) return NextResponse.json({ error: 'Max 2MB.' }, { status: 400 })
     const ext    = file.type === 'image/svg+xml' ? 'svg' : file.type.split('/')[1]
-    const path   = `platform/logo.${ext}`
+    const ts     = Date.now()
+    const path   = `platform/logo_${ts}.${ext}`
     const buffer = Buffer.from(await file.arrayBuffer())
     const { error: upErr } = await supabaseAdmin.storage.from('kaali-documents').upload(path, buffer, { contentType: file.type, upsert: true })
     if (upErr) throw upErr
