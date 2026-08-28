@@ -369,6 +369,17 @@
     const el = document.getElementById('kaali-msgs')
     if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 60)
   }
+  function scrollToMsg(el) {
+    // Scroll so the NEW message appears at the top of the visible area
+    const msgs = document.getElementById('kaali-msgs')
+    if (!msgs || !el) return
+    setTimeout(() => {
+      const msgsTop = msgs.getBoundingClientRect().top
+      const elTop   = el.getBoundingClientRect().top
+      const offset  = elTop - msgsTop
+      msgs.scrollTop = msgs.scrollTop + offset - 12
+    }, 60)
+  }
   function addMsg(role, html) {
     const wrap = document.createElement('div')
     wrap.className = `kaali-msg ${role}`
@@ -381,7 +392,8 @@
     wrap.appendChild(bbl); wrap.appendChild(ts)
     document.getElementById('kaali-msgs').appendChild(wrap)
     sessionMsgs.push({ role: role === 'bot' ? 'assistant' : 'user', content: html, time: fmtTime() })
-    scrollDown()
+    if (role === 'bot') scrollToMsg(wrap)  // bot: scroll to top of message
+    else scrollDown()                       // user: scroll to bottom
   }
   function showTyping() {
     const d = document.createElement('div')
