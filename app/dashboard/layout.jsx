@@ -27,8 +27,8 @@ const NAV_RESTRICTED = [
 // ── Sidebar colours ───────────────────────────────────────
 const SB_BG       = '#1F1B4B'   // indigo
 const SB_BORDER   = 'rgba(255,255,255,.09)'
-const SB_LABEL    = 'rgba(255,255,255,.32)'
-const SB_TEXT     = 'rgba(255,255,255,.58)'
+const SB_LABEL    = 'rgba(255,255,255,.50)'
+const SB_TEXT     = 'rgba(255,255,255,.80)'
 const SB_ACTIVE   = 'rgba(255,255,255,.12)'
 const SB_ACTIVE_C = '#FF8C42'   // orange
 
@@ -101,7 +101,7 @@ export default function DashboardLayout({ children }) {
               Nivo<span style={{ color:'#FF8C42' }}>Chat</span>
             </div>
           )}
-          <div style={{ fontSize:12, color: SB_LABEL, marginBottom:8 }}>{user.company}</div>
+          <div style={{ fontSize:12, color:'rgba(255,255,255,0.70)', marginBottom:8 }}>{user.company}</div>
           <div style={{ display:'inline-block', fontSize:11, fontWeight:500,
             color:'#FF8C42', background:'rgba(255,140,66,.18)', border:'0.5px solid rgba(255,140,66,.35)',
             padding:'2px 10px', borderRadius:10 }}>

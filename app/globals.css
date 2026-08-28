@@ -5,15 +5,15 @@
   --s1:   #1A1836;
   --s2:   #221F42;
   --s3:   #2A2650;
-  --b1:   rgba(255,255,255,.07);
-  --b2:   rgba(255,255,255,.12);
+  --b1:   rgba(255,255,255,.09);
+  --b2:   rgba(255,255,255,.15);
   --ac:   #FF5C00;
   --acd:  rgba(255,92,0,.12);
   --acg:  rgba(255,92,0,.22);
-  --tx:   #EDE9FF;
-  --ts:   #C4BCFF;
-  --tm:   #8B82CC;
-  --td:   #4A4480;
+  --tx:   #F2EEFF;
+  --ts:   #C8C0FF;
+  --tm:   #A89EDF;
+  --td:   #7B72B8;
   --gr:   #22D17A;
   --rd:   #F87171;
   --am:   #FBBF24;
@@ -174,7 +174,7 @@ a { color: inherit; text-decoration: none; }
 .stat-card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; padding: 18px 20px; }
 .stat-label { font-size: 11px; font-weight: 600; color: var(--tm); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
 .stat-value { font-size: 32px; font-weight: 700; color: var(--tx); line-height: 1; margin-bottom: 6px; }
-.stat-sub { font-size: 12px; color: var(--ts); margin-top: 2px; }
+.stat-sub { font-size: 12px; color: var(--tm); margin-top: 2px; }
 
 /* ── Usage bar ───────────────────────────────────────── */
 .usage-bar-bg { background: var(--b2); border-radius: 99px; overflow: hidden; }
@@ -185,7 +185,7 @@ a { color: inherit; text-decoration: none; }
 /* ── Table ───────────────────────────────────────────── */
 .tbl { width: 100%; border-collapse: collapse; }
 .tbl th { font-size: 11px; font-weight: 600; color: var(--ts); text-transform: uppercase; letter-spacing: 0.8px; padding: 10px 20px; border-bottom: 0.5px solid var(--b1); text-align: left; }
-.tbl td { font-size: 13px; color: var(--tx); padding: 12px 20px; border-bottom: 0.5px solid var(--b1); }
+.tbl td { font-size: 13px; color: var(--ts); padding: 12px 20px; border-bottom: 0.5px solid var(--b1); }
 .tbl tr:last-child td { border-bottom: none; }
 .tbl tr:hover td { background: var(--s2); }
 

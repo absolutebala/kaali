@@ -92,9 +92,9 @@ export default function OverviewPage() {
               {leads.map(l => (
                 <tr key={l.id}>
                   <td><strong>{l.name}</strong></td>
-                  <td style={{ color:'var(--tm)' }}>{l.email}</td>
+                  <td style={{ color:'var(--ts)' }}>{l.email}</td>
                   <td><span className={`badge badge-${(l.visitor_type||'general').toLowerCase()}`}>{l.visitor_type}</span></td>
-                  <td style={{ color:'var(--td)', fontSize:12 }}>{fmtDate(l.created_at)}</td>
+                  <td style={{ color:'var(--tm)', fontSize:12 }}>{fmtDate(l.created_at)}</td>
                   <td><span className={`badge badge-${l.status}`}>{l.status}</span></td>
                 </tr>
               ))}
