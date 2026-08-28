@@ -724,8 +724,7 @@
 
       // Close button
       '.kaali-hdr #kaali-close { color: ' + rgbA(textOn, 0.8) + ' !important; }',
-    ].join('
-')
+    ].join('\n')
 
     // 4. Avatar photo in header only
     if (cfg.avatarUrl) {
