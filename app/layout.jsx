@@ -5,8 +5,8 @@ export const metadata = {
   title:       'NivoChat — Your Website\'s AI Conversation Layer',
   description: 'NivoChat gives your website an AI assistant trained on your business that answers questions, captures leads, and hands conversations to your team.',
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
