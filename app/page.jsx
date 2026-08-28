@@ -450,12 +450,8 @@ export default function LandingPage() {
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>
             {/* Brand */}
             <div>
-              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <img src="/logo.png" alt="NivoChat" style={{ width:40, height:40, objectFit:'contain', borderRadius:8 }} />
-                <div>
-                  <div style={{ fontSize:16, fontWeight:800, color:'#fff' }}>NivoChat</div>
-                  <div style={{ fontSize:9, color:'#475569', textTransform:'uppercase', letterSpacing:'1.5px' }}>by iDataOne</div>
-                </div>
+              <div style={{ marginBottom:16 }}>
+                <img src="/logo.png" alt="NivoChat" style={{ height:52, width:'auto', objectFit:'contain' }} />
               </div>
               <p style={{ fontSize:13, lineHeight:1.7, color:'#64748B', maxWidth:260 }}>
                 AI-powered chat for your website. Answer questions, capture leads, and close more deals — 24/7.
