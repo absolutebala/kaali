@@ -34,14 +34,14 @@ export default function LoginPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         .auth-input { width:100%; padding:12px 16px; border:1.5px solid #E8E4DF; border-radius:8px; font-size:14px; font-family:Poppins,sans-serif; outline:none; transition:border-color 0.2s; color:#1A1A1A; background:#fff; }
-        .auth-input:focus { border-color:#FF5C00; }
+        .auth-input:focus { border-color:#2563EB; }
         .auth-btn { width:100%; padding:13px; background:#FF5C00; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; font-family:Poppins,sans-serif; cursor:pointer; transition:all 0.2s; }
-        .auth-btn:hover { background:#E64D00; }
+        .auth-btn:hover { background:#1D4ED8; }
         .auth-btn:disabled { opacity:0.6; cursor:not-allowed; }
       `}</style>
 
       {/* Left — brand panel */}
-      <div style={{ width:'44%', background:'linear-gradient(145deg, #FF5C00 0%, #FF8C42 100%)', display:'flex', flexDirection:'column', justifyContent:'center', padding:'60px 56px', position:'relative', overflow:'hidden' }}>
+      <div style={{ width:'44%', background:'linear-gradient(145deg, #1E40AF 0%, #2563EB 50%, #0891B2 100%)', display:'flex', flexDirection:'column', justifyContent:'center', padding:'60px 56px', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-80, right:-80, width:300, height:300, borderRadius:'50%', background:'rgba(255,255,255,0.08)' }} />
         <div style={{ position:'absolute', bottom:-60, left:-60, width:240, height:240, borderRadius:'50%', background:'rgba(255,255,255,0.06)' }} />
         <div style={{ position:'relative' }}>
@@ -96,7 +96,7 @@ export default function LoginPage() {
 
           <p style={{ textAlign:'center', marginTop:24, fontSize:14, color:'#6B6B6B' }}>
             Don't have an account?{' '}
-            <Link href="/auth/register" style={{ color:'#FF5C00', fontWeight:600, textDecoration:'none' }}>Create one free</Link>
+            <Link href="/auth/register" style={{ color:'#2563EB', fontWeight:600, textDecoration:'none' }}>Create one free</Link>
           </p>
         </div>
       </div>
