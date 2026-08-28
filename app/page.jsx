@@ -42,7 +42,7 @@ export default function LandingPage() {
       `}</style>
 
       {/* ── HEADER ── */}
-      <header style={{ position:'sticky', top:0, zIndex:50, backdropFilter:'blur(12px)', background:'rgba(255,255,255,0.88)', borderBottom:'1px solid rgba(226,232,240,0.8)' }}>
+      <header style={{ position:'fixed', top:0, left:0, right:0, zIndex:50, backdropFilter:'blur(12px)', background:'rgba(255,255,255,0.88)', borderBottom:'1px solid rgba(226,232,240,0.8)' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px', height:72, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center' }}>
             <img src="/logo.png" alt="NivoChat" style={{ height:55, width:'auto', objectFit:'contain' }} />
@@ -62,7 +62,7 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="hero-gradient" style={{ padding:'80px 24px 120px', textAlign:'center', overflow:'hidden' }}>
+      <section className="hero-gradient" style={{ padding:'80px 24px 120px', paddingTop:152, textAlign:'center', overflow:'hidden' }}>
         <div style={{ maxWidth:860, margin:'0 auto' }}>
           <h1 style={{ fontSize:'clamp(36px,6vw,66px)', fontWeight:900, color:'#0F172A', lineHeight:1.1, letterSpacing:'-.03em', marginBottom:22 }}>
             Don't make your customers search.<br />
