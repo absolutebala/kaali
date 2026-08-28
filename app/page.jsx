@@ -402,7 +402,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── PRICING ── */
+      {/* ── PRICING ── */}
       <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', maxWidth:600, margin:'0 auto 64px' }}>
