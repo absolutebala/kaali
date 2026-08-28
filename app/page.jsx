@@ -7,6 +7,7 @@ export default function LandingPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        #how-it-works, #integrations, #pricing { scroll-margin-top: 72px; }
         html { scroll-behavior: smooth; }
         body { background: #FAFAFC; font-family: 'Inter', sans-serif; color: #0F172A; -webkit-font-smoothing: antialiased; }
         ::selection { background: #2563EB; color: #fff; }
@@ -42,12 +43,8 @@ export default function LandingPage() {
       {/* ── HEADER ── */}
       <header style={{ position:'sticky', top:0, zIndex:50, backdropFilter:'blur(12px)', background:'rgba(255,255,255,0.88)', borderBottom:'1px solid rgba(226,232,240,0.8)' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px', height:72, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <img src="/logo.png" alt="NivoChat" style={{ width:44, height:44, objectFit:'contain', borderRadius:10 }} />
-            <div>
-              <div style={{ fontSize:17, fontWeight:800, color:'#0F172A', letterSpacing:'-.4px' }}>NivoChat</div>
-              <div style={{ fontSize:9, fontWeight:700, color:'#64748B', letterSpacing:'1.5px', textTransform:'uppercase' }}>by iDataOne</div>
-            </div>
+          <div style={{ display:'flex', alignItems:'center' }}>
+            <img src="/logo.png" alt="NivoChat" style={{ height:48, width:'auto', objectFit:'contain' }} />
           </div>
 
           <nav className="hide-mobile" style={{ display:'flex', gap:36, fontSize:14, fontWeight:500, color:'#475569' }}>
@@ -134,7 +131,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section id="how-it-works" style={{ padding:'100px 24px 100px', background:'#F0F4FF', scrollMarginTop:72 }}>
+      <section id="how-it-works" style={{ padding:'100px 24px 100px', background:'#F0F4FF' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:64 }}>
             <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>How NivoChat works</h2>
@@ -259,7 +256,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── INSTALL IN 5 MINUTES ── */}
-      <section id="integrations" style={{ padding:'100px 24px', background:'#fff', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
+      <section id="integrations" style={{ padding:'100px 24px', background:'#fff', borderTop:'1px solid #E2E8F0' }}>
         <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
           <div>
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'5px 14px', borderRadius:99, background:'#EFF6FF', color:'#2563EB', fontSize:12, fontWeight:700, marginBottom:20 }}>
@@ -403,13 +400,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
+      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', maxWidth:600, margin:'0 auto 64px' }}>
             <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>Simple, transparent pricing</h2>
             <p style={{ fontSize:17, color:'#64748B' }}>Start free. Upgrade when you grow.</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:24, alignItems:'start', paddingTop:20 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:32 }}>
             {[
               { name:'FREE', sub:'For getting started', price:'₹0', period:'/ month', cta:'Get Started Free', popular:false,
                 features:['100 messages / month','1 PDF upload','Lead dashboard','Claude or ChatGPT'] },
@@ -418,9 +415,9 @@ export default function LandingPage() {
               { name:'BUSINESS', sub:'For scaling teams', price:'₹4,999', period:'/ month', cta:'Start 7-Day Free Trial', popular:false,
                 features:['Unlimited messages','Unlimited PDFs','Priority support','All integrations','Live agent handoff'] },
             ].map(p => (
-              <div key={p.name} className={`card${p.popular?' pricing-popular':''}`} style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? 0 : 0 }}>
+              <div key={p.name} className={`card${p.popular?' pricing-popular':''}`} style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? -16 : 0, zIndex: p.popular ? 2 : 1 }}>
                 {p.popular && (
-                  <div style={{ position:'absolute', top:-14, left:'50%', transform:'translateX(-50%)', background:'#2563EB', color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'1.5px', textTransform:'uppercase', padding:'5px 18px', borderRadius:99, boxShadow:'0 4px 12px rgba(37,99,235,0.35)', whiteSpace:'nowrap' }}>Most Popular</div>
+                  <div style={{ position:'absolute', top:-18, left:'50%', transform:'translateX(-50%)', background:'#2563EB', color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'1.5px', textTransform:'uppercase', padding:'6px 20px', borderRadius:99, boxShadow:'0 4px 12px rgba(37,99,235,0.35)', whiteSpace:'nowrap' }}>Most Popular</div>
                 )}
                 <div style={{ fontSize:18, fontWeight:800, color:'#0F172A', marginBottom:4 }}>{p.name}</div>
                 <div style={{ fontSize:12, color:'#64748B', marginBottom:24 }}>{p.sub}</div>
