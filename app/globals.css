@@ -164,18 +164,49 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ── Card components ─────────────────────────────────── */
-.card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; overflow: hidden; }
-.card-header { padding: 14px 18px; border-bottom: 0.5px solid var(--b1); display: flex; align-items: center; justify-content: space-between; }
-.card-title { font-size: 13px; font-weight: 600; color: var(--tx); }
-.card-body { padding: 16px 18px; }
-.stat-card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; padding: 16px 18px; }
-.stat-label { font-size: 11px; color: var(--tm); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-.stat-value { font-size: 26px; font-weight: 700; color: var(--tx); line-height: 1.1; }
-.stat-sub { font-size: 11px; color: var(--td); margin-top: 4px; }
-.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 10px; background: var(--s2); color: var(--tm); }
-.badge-client   { background: rgba(59,130,246,.12); color: #60A5FA; }
-.badge-existing { background: rgba(16,185,129,.12); color: #34D399; }
-.badge-investor { background: rgba(139,92,246,.12); color: #A78BFA; }
-.badge-general  { background: rgba(107,114,128,.12); color: #9CA3AF; }
+.card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+.card-header { padding: 14px 20px; border-bottom: 0.5px solid var(--b1); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--tx); }
+.card-body { padding: 16px 20px; }
+
+/* ── Stat cards ──────────────────────────────────────── */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 14px; }
+.stat-card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; padding: 18px 20px; }
+.stat-label { font-size: 11px; font-weight: 600; color: var(--tm); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.stat-value { font-size: 32px; font-weight: 700; color: var(--tx); line-height: 1; margin-bottom: 6px; }
+.stat-sub { font-size: 12px; color: var(--ts); margin-top: 2px; }
+
+/* ── Usage bar ───────────────────────────────────────── */
+.usage-bar-bg { background: var(--b2); border-radius: 99px; overflow: hidden; }
+.usage-bar-fill { height: 100%; background: var(--ac); border-radius: 99px; transition: width .4s; }
+.usage-bar-fill.warn { background: var(--am); }
+.usage-bar-fill.crit { background: var(--rd); }
+
+/* ── Table ───────────────────────────────────────────── */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-size: 11px; font-weight: 600; color: var(--ts); text-transform: uppercase; letter-spacing: 0.8px; padding: 10px 20px; border-bottom: 0.5px solid var(--b1); text-align: left; }
+.tbl td { font-size: 13px; color: var(--tx); padding: 12px 20px; border-bottom: 0.5px solid var(--b1); }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--s2); }
+
+/* ── Empty state ─────────────────────────────────────── */
+.empty-state { padding: 40px 20px; text-align: center; color: var(--tm); font-size: 13px; }
+.empty-ico { font-size: 28px; margin-bottom: 10px; }
+
+/* ── Badge ───────────────────────────────────────────── */
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 10px; background: var(--s2); color: var(--ts); }
+.badge-client   { background: rgba(59,130,246,.15);  color: #60A5FA; }
+.badge-existing { background: rgba(16,185,129,.15);  color: #34D399; }
+.badge-investor { background: rgba(139,92,246,.15);  color: #A78BFA; }
+.badge-general  { background: rgba(107,114,128,.15); color: #9CA3AF; }
+.badge-new       { background: rgba(251,191,36,.12); color: #FBBF24; }
+.badge-contacted { background: rgba(59,130,246,.12); color: #60A5FA; }
+.badge-converted { background: rgba(16,185,129,.12); color: #34D399; }
+
+/* ── Form inputs ─────────────────────────────────────── */
 .form-input { width: 100%; padding: 9px 13px; border: 0.5px solid var(--b2); border-radius: 8px; background: var(--s2); color: var(--tx); font-size: 13px; font-family: inherit; outline: none; transition: border-color .15s; box-sizing: border-box; }
 .form-input:focus { border-color: var(--ac); }
+
+/* ── Toast ───────────────────────────────────────────── */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--s1); border:0.5px solid var(--b1); color:var(--tx); padding:12px 20px; border-radius:10px; font-size:13px; z-index:9999; box-shadow:0 4px 20px rgba(0,0,0,.4); animation: fadeUp .2s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
