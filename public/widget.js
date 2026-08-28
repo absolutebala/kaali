@@ -659,6 +659,7 @@
   // ── Apply tenant branding ─────────────────────────────────
   function applyTenantStyle(cfg) {
     if (!cfg) return
+    try {
     const color    = cfg.bubbleColor || '#FF5C00'
     const lum      = luminance(color)
     const isLight  = lum > 0.35                      // light colour → dark text
@@ -675,7 +676,7 @@
     }
 
     // 2. Panel header
-    const header = document.getElementById('kaali-hdr')
+    const header = document.querySelector('.kaali-hdr')
     if (header) {
       header.style.background = 'linear-gradient(135deg,' + headerBg + ',' + color + ')'
     }
@@ -718,11 +719,11 @@
       '#kaali-inp:focus { outline: 2px solid ' + rgbA(color,0.5) + ' !important; outline-offset: -1px; }',
 
       // Header bot name + status text
-      '#kaali-hdr .kaali-name { color: ' + textOn + ' !important; }',
-      '#kaali-hdr .kaali-status { color: ' + rgbA(textOn, 0.75) + ' !important; }',
+      '.kaali-hdr .kaali-name { color: ' + textOn + ' !important; }',
+      '.kaali-hdr .kaali-status { color: ' + rgbA(textOn, 0.75) + ' !important; }',
 
       // Close button
-      '#kaali-close { color: ' + rgbA(textOn, 0.8) + ' !important; }',
+      '.kaali-hdr #kaali-close { color: ' + rgbA(textOn, 0.8) + ' !important; }',
     ].join('
 ')
 
@@ -738,6 +739,8 @@
         avEl.innerHTML = ''; avEl.appendChild(img)
       }
     }
+
+    } catch(e) { console.warn('[NivoChat] Theme error:', e.message) }
 
     // 5. Widget mode
     if (cfg.widgetMode === 'always_open') {
