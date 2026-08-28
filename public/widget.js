@@ -724,11 +724,11 @@
         '#kaali-panel { color: ' + textMain + '; }',
 
         // Header text & close
-        '.kaali-nm { color: ' + textOn + ' !important; }',
-        '.kaali-st { color: ' + rgbA(textOn,0.8) + ' !important; }',
-        '.kaali-st::before { background: ' + rgbA(textOn,0.8) + ' !important; }',
-        '.kaali-x { color: ' + rgbA(textOn,0.65) + ' !important; }',
-        '.kaali-x:hover { background: ' + rgbA(textOn,0.12) + ' !important; color: ' + textOn + ' !important; }',
+        '.kaali-nm { color: #FFFFFF !important; }',
+        '.kaali-st { color: rgba(255,255,255,0.85) !important; }',
+        '.kaali-st::before { background: rgba(255,255,255,0.85) !important; }',
+        '.kaali-x { color: rgba(255,255,255,0.7) !important; }',
+        '.kaali-x:hover { background: rgba(255,255,255,0.15) !important; color: #FFFFFF !important; }',
 
         // Messages area
         '.kaali-msgs { background: ' + panelBg + '; }',
@@ -777,7 +777,7 @@
       const isDashboard = window.location.pathname.startsWith('/dashboard')
       // Don't auto-open if user manually closed it this session
       const wasClosed = (() => { try { return sessionStorage.getItem('kaali_closed_' + cfg.tenantId) } catch(e) { return null } })()
-      if (!isDashboard && !wasClosed) setTimeout(openPanel, 800)
+      if (!isDashboard && !wasClosed) setTimeout(openPanel, 1000)
     } else if (cfg.widgetMode === 'popup') {
       // Popup mode: hide bubble, show panel centered with backdrop
       if (bubble) bubble.style.display = 'none'
