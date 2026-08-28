@@ -11,7 +11,7 @@ const ROLES = {
   superadmin: { label:'Super Admin', color:'#F87171', bg:'rgba(248,113,113,.12)' },
   support:    { label:'Support',     color:'#7EB3FF', bg:'rgba(79,142,247,.12)'  },
   billing:    { label:'Billing',     color:'#FBBF24', bg:'rgba(251,191,36,.12)'  },
-  readonly:   { label:'Read Only',   color:'#6E7E9E', bg:'rgba(110,126,158,.15)' },
+  readonly:   { label:'Read Only',   color:'#9AAAC8', bg:'rgba(110,126,158,.15)' },
 }
 
 const ROLE_PERMISSIONS = {
@@ -85,7 +85,7 @@ export default function SATeam() {
   return (
     <PageShell title="Team Management" action={
       <div style={{ display:'flex', gap:10 }}>
-        <button onClick={()=>setPwModal(true)} style={{ fontSize:12, background:'rgba(255,255,255,.06)', border:'0.5px solid rgba(255,255,255,.13)', color:'#6E7E9E', padding:'7px 14px', borderRadius:8, cursor:'pointer' }}>
+        <button onClick={()=>setPwModal(true)} style={{ fontSize:12, background:'rgba(255,255,255,.06)', border:'0.5px solid rgba(255,255,255,.13)', color:'#9AAAC8', padding:'7px 14px', borderRadius:8, cursor:'pointer' }}>
           Change My Password
         </button>
         <button onClick={()=>setModal(true)} style={{ fontSize:12, background:'rgba(248,113,113,.12)', border:'0.5px solid rgba(248,113,113,.3)', color:'#F87171', padding:'7px 14px', borderRadius:8, cursor:'pointer' }}>
@@ -99,17 +99,17 @@ export default function SATeam() {
         {Object.entries(ROLES).map(([key, r]) => (
           <div key={key} style={{ padding:12, background:'#0C1220', border:`0.5px solid ${r.bg.replace('rgba','rgba').replace(/,([\d.]+)\)/, ',.3)')}`, borderRadius:10 }}>
             <div style={{ fontSize:12, fontWeight:500, color:r.color, marginBottom:4 }}>{r.label}</div>
-            <div style={{ fontSize:11, color:'#6E7E9E', lineHeight:1.5 }}>{ROLE_PERMISSIONS[key]}</div>
+            <div style={{ fontSize:11, color:'#9AAAC8', lineHeight:1.5 }}>{ROLE_PERMISSIONS[key]}</div>
           </div>
         ))}
       </div>
 
       <div style={{ background:'#0C1220', border:'0.5px solid rgba(255,255,255,.07)', borderRadius:12, overflow:'hidden' }}>
-        {loading ? <div style={{ padding:40, textAlign:'center', color:'#6E7E9E', fontSize:13 }}>Loading…</div> : (
+        {loading ? <div style={{ padding:40, textAlign:'center', color:'#9AAAC8', fontSize:13 }}>Loading…</div> : (
           <table style={{ width:'100%', borderCollapse:'collapse' }}>
             <thead>
               <tr>{['Name','Email','Role','Status','Last Login','Actions'].map(h => (
-                <th key={h} style={{ padding:'9px 13px', textAlign:'left', fontSize:11, fontWeight:500, color:'#6E7E9E', letterSpacing:'.5px', textTransform:'uppercase', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>{h}</th>
+                <th key={h} style={{ padding:'9px 13px', textAlign:'left', fontSize:11, fontWeight:500, color:'#9AAAC8', letterSpacing:'.5px', textTransform:'uppercase', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>{h}</th>
               ))}</tr>
             </thead>
             <tbody>
@@ -118,7 +118,7 @@ export default function SATeam() {
                 return (
                   <tr key={m.id}>
                     <td style={{ padding:'10px 13px', fontSize:13, color:'#E5EBF8', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}><strong>{m.name}</strong></td>
-                    <td style={{ padding:'10px 13px', fontSize:12, color:'#6E7E9E', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{m.email}</td>
+                    <td style={{ padding:'10px 13px', fontSize:12, color:'#9AAAC8', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{m.email}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       <select value={m.role} onChange={e=>changeRole(m.id, e.target.value)}
                         style={{ background:r.bg, border:`0.5px solid ${r.color}44`, borderRadius:6, padding:'3px 8px', fontSize:11.5, color:r.color, outline:'none', cursor:'pointer' }}>
@@ -130,11 +130,11 @@ export default function SATeam() {
                         {m.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td style={{ padding:'10px 13px', fontSize:11, color:'#3A4A6A', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{m.last_login ? fmtDate(m.last_login) : 'Never'}</td>
+                    <td style={{ padding:'10px 13px', fontSize:11, color:'#7B8DB5', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{m.last_login ? fmtDate(m.last_login) : 'Never'}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       <div style={{ display:'flex', gap:6 }}>
                         <button onClick={()=>toggleActive(m.id, m.is_active)}
-                          style={{ fontSize:11, background:'rgba(255,255,255,.06)', border:'0.5px solid rgba(255,255,255,.13)', color:'#6E7E9E', padding:'3px 8px', borderRadius:6, cursor:'pointer' }}>
+                          style={{ fontSize:11, background:'rgba(255,255,255,.06)', border:'0.5px solid rgba(255,255,255,.13)', color:'#9AAAC8', padding:'3px 8px', borderRadius:6, cursor:'pointer' }}>
                           {m.is_active ? 'Deactivate' : 'Activate'}
                         </button>
                         <button onClick={()=>removeMember(m.id, m.name)}
@@ -146,7 +146,7 @@ export default function SATeam() {
                   </tr>
                 )
               })}
-              {!team.length && <tr><td colSpan={6}><div style={{ padding:36, textAlign:'center', color:'#6E7E9E', fontSize:13 }}>No team members yet</div></td></tr>}
+              {!team.length && <tr><td colSpan={6}><div style={{ padding:36, textAlign:'center', color:'#9AAAC8', fontSize:13 }}>No team members yet</div></td></tr>}
             </tbody>
           </table>
         )}
@@ -166,7 +166,7 @@ export default function SATeam() {
               {Object.entries(ROLES).map(([k,v]) => <option key={k} value={k}>{v.label} — {ROLE_PERMISSIONS[k]}</option>)}
             </select>
             <div style={{ display:'flex', gap:10, justifyContent:'flex-end' }}>
-              <button onClick={()=>setModal(false)} style={{ fontSize:13, background:'none', border:'0.5px solid rgba(255,255,255,.13)', color:'#6E7E9E', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>Cancel</button>
+              <button onClick={()=>setModal(false)} style={{ fontSize:13, background:'none', border:'0.5px solid rgba(255,255,255,.13)', color:'#9AAAC8', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>Cancel</button>
               <button onClick={addMember} disabled={saving} style={{ fontSize:13, background:'rgba(248,113,113,.15)', border:'0.5px solid rgba(248,113,113,.3)', color:'#F87171', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>
                 {saving ? 'Adding…' : 'Add Member'}
               </button>
@@ -186,7 +186,7 @@ export default function SATeam() {
             <input style={inp} placeholder="New password (min 8 chars)" type="password" value={pwForm.newPw} onChange={e=>setPwForm(p=>({...p,newPw:e.target.value}))} />
             <input style={{ ...inp, marginBottom:16 }} placeholder="Confirm new password" type="password" value={pwForm.confirm} onChange={e=>setPwForm(p=>({...p,confirm:e.target.value}))} />
             <div style={{ display:'flex', gap:10, justifyContent:'flex-end' }}>
-              <button onClick={()=>setPwModal(false)} style={{ fontSize:13, background:'none', border:'0.5px solid rgba(255,255,255,.13)', color:'#6E7E9E', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>Cancel</button>
+              <button onClick={()=>setPwModal(false)} style={{ fontSize:13, background:'none', border:'0.5px solid rgba(255,255,255,.13)', color:'#9AAAC8', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>Cancel</button>
               <button onClick={changePassword} disabled={saving} style={{ fontSize:13, background:'rgba(79,142,247,.15)', border:'0.5px solid rgba(79,142,247,.3)', color:'#7EB3FF', padding:'9px 18px', borderRadius:8, cursor:'pointer' }}>
                 {saving ? 'Saving…' : 'Change Password'}
               </button>

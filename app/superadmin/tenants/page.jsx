@@ -79,13 +79,13 @@ export default function SAtenants() {
 
       <div style={{ background:'#0C1220', border:'0.5px solid rgba(255,255,255,.07)', borderRadius:12, overflow:'hidden' }}>
         {loading ? (
-          <div style={{ padding:40, textAlign:'center', color:'#6E7E9E', fontSize:13 }}>Loading…</div>
+          <div style={{ padding:40, textAlign:'center', color:'#9AAAC8', fontSize:13 }}>Loading…</div>
         ) : (
           <table style={{ width:'100%', borderCollapse:'collapse' }}>
             <thead>
               <tr>
                 {['Company','Email','Plan','AI','Usage','Joined','Actions'].map(h => (
-                  <th key={h} style={{ padding:'9px 13px', textAlign:'left', fontSize:11, fontWeight:500, color:'#6E7E9E', letterSpacing:'.5px', textTransform:'uppercase', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>{h}</th>
+                  <th key={h} style={{ padding:'9px 13px', textAlign:'left', fontSize:11, fontWeight:500, color:'#9AAAC8', letterSpacing:'.5px', textTransform:'uppercase', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -96,9 +96,9 @@ export default function SAtenants() {
                   <tr key={t.id}>
                     <td style={{ padding:'10px 13px', fontSize:13, color:'#E5EBF8', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       <strong>{t.company}</strong>
-                      <div style={{ fontSize:11, color:'#3A4A6A' }}>{t.name}</div>
+                      <div style={{ fontSize:11, color:'#7B8DB5' }}>{t.name}</div>
                     </td>
-                    <td style={{ padding:'10px 13px', fontSize:12, color:'#6E7E9E', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{t.email}</td>
+                    <td style={{ padding:'10px 13px', fontSize:12, color:'#9AAAC8', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{t.email}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       {editId === t.id ? (
                         <div style={{ display:'flex', gap:6, alignItems:'center' }}>
@@ -110,25 +110,25 @@ export default function SAtenants() {
                             <option value="business">Business</option>
                           </select>
                           <button onClick={()=>savePlan(t.id)} style={{ fontSize:11, background:'rgba(34,209,122,.12)', border:'0.5px solid rgba(34,209,122,.25)', color:'#22D17A', padding:'4px 8px', borderRadius:6, cursor:'pointer' }}>Save</button>
-                          <button onClick={()=>setEditId(null)} style={{ fontSize:11, background:'none', border:'none', color:'#6E7E9E', cursor:'pointer' }}>✕</button>
+                          <button onClick={()=>setEditId(null)} style={{ fontSize:11, background:'none', border:'none', color:'#9AAAC8', cursor:'pointer' }}>✕</button>
                         </div>
                       ) : (
                         <span style={{ fontSize:10.5, fontWeight:500, padding:'2px 9px', borderRadius:20, cursor:'pointer',
                           background: t.plan==='business'?'rgba(251,191,36,.12)':t.plan==='growth'?'rgba(79,142,247,.12)':'rgba(110,126,158,.15)',
-                          color: t.plan==='business'?'#FBBF24':t.plan==='growth'?'#7EB3FF':'#6E7E9E'
+                          color: t.plan==='business'?'#FBBF24':t.plan==='growth'?'#7EB3FF':'#9AAAC8'
                         }} onClick={()=>{setEditId(t.id);setEditPlan(t.plan);setEditLimit('')}}>
                           {t.plan}
                         </span>
                       )}
                     </td>
-                    <td style={{ padding:'10px 13px', fontSize:12, color:'#6E7E9E', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{t.ai_provider||'—'}</td>
+                    <td style={{ padding:'10px 13px', fontSize:12, color:'#9AAAC8', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>{t.ai_provider||'—'}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)', minWidth:120 }}>
-                      <div style={{ fontSize:11, color: pct>=100?'#F87171':pct>=80?'#FBBF24':'#6E7E9E', marginBottom:4 }}>{t.conversations_used}/{t.conversations_limit} ({pct}%)</div>
+                      <div style={{ fontSize:11, color: pct>=100?'#F87171':pct>=80?'#FBBF24':'#9AAAC8', marginBottom:4 }}>{t.conversations_used}/{t.conversations_limit} ({pct}%)</div>
                       <div style={{ background:'#111A2E', borderRadius:4, height:5, overflow:'hidden' }}>
                         <div style={{ height:'100%', borderRadius:4, background: pct>=100?'#F87171':pct>=80?'#FBBF24':'#4F8EF7', width:`${Math.min(pct,100)}%` }} />
                       </div>
                     </td>
-                    <td style={{ padding:'10px 13px', fontSize:11, color:'#3A4A6A', borderBottom:'0.5px solid rgba(255,255,255,.05)', whiteSpace:'nowrap' }}>{fmtDate(t.created_at)}</td>
+                    <td style={{ padding:'10px 13px', fontSize:11, color:'#7B8DB5', borderBottom:'0.5px solid rgba(255,255,255,.05)', whiteSpace:'nowrap' }}>{fmtDate(t.created_at)}</td>
                     <td style={{ padding:'10px 13px', borderBottom:'0.5px solid rgba(255,255,255,.05)' }}>
                       <div style={{ display:'flex', gap:6 }}>
                         <button onClick={()=>impersonate(t.id)} title="Log in as this tenant"
@@ -149,7 +149,7 @@ export default function SAtenants() {
                 )
               })}
               {!tenants.length && (
-                <tr><td colSpan={7}><div style={{ padding:'36px', textAlign:'center', color:'#6E7E9E', fontSize:13 }}>No tenants found</div></td></tr>
+                <tr><td colSpan={7}><div style={{ padding:'36px', textAlign:'center', color:'#9AAAC8', fontSize:13 }}>No tenants found</div></td></tr>
               )}
             </tbody>
           </table>

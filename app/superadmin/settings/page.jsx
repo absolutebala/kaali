@@ -60,7 +60,7 @@ export default function SASettingsPage() {
               {logoUrl ? (
                 <img src={logoUrl} alt="Platform logo" style={{ maxWidth:'140px', maxHeight:'50px', objectFit:'contain' }} />
               ) : (
-                <span style={{ fontSize:13, color:'#3A4A6A' }}>No logo uploaded</span>
+                <span style={{ fontSize:13, color:'#7B8DB5' }}>No logo uploaded</span>
               )}
             </div>
             <div>

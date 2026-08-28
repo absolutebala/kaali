@@ -28,7 +28,7 @@ export default function SuperAdminLayout({ children }) {
   if (path === '/superadmin/login') return <>{children}</>
 
   if (loading) return (
-    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#05080F', color:'#6E7E9E', fontSize:13 }}>
+    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#05080F', color:'#9AAAC8', fontSize:13 }}>
       Loading…
     </div>
   )
@@ -51,12 +51,12 @@ export default function SuperAdminLayout({ children }) {
               <div style={{ fontSize:10, color:'#F87171' }}>Absolute App Labs</div>
             </div>
           </div>
-          {admin && <div style={{ fontSize:11, color:'#6E7E9E', marginTop:6, padding:'3px 8px', background:'rgba(248,113,113,.08)', border:'0.5px solid rgba(248,113,113,.2)', borderRadius:6, display:'inline-block' }}>{admin.role}</div>}
+          {admin && <div style={{ fontSize:11, color:'#9AAAC8', marginTop:6, padding:'3px 8px', background:'rgba(248,113,113,.08)', border:'0.5px solid rgba(248,113,113,.2)', borderRadius:6, display:'inline-block' }}>{admin.role}</div>}
         </div>
 
         <nav style={{ padding:'10px 8px', flex:1 }}>
           {NAV.map(n => (
-            <Link key={n.href} href={n.href} style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 10px', borderRadius:8, fontSize:13, color: path===n.href ? '#E5EBF8' : '#6E7E9E', background: path===n.href ? 'rgba(248,113,113,.12)' : 'none', marginBottom:1, transition:'all .15s', textDecoration:'none' }}>
+            <Link key={n.href} href={n.href} style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 10px', borderRadius:8, fontSize:13, color: path===n.href ? '#E5EBF8' : '#9AAAC8', background: path===n.href ? 'rgba(248,113,113,.12)' : 'none', marginBottom:1, transition:'all .15s', textDecoration:'none' }}>
               <span style={{ width:16, textAlign:'center', fontSize:13 }}>{n.icon}</span>
               <span>{n.label}</span>
             </Link>
@@ -67,7 +67,7 @@ export default function SuperAdminLayout({ children }) {
           {admin && (
             <div style={{ padding:'8px 10px', marginBottom:4 }}>
               <div style={{ fontSize:12.5, color:'#E5EBF8' }}>{admin.name}</div>
-              <div style={{ fontSize:11, color:'#3A4A6A' }}>{admin.email}</div>
+              <div style={{ fontSize:11, color:'#7B8DB5' }}>{admin.email}</div>
             </div>
           )}
           <button onClick={logout} style={{ width:'100%', fontSize:12, color:'#F87171', background:'none', border:'none', padding:'8px 10px', borderRadius:7, cursor:'pointer', textAlign:'left' }}>

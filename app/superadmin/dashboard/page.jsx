@@ -17,7 +17,7 @@ export default function SADashboard() {
     saFetch('/api/superadmin/stats').then(d => { setData(d); setLoading(false) }).catch(() => setLoading(false))
   }, [])
 
-  if (loading) return <PageShell title="Overview"><div style={{ padding:40, textAlign:'center', color:'#6E7E9E', fontSize:13 }}>Loading…</div></PageShell>
+  if (loading) return <PageShell title="Overview"><div style={{ padding:40, textAlign:'center', color:'#9AAAC8', fontSize:13 }}>Loading…</div></PageShell>
 
   const plans = data?.planBreakdown || {}
 
@@ -32,9 +32,9 @@ export default function SADashboard() {
           { label:'Total Messages',  value: data?.totalConvos   || 0, sub:'All time'           },
         ].map(s => (
           <div key={s.label} style={{ background:'#0C1220', border:'0.5px solid rgba(248,113,113,.12)', borderRadius:12, padding:15 }}>
-            <div style={{ fontSize:11.5, color:'#6E7E9E', marginBottom:7 }}>{s.label}</div>
+            <div style={{ fontSize:11.5, color:'#9AAAC8', marginBottom:7 }}>{s.label}</div>
             <div style={{ fontFamily:'system-ui', fontSize:24, fontWeight:700, color:'#E5EBF8' }}>{s.value}</div>
-            <div style={{ fontSize:11, color:'#3A4A6A', marginTop:3 }}>{s.sub}</div>
+            <div style={{ fontSize:11, color:'#7B8DB5', marginTop:3 }}>{s.sub}</div>
           </div>
         ))}
       </div>
@@ -45,7 +45,7 @@ export default function SADashboard() {
           <div style={{ padding:'12px 16px', borderBottom:'0.5px solid rgba(255,255,255,.07)', fontSize:13, fontWeight:500, color:'#E5EBF8' }}>Plan Breakdown</div>
           <div style={{ padding:16 }}>
             {[
-              { plan:'starter',  label:'Starter',  color:'#6E7E9E' },
+              { plan:'starter',  label:'Starter',  color:'#9AAAC8' },
               { plan:'growth',   label:'Growth',   color:'#4F8EF7' },
               { plan:'business', label:'Business', color:'#FBBF24' },
             ].map(p => {
@@ -54,7 +54,7 @@ export default function SADashboard() {
               const pct   = Math.round(count / total * 100)
               return (
                 <div key={p.plan} style={{ marginBottom:12 }}>
-                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:12, color:'#6E7E9E', marginBottom:5 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:12, color:'#9AAAC8', marginBottom:5 }}>
                     <span>{p.label}</span><span>{count} tenants ({pct}%)</span>
                   </div>
                   <div style={{ background:'#111A2E', borderRadius:6, height:7, overflow:'hidden' }}>
@@ -80,14 +80,14 @@ export default function SADashboard() {
                 </div>
                 <div style={{ flex:1, minWidth:0 }}>
                   <div style={{ fontSize:12.5, color:'#E5EBF8', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{t.company}</div>
-                  <div style={{ fontSize:11, color:'#3A4A6A' }}>{t.email}</div>
+                  <div style={{ fontSize:11, color:'#7B8DB5' }}>{t.email}</div>
                 </div>
-                <span style={{ fontSize:10, fontWeight:500, padding:'2px 8px', borderRadius:20, background: t.plan==='business'?'rgba(251,191,36,.12)':t.plan==='growth'?'rgba(79,142,247,.12)':'rgba(110,126,158,.15)', color: t.plan==='business'?'#FBBF24':t.plan==='growth'?'#7EB3FF':'#6E7E9E' }}>
+                <span style={{ fontSize:10, fontWeight:500, padding:'2px 8px', borderRadius:20, background: t.plan==='business'?'rgba(251,191,36,.12)':t.plan==='growth'?'rgba(79,142,247,.12)':'rgba(110,126,158,.15)', color: t.plan==='business'?'#FBBF24':t.plan==='growth'?'#7EB3FF':'#9AAAC8' }}>
                   {t.plan}
                 </span>
               </div>
             ))}
-            {!(data?.recentTenants||[]).length && <div style={{ padding:'20px 16px', color:'#3A4A6A', fontSize:13, textAlign:'center' }}>No tenants yet</div>}
+            {!(data?.recentTenants||[]).length && <div style={{ padding:'20px 16px', color:'#7B8DB5', fontSize:13, textAlign:'center' }}>No tenants yet</div>}
           </div>
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function SADashboard() {
           <Link key={c.href} href={c.href} style={{ padding:16, background:'#0C1220', border:'0.5px solid rgba(255,255,255,.07)', borderRadius:12, textDecoration:'none', transition:'border-color .15s', display:'block' }}>
             <div style={{ fontSize:20, marginBottom:8 }}>{c.icon}</div>
             <div style={{ fontSize:13, fontWeight:500, color:'#E5EBF8', marginBottom:4 }}>{c.label}</div>
-            <div style={{ fontSize:12, color:'#6E7E9E' }}>{c.desc}</div>
+            <div style={{ fontSize:12, color:'#9AAAC8' }}>{c.desc}</div>
           </Link>
         ))}
       </div>
