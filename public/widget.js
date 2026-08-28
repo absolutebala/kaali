@@ -620,30 +620,111 @@
 
   // ── Load config and boot ──────────────────────────────────
 
+  // ── Colour utilities ──────────────────────────────────────
+  function hexToRgb(hex) {
+    const h = hex.replace('#','')
+    const r = parseInt(h.slice(0,2),16)
+    const g = parseInt(h.slice(2,4),16)
+    const b = parseInt(h.slice(4,6),16)
+    return { r, g, b }
+  }
+
+  function luminance(hex) {
+    const { r, g, b } = hexToRgb(hex)
+    const toLinear = c => { c /= 255; return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4) }
+    return 0.2126*toLinear(r) + 0.7152*toLinear(g) + 0.0722*toLinear(b)
+  }
+
+  function darken(hex, amt) {
+    let { r, g, b } = hexToRgb(hex)
+    r = Math.max(0, Math.floor(r * (1 - amt)))
+    g = Math.max(0, Math.floor(g * (1 - amt)))
+    b = Math.max(0, Math.floor(b * (1 - amt)))
+    return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('')
+  }
+
+  function lighten(hex, amt) {
+    let { r, g, b } = hexToRgb(hex)
+    r = Math.min(255, Math.floor(r + (255-r)*amt))
+    g = Math.min(255, Math.floor(g + (255-g)*amt))
+    b = Math.min(255, Math.floor(b + (255-b)*amt))
+    return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('')
+  }
+
+  function rgbA(hex, alpha) {
+    const { r, g, b } = hexToRgb(hex)
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')'
+  }
+
   // ── Apply tenant branding ─────────────────────────────────
   function applyTenantStyle(cfg) {
     if (!cfg) return
-    const color = cfg.bubbleColor || '#4F8EF7'
+    const color    = cfg.bubbleColor || '#FF5C00'
+    const lum      = luminance(color)
+    const isLight  = lum > 0.35                      // light colour → dark text
+    const textOn   = isLight ? '#1A1A1A' : '#FFFFFF'  // text on coloured bg
+    const headerBg = darken(color, 0.25)              // header slightly darker
+    const visitorBubbleBg  = rgbA(color, 0.18)        // visitor msg bg
+    const visitorBubbleBdr = rgbA(color, 0.35)        // visitor msg border
 
     // 1. Bubble
     const bubble = document.getElementById('kaali-bubble')
     if (bubble) {
-      bubble.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
-      bubble.style.boxShadow  = '0 4px 22px ' + color + '88'
+      bubble.style.background = 'linear-gradient(145deg,' + darken(color,0.1) + ',' + color + ')'
+      bubble.style.boxShadow  = '0 4px 22px ' + rgbA(color, 0.5)
     }
 
-    // 2. Avatar circle background
-    const avCircle = document.querySelector('.kaali-av')
-    if (avCircle) avCircle.style.background = 'linear-gradient(145deg,' + color + 'CC,' + color + ')'
+    // 2. Panel header
+    const header = document.getElementById('kaali-hdr')
+    if (header) {
+      header.style.background = 'linear-gradient(135deg,' + headerBg + ',' + color + ')'
+    }
 
-    // 3. Send button + visitor buttons via injected CSS
+    // 3. Avatar circle
+    const avCircle = document.querySelector('.kaali-av')
+    if (avCircle) avCircle.style.background = 'linear-gradient(145deg,' + darken(color,0.15) + ',' + color + ')'
+
+    // 4. Online dot colour
+    const dot = document.querySelector('.kaali-dot')
+    if (dot) dot.style.background = isLight ? '#22C55E' : lighten(color, 0.5)
+
+    // 5. Inject full theme CSS
     let styleEl = document.getElementById('kaali-theme-css')
     if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'kaali-theme-css'; document.head.appendChild(styleEl) }
+
     styleEl.textContent = [
-      '#kaali-snd { background: ' + color + ' !important; }',
-      '#kaali-snd:hover { filter: brightness(1.1); }',
-      '.kaali-vbtn:hover { background: ' + color + '22 !important; border-color: ' + color + '88 !important; }',
-    ].join(' ')
+      // Send button
+      '#kaali-snd { background: ' + color + ' !important; color: ' + textOn + ' !important; }',
+      '#kaali-snd:hover { filter: brightness(1.12); }',
+
+      // Visitor message bubbles — themed colour
+      '.kaali-msg-user .kaali-bubble-msg {',
+      '  background: ' + visitorBubbleBg + ' !important;',
+      '  color: ' + (isLight ? '#1A1A1A' : '#FFFFFF') + ' !important;',
+      '  border: 1px solid ' + visitorBubbleBdr + ' !important;',
+      '}',
+
+      // Visitor type selection buttons
+      '.kaali-vbtn {',
+      '  border: 1.5px solid ' + rgbA(color, 0.4) + ' !important;',
+      '  color: ' + (isLight ? darken(color,0.3) : lighten(color,0.3)) + ' !important;',
+      '}',
+      '.kaali-vbtn:hover {',
+      '  background: ' + visitorBubbleBg + ' !important;',
+      '  border-color: ' + color + ' !important;',
+      '}',
+
+      // Input focus ring
+      '#kaali-inp:focus { outline: 2px solid ' + rgbA(color,0.5) + ' !important; outline-offset: -1px; }',
+
+      // Header bot name + status text
+      '#kaali-hdr .kaali-name { color: ' + textOn + ' !important; }',
+      '#kaali-hdr .kaali-status { color: ' + rgbA(textOn, 0.75) + ' !important; }',
+
+      // Close button
+      '#kaali-close { color: ' + rgbA(textOn, 0.8) + ' !important; }',
+    ].join('
+')
 
     // 4. Avatar photo in header only
     if (cfg.avatarUrl) {
