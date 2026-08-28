@@ -18,6 +18,7 @@ export default function LandingPage() {
         .btn-secondary { display:inline-flex; align-items:center; gap:8px; padding:14px 28px; background:#fff; color:#374151; border-radius:12px; font-weight:600; font-size:15px; border:1.5px solid #E2E8F0; transition:all .2s; cursor:pointer; }
         .btn-secondary:hover { background:#F8FAFC; }
         .card { background:#fff; border:1px solid rgba(226,232,240,0.8); border-radius:20px; box-shadow:0 2px 12px rgba(0,0,0,0.04); }
+        .card { overflow: visible !important; }
         .pricing-popular { border:2px solid #2563EB !important; box-shadow:0 8px 40px rgba(37,99,235,0.18) !important; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
         .pulse { animation:pulse 2s ease-in-out infinite; }
@@ -44,7 +45,7 @@ export default function LandingPage() {
       <header style={{ position:'sticky', top:0, zIndex:50, backdropFilter:'blur(12px)', background:'rgba(255,255,255,0.88)', borderBottom:'1px solid rgba(226,232,240,0.8)' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px', height:72, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center' }}>
-            <img src="/logo.png" alt="NivoChat" style={{ height:48, width:'auto', objectFit:'contain' }} />
+            <img src="/logo.png" alt="NivoChat" style={{ height:55, width:'auto', objectFit:'contain' }} />
           </div>
 
           <nav className="hide-mobile" style={{ display:'flex', gap:36, fontSize:14, fontWeight:500, color:'#475569' }}>
@@ -406,7 +407,7 @@ export default function LandingPage() {
             <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>Simple, transparent pricing</h2>
             <p style={{ fontSize:17, color:'#64748B' }}>Start free. Upgrade when you grow.</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:32 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:36, marginTop:4 }}>
             {[
               { name:'FREE', sub:'For getting started', price:'₹0', period:'/ month', cta:'Get Started Free', popular:false,
                 features:['100 messages / month','1 PDF upload','Lead dashboard','Claude or ChatGPT'] },
