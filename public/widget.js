@@ -660,84 +660,114 @@
   function applyTenantStyle(cfg) {
     if (!cfg) return
     try {
-    const color    = cfg.bubbleColor || '#FF5C00'
-    const lum      = luminance(color)
-    const isLight  = lum > 0.35                      // light colour → dark text
-    const textOn   = isLight ? '#1A1A1A' : '#FFFFFF'  // text on coloured bg
-    const headerBg = darken(color, 0.25)              // header slightly darker
-    const visitorBubbleBg  = rgbA(color, 0.18)        // visitor msg bg
-    const visitorBubbleBdr = rgbA(color, 0.35)        // visitor msg border
+      const color   = cfg.bubbleColor || '#4F8EF7'
+      const lum     = luminance(color)
+      const isLight = lum > 0.35
 
-    // 1. Bubble
-    const bubble = document.getElementById('kaali-bubble')
-    if (bubble) {
-      bubble.style.background = 'linear-gradient(145deg,' + darken(color,0.1) + ',' + color + ')'
-      bubble.style.boxShadow  = '0 4px 22px ' + rgbA(color, 0.5)
-    }
+      // Derive panel palette from bubble colour
+      // Panel bg: very dark tint of the colour (8% saturation preserved)
+      const { r, g, b } = hexToRgb(color)
+      const panelBg  = 'rgb(' + Math.round(r*0.06+6)  + ',' + Math.round(g*0.06+8)  + ',' + Math.round(b*0.10+14) + ')'
+      const headerBg = 'rgb(' + Math.round(r*0.12+8)  + ',' + Math.round(g*0.12+12) + ',' + Math.round(b*0.18+22) + ')'
+      const botBbl   = 'rgb(' + Math.round(r*0.10+10) + ',' + Math.round(g*0.10+14) + ',' + Math.round(b*0.16+20) + ')'
+      const inputBg  = 'rgb(' + Math.round(r*0.08+8)  + ',' + Math.round(g*0.08+10) + ',' + Math.round(b*0.14+16) + ')'
+      const vbtnBg   = 'rgb(' + Math.round(r*0.09+9)  + ',' + Math.round(g*0.09+12) + ',' + Math.round(b*0.15+18) + ')'
+      const borderC  = rgbA(color, 0.18)
+      const textMain = '#E8EEFF'   // main text — always light on dark panel
+      const textMute = rgbA('#E8EEFF', 0.45)
+      const textOn   = isLight ? '#1A1A1A' : '#FFFFFF'  // text ON the accent color
 
-    // 2. Panel header
-    const header = document.querySelector('.kaali-hdr')
-    if (header) {
-      header.style.background = 'linear-gradient(135deg,' + headerBg + ',' + color + ')'
-    }
-
-    // 3. Avatar circle
-    const avCircle = document.querySelector('.kaali-av')
-    if (avCircle) avCircle.style.background = 'linear-gradient(145deg,' + darken(color,0.15) + ',' + color + ')'
-
-    // 4. Online dot colour
-    const dot = document.querySelector('.kaali-dot')
-    if (dot) dot.style.background = isLight ? '#22C55E' : lighten(color, 0.5)
-
-    // 5. Inject full theme CSS
-    let styleEl = document.getElementById('kaali-theme-css')
-    if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'kaali-theme-css'; document.head.appendChild(styleEl) }
-
-    styleEl.textContent = [
-      // Send button
-      '#kaali-snd { background: ' + color + ' !important; color: ' + textOn + ' !important; }',
-      '#kaali-snd:hover { filter: brightness(1.12); }',
-
-      // Visitor message bubbles — themed colour
-      '.kaali-msg-user .kaali-bubble-msg {',
-      '  background: ' + visitorBubbleBg + ' !important;',
-      '  color: ' + (isLight ? '#1A1A1A' : '#FFFFFF') + ' !important;',
-      '  border: 1px solid ' + visitorBubbleBdr + ' !important;',
-      '}',
-
-      // Visitor type selection buttons
-      '.kaali-vbtn {',
-      '  border: 1.5px solid ' + rgbA(color, 0.4) + ' !important;',
-      '  color: ' + (isLight ? darken(color,0.3) : lighten(color,0.3)) + ' !important;',
-      '}',
-      '.kaali-vbtn:hover {',
-      '  background: ' + visitorBubbleBg + ' !important;',
-      '  border-color: ' + color + ' !important;',
-      '}',
-
-      // Input focus ring
-      '#kaali-inp:focus { outline: 2px solid ' + rgbA(color,0.5) + ' !important; outline-offset: -1px; }',
-
-      // Header bot name + status text
-      '.kaali-hdr .kaali-name { color: ' + textOn + ' !important; }',
-      '.kaali-hdr .kaali-status { color: ' + rgbA(textOn, 0.75) + ' !important; }',
-
-      // Close button
-      '.kaali-hdr #kaali-close { color: ' + rgbA(textOn, 0.8) + ' !important; }',
-    ].join('\n')
-
-    // 4. Avatar photo in header only
-    if (cfg.avatarUrl) {
-      const avEl = document.querySelector('.kaali-av-l')
-      if (avEl) {
-        avEl.style.cssText = 'overflow:hidden;padding:0;background:transparent;width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center'
-        const img = document.createElement('img')
-        img.src = cfg.avatarUrl
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
-        img.onerror = function() { avEl.innerHTML = '<span style="font-size:14px;font-weight:700;color:#fff">' + (cfg.botName||'K').charAt(0).toUpperCase() + '</span>' }
-        avEl.innerHTML = ''; avEl.appendChild(img)
+      // 1. Panel background
+      const panel = document.getElementById('kaali-panel')
+      if (panel) {
+        panel.style.background = panelBg
+        panel.style.borderColor = rgbA(color, 0.22)
       }
-    }
+
+      // 2. Bubble
+      const bubble = document.getElementById('kaali-bubble')
+      if (bubble) {
+        bubble.style.background = 'linear-gradient(145deg,' + darken(color,0.12) + ',' + color + ')'
+        bubble.style.boxShadow  = '0 4px 22px ' + rgbA(color, 0.55)
+      }
+
+      // 3. Header
+      const header = document.querySelector('.kaali-hdr')
+      if (header) {
+        header.style.background = 'linear-gradient(135deg,' + headerBg + ',' + darken(color,0.15) + ')'
+        header.style.borderBottomColor = rgbA(color, 0.2)
+      }
+
+      // 4. Avatar
+      const avCircle = document.querySelector('.kaali-av')
+      if (avCircle) avCircle.style.background = 'linear-gradient(145deg,' + darken(color,0.2) + ',' + color + ')'
+
+      // 5. Avatar photo
+      if (cfg.avatarUrl) {
+        const avEl = document.querySelector('.kaali-av-l')
+        if (avEl) {
+          avEl.style.cssText = 'overflow:hidden;padding:0;background:transparent;width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center'
+          const img = document.createElement('img')
+          img.src = cfg.avatarUrl
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block'
+          img.onerror = function() { avEl.innerHTML = '<span style="font-size:14px;font-weight:700;color:#fff">' + (cfg.botName||'K').charAt(0).toUpperCase() + '</span>' }
+          avEl.innerHTML = ''; avEl.appendChild(img)
+        }
+      }
+
+      // 6. Inject full dynamic CSS
+      let styleEl = document.getElementById('kaali-theme-css')
+      if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'kaali-theme-css'; document.head.appendChild(styleEl) }
+
+      styleEl.textContent = [
+        // Panel text
+        '#kaali-panel { color: ' + textMain + '; }',
+
+        // Header text & close
+        '.kaali-nm { color: ' + textOn + ' !important; }',
+        '.kaali-st { color: ' + rgbA(textOn,0.8) + ' !important; }',
+        '.kaali-st::before { background: ' + rgbA(textOn,0.8) + ' !important; }',
+        '.kaali-x { color: ' + rgbA(textOn,0.65) + ' !important; }',
+        '.kaali-x:hover { background: ' + rgbA(textOn,0.12) + ' !important; color: ' + textOn + ' !important; }',
+
+        // Messages area
+        '.kaali-msgs { background: ' + panelBg + '; }',
+
+        // Bot message bubbles
+        '.kaali-msg.bot .kaali-bbl { background: ' + botBbl + ' !important; color: ' + textMain + ' !important; border-color: ' + borderC + ' !important; }',
+
+        // Visitor message bubbles — accent colour
+        '.kaali-msg.usr .kaali-bbl { background: ' + color + ' !important; color: ' + textOn + ' !important; border-bottom-right-radius: 4px; }',
+
+        // Timestamps
+        '.kaali-ts { color: ' + textMute + ' !important; }',
+
+        // Typing dots
+        '.kaali-typing { background: ' + botBbl + ' !important; border-color: ' + borderC + ' !important; }',
+        '.kaali-typing span { background: ' + rgbA(textMain,0.4) + ' !important; }',
+
+        // Visitor type buttons
+        '.kaali-vbtns { }',
+        '.kaali-vbtn { background: ' + vbtnBg + ' !important; border-color: ' + rgbA(color,0.35) + ' !important; color: ' + textMain + ' !important; }',
+        '.kaali-vbtn:hover { background: ' + rgbA(color,0.2) + ' !important; border-color: ' + color + ' !important; }',
+
+        // Input area
+        '.kaali-inp-wrap { background: ' + inputBg + ' !important; border-top-color: ' + borderC + ' !important; }',
+        '#kaali-inp { background: transparent !important; color: ' + textMain + ' !important; }',
+        '#kaali-inp::placeholder { color: ' + textMute + ' !important; }',
+        '#kaali-inp:focus { outline: 2px solid ' + rgbA(color,0.5) + ' !important; outline-offset: -1px; }',
+
+        // Send button
+        '#kaali-snd { background: ' + color + ' !important; color: ' + textOn + ' !important; }',
+        '#kaali-snd:hover { filter: brightness(1.12) !important; }',
+
+        // Scrollbar
+        '.kaali-msgs::-webkit-scrollbar-thumb { background: ' + rgbA(color,0.3) + ' !important; }',
+
+        // Footer attribution
+        '.kaali-footer { color: ' + textMute + ' !important; }',
+        '.kaali-footer a { color: ' + rgbA(color, 0.8) + ' !important; }',
+      ].join('\n')
 
     } catch(e) { console.warn('[NivoChat] Theme error:', e.message) }
 
