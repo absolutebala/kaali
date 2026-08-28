@@ -43,9 +43,7 @@ export default function LandingPage() {
       <header style={{ position:'sticky', top:0, zIndex:50, backdropFilter:'blur(12px)', background:'rgba(255,255,255,0.88)', borderBottom:'1px solid rgba(226,232,240,0.8)' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px', height:72, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <div style={{ width:38, height:38, borderRadius:10, background:'linear-gradient(135deg,#2563EB,#06B6D4)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 12px rgba(37,99,235,0.3)' }}>
-              <img src="/favicon.png" alt="NivoChat" style={{ width:26, height:26, objectFit:'contain' }} />
-            </div>
+            <img src="/logo.png" alt="NivoChat" style={{ width:44, height:44, objectFit:'contain', borderRadius:10 }} />
             <div>
               <div style={{ fontSize:17, fontWeight:800, color:'#0F172A', letterSpacing:'-.4px' }}>NivoChat</div>
               <div style={{ fontSize:9, fontWeight:700, color:'#64748B', letterSpacing:'1.5px', textTransform:'uppercase' }}>by iDataOne</div>
@@ -136,7 +134,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section id="how-it-works" style={{ padding:'100px 24px', background:'#F0F4FF' }}>
+      <section id="how-it-works" style={{ padding:'100px 24px 100px', background:'#F0F4FF', scrollMarginTop:72 }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:64 }}>
             <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>How NivoChat works</h2>
@@ -261,7 +259,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── INSTALL IN 5 MINUTES ── */}
-      <section id="integrations" style={{ padding:'100px 24px', background:'#fff', borderTop:'1px solid #E2E8F0' }}>
+      <section id="integrations" style={{ padding:'100px 24px', background:'#fff', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
         <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
           <div>
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'5px 14px', borderRadius:99, background:'#EFF6FF', color:'#2563EB', fontSize:12, fontWeight:700, marginBottom:20 }}>
@@ -375,14 +373,43 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── PRICING ── */}
-      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0' }}>
+
+      {/* ── INTEGRATIONS ── */}
+      <section style={{ padding:'80px 24px', background:'#fff', borderTop:'1px solid #E2E8F0' }}>
+        <div style={{ maxWidth:1100, margin:'0 auto', textAlign:'center' }}>
+          <div style={{ fontSize:12, fontWeight:700, color:'#64748B', letterSpacing:'2px', textTransform:'uppercase', marginBottom:16 }}>Works with your existing tools</div>
+          <h2 style={{ fontSize:34, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:12 }}>Connect your favourite tools</h2>
+          <p style={{ fontSize:16, color:'#64748B', maxWidth:520, margin:'0 auto 48px', lineHeight:1.7 }}>NivoChat connects with the tools you already use — no extra setup needed.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:20, textAlign:'left' }}>
+            {[
+              { icon:'🟠', name:'HubSpot', desc:'Auto-create and update contacts in HubSpot when a lead is captured. Zero manual entry.', badge:'CRM' },
+              { icon:'⚡', name:'Zapier', desc:'Connect to 6,000+ apps. Fire a Zap on every lead capture — Slack, Sheets, email, you name it.', badge:'Automation' },
+              { icon:'📅', name:'Calendly', desc:'Qualified leads get a booking link inside the chat. Book discovery calls without leaving the conversation.', badge:'Scheduling' },
+              { icon:'🤖', name:'Claude & ChatGPT', desc:'Bring your own API key. Use Claude Sonnet, Claude Haiku, GPT-4o, or GPT-4o Mini — your choice.', badge:'AI' },
+            ].map(({ icon, name, desc, badge }) => (
+              <div key={name} style={{ background:'#F8FAFC', border:'1px solid #E2E8F0', borderRadius:16, padding:24 }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <span style={{ fontSize:28 }}>{icon}</span>
+                    <span style={{ fontSize:16, fontWeight:700, color:'#0F172A' }}>{name}</span>
+                  </div>
+                  <span style={{ fontSize:10, fontWeight:700, color:'#2563EB', background:'#EFF6FF', padding:'3px 10px', borderRadius:99, letterSpacing:'0.5px' }}>{badge}</span>
+                </div>
+                <p style={{ fontSize:13, color:'#64748B', lineHeight:1.7 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRICING ── */
+      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', maxWidth:600, margin:'0 auto 64px' }}>
             <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>Simple, transparent pricing</h2>
             <p style={{ fontSize:17, color:'#64748B' }}>Start free. Upgrade when you grow.</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:24, alignItems:'center' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:24, alignItems:'start', paddingTop:20 }}>
             {[
               { name:'FREE', sub:'For getting started', price:'₹0', period:'/ month', cta:'Get Started Free', popular:false,
                 features:['100 messages / month','1 PDF upload','Lead dashboard','Claude or ChatGPT'] },
@@ -426,9 +453,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-                <div style={{ width:34, height:34, borderRadius:8, background:'linear-gradient(135deg,#2563EB,#06B6D4)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  <img src="/favicon.png" alt="NivoChat" style={{ width:22, height:22, objectFit:'contain' }} />
-                </div>
+                <img src="/logo.png" alt="NivoChat" style={{ width:40, height:40, objectFit:'contain', borderRadius:8 }} />
                 <div>
                   <div style={{ fontSize:16, fontWeight:800, color:'#fff' }}>NivoChat</div>
                   <div style={{ fontSize:9, color:'#475569', textTransform:'uppercase', letterSpacing:'1.5px' }}>by iDataOne</div>
@@ -447,8 +472,8 @@ export default function LandingPage() {
             {/* Product */}
             <div>
               <div style={{ fontSize:12, fontWeight:700, color:'#fff', letterSpacing:'1px', textTransform:'uppercase', marginBottom:16 }}>Product</div>
-              {['Features','How It Works','Integrations','Pricing','Login'].map(l=>(
-                <a key={l} href={`#${l.toLowerCase().replace(/ /g,'-')}`} style={{ display:'block', fontSize:13, color:'#64748B', marginBottom:10, transition:'color .15s' }}
+              {['How It Works','Integrations','Pricing','Login'].map(l=>(
+                <a key={l} href={l==='Login'?'/auth/login':`#${l.toLowerCase().replace(/ /g,'-')}`} style={{ display:'block', fontSize:13, color:'#64748B', marginBottom:10, transition:'color .15s' }}
                   onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#64748B'}>{l}</a>
               ))}
             </div>
@@ -472,8 +497,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ borderTop:'1px solid #1E293B', paddingTop:28, display:'flex', flexWrap:'wrap', justifyContent:'space-between', alignItems:'center', gap:12 }}>
-            <p style={{ fontSize:12, color:'#475569' }}>© 2026 iDataOne Private Limited. All rights reserved.</p>
+          <div style={{ borderTop:'1px solid #1E293B', paddingTop:28, display:'flex', justifyContent:'flex-end' }}>
             <p style={{ fontSize:12, color:'#334155' }}>
               <a href="https://idataone.com" style={{ color:'#475569' }}>Built by iDataOne</a> · Chennai, India 🇮🇳
             </p>

@@ -5,8 +5,8 @@ export const metadata = {
   title:       'NivoChat — Your Website\'s AI Conversation Layer',
   description: 'NivoChat gives your website an AI assistant trained on your business that answers questions, captures leads, and hands conversations to your team.',
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
 }
 
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/logo.png" />
       </head>
       <body>
         <AuthProvider>
