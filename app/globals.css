@@ -163,12 +163,6 @@ a { color: inherit; text-decoration: none; }
   .form-2col  { grid-template-columns: 1fr; }
 }
 
-/* ── Card components ─────────────────────────────────── */
-.card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
-.card-header { padding: 14px 20px; border-bottom: 0.5px solid var(--b1); display: flex; align-items: center; justify-content: space-between; }
-.card-title { font-size: 14px; font-weight: 600; color: var(--tx); }
-.card-body { padding: 16px 20px; }
-
 /* ── Stat cards ──────────────────────────────────────── */
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 14px; }
 .stat-card { background: var(--s1); border: 0.5px solid var(--b1); border-radius: 12px; padding: 18px 20px; }

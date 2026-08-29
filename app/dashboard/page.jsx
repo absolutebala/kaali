@@ -7,17 +7,14 @@ import Link from 'next/link'
 
 export default function OverviewPage() {
   const { user, refreshUser } = useAuth()
-  const router       = useRouter()
-  const params       = useSearchParams()
-  const [data, setData]     = useState(null)
-  const [leads, setLeads]   = useState([])
+  const router   = useRouter()
+  const params   = useSearchParams()
+  const [data,    setData]    = useState(null)
+  const [leads,   setLeads]   = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (params.get('upgrade') === 'success') {
-      refreshUser()
-      toast('🎉 Plan upgraded successfully!')
-    }
+    if (params.get('upgrade') === 'success') { refreshUser(); toast('🎉 Plan upgraded!') }
     async function load() {
       try {
         const [s, l] = await Promise.all([statsApi.get(), leadsApi.list({ limit: 5 })])
@@ -32,78 +29,122 @@ export default function OverviewPage() {
     try {
       const { url } = await stripeApi.createCheckout(plan)
       window.location.href = url
-    } catch(e) { toast('Stripe not configured yet — set STRIPE_SECRET_KEY in Vercel env vars') }
+    } catch { toast('Stripe not configured — set STRIPE_SECRET_KEY in Vercel env vars') }
   }
 
-  if (loading) return <PageShell title="Overview"><div style={{ color:'var(--tm)', padding:40, textAlign:'center', fontSize:13 }}>Loading…</div></PageShell>
+  if (loading) return (
+    <PageShell title="Overview">
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:200, color:'var(--tm)', fontSize:13 }}>Loading…</div>
+    </PageShell>
+  )
 
   const pct    = data?.usagePct || 0
-  const barCls = pct>=100 ? 'crit' : pct>=80 ? 'warn' : ''
+  const used   = data?.used || 0
+  const limit  = data?.limit || 50
+  const barColor = pct >= 100 ? '#F87171' : pct >= 80 ? '#FBBF24' : 'var(--ac)'
 
   return (
     <PageShell title="Overview">
-      {/* Stats */}
-      <div className="stats-grid">
-        <StatCard label="Total Chats"      value={data?.totalConversations || 0} sub="All time" />
-        <StatCard label="Leads Captured"   value={data?.totalLeads || 0}         sub="With contact info" />
-        <StatCard label="Potential Clients" value={data?.clientLeads || 0}       sub="In pipeline" />
-        <StatCard label="Chats This Week"  value={data?.weekConversations || 0}  sub="Last 7 days" />
+
+      {/* ── STAT CARDS ── */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:20 }}>
+        {[
+          { label:'Total Chats',       value: data?.totalConversations || 0, sub:'All time',    icon:'💬', color:'var(--ac)' },
+          { label:'Leads Captured',    value: data?.totalLeads || 0,         sub:'With contact',icon:'👥', color:'#22D17A' },
+          { label:'Potential Clients', value: data?.clientLeads || 0,        sub:'In pipeline', icon:'🎯', color:'#A78BFA' },
+          { label:'Chats This Week',   value: data?.weekConversations || 0,  sub:'Last 7 days', icon:'📈', color:'#60A5FA' },
+        ].map(c => (
+          <div key={c.label} style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:14, padding:'20px 22px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:'var(--tm)', letterSpacing:'1px', textTransform:'uppercase' }}>{c.label}</div>
+              <div style={{ fontSize:20 }}>{c.icon}</div>
+            </div>
+            <div style={{ fontSize:38, fontWeight:800, color: c.color, lineHeight:1, marginBottom:6 }}>{c.value}</div>
+            <div style={{ fontSize:12, color:'var(--ts)' }}>{c.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Usage */}
-      <div className="card" style={{ marginBottom:14 }}>
-        <div className="card-header">
-          <span className="card-title">Monthly Usage — {(user?.plan||'Starter').charAt(0).toUpperCase()+(user?.plan||'starter').slice(1)}</span>
-          <Link href="/dashboard/api-usage" style={{ fontSize:12, color:'var(--ac)' }}>Manage →</Link>
-        </div>
-        <div className="card-body">
-          <div style={{ display:'flex', justifyContent:'space-between', fontSize:12, color:'var(--tm)', marginBottom:6 }}>
-            <span>{data?.used||0} Messages</span>
-            <span>{data?.limit||100} Messages Limit</span>
-          </div>
-          <div className="usage-bar-bg" style={{ height:9 }}>
-            <div className={`usage-bar-fill ${barCls}`} style={{ width:`${pct}%` }} />
-          </div>
-          {pct >= 80 && <div style={{ fontSize:12, color:'var(--am)', marginTop:6 }}>⚠ Approaching monthly limit</div>}
-        </div>
-      </div>
-
-      {/* Upgrade CTA */}
-      {user?.plan === 'starter' && (
-        <div style={{ background:'linear-gradient(135deg,rgba(79,142,247,.15),rgba(79,142,247,.06))', border:'0.5px solid rgba(79,142,247,.3)', borderRadius:12, padding:'16px 20px', marginBottom:14, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
+      {/* ── USAGE BAR ── */}
+      <div style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:14, padding:'20px 24px', marginBottom:16 }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
           <div>
-            <div style={{ fontSize:14, fontWeight:500, color:'var(--tx)', marginBottom:3 }}>You're on the free plan</div>
-            <div style={{ fontSize:13, color:'var(--tm)' }}>Upgrade to Growth for 2,000 messages/mo and 10 PDFs.</div>
+            <div style={{ fontSize:15, fontWeight:700, color:'var(--tx)', marginBottom:2 }}>
+              Monthly Usage
+              <span style={{ marginLeft:10, fontSize:11, fontWeight:600, padding:'3px 10px', borderRadius:99,
+                background:'rgba(255,92,0,.15)', color:'var(--ac)' }}>
+                {(user?.plan||'starter').charAt(0).toUpperCase()+(user?.plan||'starter').slice(1)}
+              </span>
+            </div>
+            <div style={{ fontSize:12, color:'var(--tm)' }}>Resets monthly</div>
           </div>
-          <button className="btn-pri" onClick={() => handleUpgrade('growth')}>Upgrade to Growth — $29/mo →</button>
+          <Link href="/dashboard/api-usage" style={{ fontSize:12, color:'var(--ac)', fontWeight:600 }}>Manage →</Link>
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:8 }}>
+          <span style={{ color:'var(--tx)', fontWeight:600 }}>{used} messages used</span>
+          <span style={{ color:'var(--tm)' }}>{limit} limit</span>
+        </div>
+        <div style={{ height:8, background:'var(--s3)', borderRadius:99, overflow:'hidden' }}>
+          <div style={{ height:'100%', width:`${Math.min(pct,100)}%`, background: barColor, borderRadius:99, transition:'width .4s' }} />
+        </div>
+        {pct >= 100 && <div style={{ fontSize:12, color:'#F87171', marginTop:8, fontWeight:500 }}>🔴 Limit reached — upgrade to continue chatting</div>}
+        {pct >= 80 && pct < 100 && <div style={{ fontSize:12, color:'#FBBF24', marginTop:8, fontWeight:500 }}>⚠ Approaching monthly limit ({pct}% used)</div>}
+      </div>
+
+      {/* ── UPGRADE CTA ── */}
+      {user?.plan === 'starter' && (
+        <div style={{ background:'linear-gradient(135deg, rgba(255,92,0,.12), rgba(255,92,0,.04))', border:'0.5px solid rgba(255,92,0,.25)', borderRadius:14, padding:'18px 24px', marginBottom:20, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
+          <div>
+            <div style={{ fontSize:15, fontWeight:700, color:'var(--tx)', marginBottom:4 }}>You're on the Starter plan</div>
+            <div style={{ fontSize:13, color:'var(--tm)' }}>Upgrade to Growth for unlimited chats, 10 seats, and no personal API key needed.</div>
+          </div>
+          <button className="btn-pri" onClick={() => handleUpgrade('growth')} style={{ whiteSpace:'nowrap' }}>
+            Upgrade to Growth →
+          </button>
         </div>
       )}
 
-      {/* Recent leads */}
-      <div className="card">
-        <div className="card-header">
-          <span className="card-title">Recent Leads</span>
-          <Link href="/dashboard/leads" style={{ fontSize:12, color:'var(--ac)' }}>View All →</Link>
+      {/* ── RECENT LEADS ── */}
+      <div style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:14, overflow:'hidden' }}>
+        <div style={{ padding:'16px 22px', borderBottom:'0.5px solid var(--b1)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <div style={{ fontSize:15, fontWeight:700, color:'var(--tx)' }}>Recent Leads</div>
+          <Link href="/dashboard/leads" style={{ fontSize:12, color:'var(--ac)', fontWeight:600 }}>View All →</Link>
         </div>
         {leads.length ? (
-          <table className="tbl">
-            <thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Date</th><th>Status</th></tr></thead>
+          <table style={{ width:'100%', borderCollapse:'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom:'0.5px solid var(--b1)' }}>
+                {['Name','Email','Type','Date','Status'].map(h => (
+                  <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:700, color:'var(--ts)', textTransform:'uppercase', letterSpacing:'1px' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
             <tbody>
               {leads.map(l => (
-                <tr key={l.id}>
-                  <td><strong>{l.name}</strong></td>
-                  <td style={{ color:'var(--ts)' }}>{l.email}</td>
-                  <td><span className={`badge badge-${(l.visitor_type||'general').toLowerCase()}`}>{l.visitor_type}</span></td>
-                  <td style={{ color:'var(--tm)', fontSize:12 }}>{fmtDate(l.created_at)}</td>
-                  <td><span className={`badge badge-${l.status}`}>{l.status}</span></td>
+                <tr key={l.id} style={{ borderBottom:'0.5px solid var(--b1)' }}
+                  onMouseOver={e => e.currentTarget.style.background='var(--s2)'}
+                  onMouseOut={e => e.currentTarget.style.background='transparent'}>
+                  <td style={{ padding:'13px 20px', fontSize:14, fontWeight:700, color:'var(--tx)' }}>{l.name}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'var(--ts)' }}>{l.email}</td>
+                  <td style={{ padding:'13px 20px' }}>
+                    <span className={`badge badge-${(l.visitor_type||'general').toLowerCase()}`}>{l.visitor_type}</span>
+                  </td>
+                  <td style={{ padding:'13px 20px', fontSize:12, color:'var(--tm)' }}>{fmtDate(l.created_at)}</td>
+                  <td style={{ padding:'13px 20px' }}>
+                    <span className={`badge badge-${l.status}`}>{l.status}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <div className="empty-state"><div className="empty-ico">👥</div>No leads yet — start a chat on your website!</div>
+          <div style={{ padding:'48px 24px', textAlign:'center', color:'var(--tm)', fontSize:13 }}>
+            <div style={{ fontSize:32, marginBottom:12 }}>👥</div>
+            No leads yet — start a chat on your website!
+          </div>
         )}
       </div>
+
     </PageShell>
   )
 }
@@ -121,11 +162,13 @@ function StatCard({ label, value, sub }) {
 export function PageShell({ title, action, children }) {
   return (
     <>
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 24px', borderBottom:'0.5px solid rgba(255,255,255,.07)', background:'var(--s1)', position:'sticky', top:0, zIndex:10 }}>
-        <div style={{ fontFamily:'var(--font-brand)', fontSize:17, fontWeight:700, color:'var(--tx)' }}>{title}</div>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
+        padding:'16px 28px', borderBottom:'0.5px solid var(--b1)',
+        background:'var(--s1)', position:'sticky', top:0, zIndex:10 }}>
+        <div style={{ fontSize:20, fontWeight:700, color:'var(--tx)', letterSpacing:'-.3px' }}>{title}</div>
         {action && <div>{action}</div>}
       </div>
-      <div style={{ padding:'22px 24px' }}>{children}</div>
+      <div style={{ padding:'24px 28px' }}>{children}</div>
     </>
   )
 }
@@ -136,6 +179,7 @@ export function fmtDate(d) {
 }
 
 function toast(msg) {
-  const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2400);
+  if (typeof document === 'undefined') return
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2400)
 }
