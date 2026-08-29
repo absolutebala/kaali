@@ -31,7 +31,7 @@ export async function GET(request) {
   ])
 
   const used  = tenantData?.conversations_used  || 0
-  const limit = tenantData?.conversations_limit || 100
+  const limit = tenantData?.conversations_limit || 50
   const pct   = limit > 0 ? Math.min(Math.round(used / limit * 100), 100) : 0
 
   return NextResponse.json({

@@ -26,10 +26,23 @@ export default function OverviewPage() {
   }, [])
 
   async function handleUpgrade(plan) {
+    // Send notification to admin and confirmation to tenant
+    try {
+      const token = localStorage.getItem('kaali_token')
+      await fetch('/api/upgrade-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ plan }),
+      })
+    } catch(e) { console.error('Notify error:', e) }
+
+    // Try Stripe checkout, fallback to contact message
     try {
       const { url } = await stripeApi.createCheckout(plan)
       window.location.href = url
-    } catch { toast('Stripe not configured — set STRIPE_SECRET_KEY in Vercel env vars') }
+    } catch {
+      toast('✅ Your upgrade request has been sent! Our team will contact you within 24 hours.')
+    }
   }
 
   if (loading) return (
@@ -40,7 +53,8 @@ export default function OverviewPage() {
 
   const pct    = data?.usagePct || 0
   const used   = data?.used || 0
-  const limit  = data?.limit || 50
+  const planLimits = { starter: 50, growth: 999999, enterprise: 999999 }
+  const limit  = user?.plan === 'starter' ? 50 : (data?.limit || planLimits[user?.plan] || 50)
   const barColor = pct >= 100 ? '#F87171' : pct >= 80 ? '#FBBF24' : 'var(--ac)'
 
   return (

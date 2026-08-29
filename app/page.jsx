@@ -12,23 +12,22 @@ export default function LandingPage() {
   }, [])
 
   function PricingCards() {
-    const ALL_FEATURES = [
-      'AI chat widget (embed anywhere)',
-      'Lead capture & dashboard',
-      'Knowledge base (PDF + URL)',
-      'Claude & ChatGPT support',
-      'HubSpot + Zapier + Calendly',
-      'Live agent handoff',
-      'Analytics dashboard',
-      'Visitor intelligence',
-    ]
     const plans = [
       {
         name: 'Starter', sub: 'Free forever', popular: false,
         price: 'Free', period: '',
         cta: 'Get Started Free', ctaHref: '/auth/register',
         highlight: ['50 chats / month', '1 seat'],
-        note: 'All features included',
+        note: 'Includes everything',
+        features: [
+          'AI chat widget (embed anywhere)',
+          'Lead capture & dashboard',
+          'Knowledge base (PDF + URL)',
+          'HubSpot + Zapier + Calendly',
+          'Analytics dashboard',
+        ],
+        keyNote: '⚠ Bring your own Claude / ChatGPT API key',
+        keyNoteColor: '#FBBF24',
       },
       {
         name: 'Growth', sub: 'Most popular', popular: true,
@@ -36,15 +35,32 @@ export default function LandingPage() {
         annual: isIndia ? 'Billed annually — ₹29,988/yr' : 'Billed annually — $300/yr',
         cta: 'Start Free Trial', ctaHref: '/auth/register',
         highlight: ['Unlimited chats', '10 seats'],
-        note: 'All features included',
+        note: 'Everything in Starter +',
+        features: [
+          'No API key needed — AI included',
+          'Live agent handoff',
+          'Visitor intelligence',
+          'Priority email support',
+          'Usage alerts',
+        ],
+        keyNote: '✅ AI included — no personal API key needed',
+        keyNoteColor: '#10B981',
       },
       {
         name: 'Enterprise', sub: 'One-time payment', popular: false,
-        price: '$1,000', period: 'one-time',
+        price: isIndia ? '₹49,999' : '$499', period: 'one-time',
         cta: 'Contact Us', ctaHref: 'mailto:info@idataone.com',
-        highlight: ['Unlimited chats', 'Unlimited seats', 'On-Premise deployment'],
+        highlight: ['Unlimited chats', 'Unlimited seats'],
         note: 'Everything in Growth +',
-        extra: ['Dedicated server setup', 'Priority SLA support', 'Custom integrations'],
+        features: [
+          'On-Premise deployment',
+          'Dedicated server setup',
+          'Priority SLA support',
+          'Custom integrations',
+          'White-label option',
+        ],
+        keyNote: '✅ AI included — no personal API key needed',
+        keyNoteColor: '#10B981',
       },
     ]
     return (
@@ -76,18 +92,18 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
+            {/* Key API note */}
+            {p.keyNote && (
+              <div style={{ fontSize:12, fontWeight:600, color: p.keyNoteColor, padding:'8px 12px', background: p.keyNoteColor+'18', borderRadius:8, marginBottom:14 }}>
+                {p.keyNote}
+              </div>
+            )}
             {/* Features */}
-            <div style={{ fontSize:12, fontWeight:600, color:'#64748B', textTransform:'uppercase', letterSpacing:'0.8px', marginBottom:10 }}>{p.note}</div>
+            <div style={{ fontSize:11, fontWeight:700, color:'#64748B', textTransform:'uppercase', letterSpacing:'0.8px', marginBottom:10 }}>{p.note}</div>
             <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:28, flex:1 }}>
-              {ALL_FEATURES.map(f => (
+              {(p.features||[]).map(f => (
                 <div key={f} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'#475569' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
-                  {f}
-                </div>
-              ))}
-              {(p.extra||[]).map(f => (
-                <div key={f} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'#475569' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
                   {f}
                 </div>
               ))}
@@ -175,7 +191,7 @@ export default function LandingPage() {
           </p>
           <div style={{ display:'flex', flexWrap:'wrap', gap:12, justifyContent:'center', marginBottom:32 }}>
             <Link href="/auth/register" className="btn-primary">Start Free — No credit card →</Link>
-            <a href="#how-it-works" className="btn-secondary">See How It Works</a>
+            <a href="https://wa.me/916385155341" target="_blank" rel="noopener" className="btn-secondary" style={{ background:'#25D366', color:'#fff', border:'none' }}>💬 WhatsApp Us</a>
           </div>
           <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:24, fontSize:13, color:'#64748B', fontWeight:500 }}>
             {['No credit card required','Set up in 5 minutes','Cancel anytime'].map(t => (
@@ -530,6 +546,10 @@ export default function LandingPage() {
                 <a href="https://idataone.com" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>iDataOne.com</a>
                 <span style={{ color:'#1E293B' }}>·</span>
                 <a href="mailto:info@idataone.com" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>info@idataone.com</a>
+                <span style={{ color:'#1E293B' }}>·</span>
+                <a href="https://wa.me/916385155341" target="_blank" rel="noopener" style={{ fontSize:12, color:'#25D366', fontWeight:600 }}>💬 WhatsApp</a>
+                <span style={{ color:'#1E293B' }}>·</span>
+                <a href="tel:+916385155341" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>📞 +91 63851 55341</a>
               </div>
             </div>
 

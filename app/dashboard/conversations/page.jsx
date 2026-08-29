@@ -44,6 +44,12 @@ export default function ConversationsPage() {
   const [list,  setList]  = useState([])
   const [msgs,  setMsgs]  = useState([])
   const [selId, setSelId] = useState(params.get('id') || null)
+
+  // Sync selId when URL param changes (e.g. navigating from leads page)
+  useEffect(() => {
+    const id = params.get('id')
+    if (id && id !== selId) setSelId(id)
+  }, [params])
   const [meta,  setMeta]  = useState(null)
   const [loading, setL]   = useState(true)
   const [view,  setView]  = useState('timeline') // timeline | category
