@@ -15,7 +15,6 @@ export default function EmbedPage() {
     })
   }
 
-  const { user } = useAuth()
   const hasApiKey = user?.hasApiKey
 
   return (
