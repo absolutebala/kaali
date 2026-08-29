@@ -20,6 +20,7 @@ export default function SASettingsPage() {
 
   useEffect(() => {
     saFetch('/api/superadmin/settings').then(d => {
+      if (d?.settings?.logo_url) setLogoUrl(d.settings.logo_url)
       if (d?.settings?.hasGlobalKey) setHasGlobalKey(true)
       if (d?.settings?.global_provider) setGlobalProvider(d.settings.global_provider)
       if (d?.settings?.global_model) setGlobalModel(d.settings.global_model)
@@ -38,9 +39,6 @@ export default function SASettingsPage() {
     finally { setGlobalSaving(false) }
   }
 
-  useEffect(() => {
-    saFetch('/api/superadmin/settings').then(d => setLogoUrl(d.settings?.logo_url || ''))
-  }, [])
 
   async function uploadLogo(e) {
     const file = e.target.files?.[0]; if (!file) return
@@ -73,15 +71,6 @@ export default function SASettingsPage() {
   const [hasGlobalKey, setHasGlobalKey] = useState(false)
   const [globalSaving, setGlobalSaving] = useState(false)
   const [globalMsg, setGlobalMsg] = useState('')
-
-  useEffect(() => {
-    saFetch('/api/superadmin/settings')
-      .then(d => {
-        if (d.settings?.hasGlobalKey) setHasGlobalKey(true)
-        if (d.settings?.global_provider) setGlobalProvider(d.settings.global_provider)
-        if (d.settings?.global_model) setGlobalModel(d.settings.global_model)
-      }).catch(() => {})
-  }, [])
 
   async function saveGlobalKey() {
     setGlobalSaving(true); setGlobalMsg('')
