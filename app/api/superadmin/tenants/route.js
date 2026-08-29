@@ -35,7 +35,7 @@ export async function PATCH(request) {
   const { id, plan, conversationsLimit, resetUsage } = await request.json()
   if (!id) return NextResponse.json({ error: 'id required.' }, { status: 400 })
 
-  const planLimits = { starter: 100, growth: 2000, business: 999999 }
+  const planLimits = { starter: 50, growth: 2000, business: 999999 }
   const updates = {}
   if (plan !== undefined) { updates.plan = plan; updates.conversations_limit = planLimits[plan] || 100 }
   if (conversationsLimit !== undefined) updates.conversations_limit = conversationsLimit
@@ -49,8 +49,8 @@ export async function PATCH(request) {
       const { data: currentTenant } = await supabaseAdmin
         .from('tenants').select('plan').eq('id', id).single()
       if (currentTenant) {
-        const limits = { starter: 100, growth: 2000, business: 999999 }
-        updates.conversations_limit = limits[currentTenant.plan] || 100
+        const limits = { starter: 50, growth: 2000, business: 999999 }
+        updates.conversations_limit = limits[currentTenant.plan] || 50
       }
     }
   }

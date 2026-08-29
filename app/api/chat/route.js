@@ -174,15 +174,35 @@ export async function POST(request) {
     }
 
     // ── CALL AI ───────────────────────────────────────────────
-    // Check API key exists before calling AI (stored as api_key_enc)
-    if (!tenant.api_key_enc) {
-      const noKeyMsg = "Hi! I'd love to help, but the AI isn't configured for this chat yet. Please contact us directly for assistance."
+    // Growth/Enterprise: use global API key if tenant has no personal key
+    let tenantForAI = tenant
+    if (!tenant.api_key_enc && ['growth','enterprise'].includes(tenant.plan)) {
+      // Fetch global key from platform_settings
+      const { data: ps } = await supabaseAdmin.from('platform_settings').select('global_api_key,global_provider,global_model').eq('id','singleton').single().catch(()=>({ data: null }))
+      if (ps?.global_api_key) {
+        // Inject global key into tenant object for callAI
+        tenantForAI = {
+          ...tenant,
+          api_key_enc:  ps.global_api_key,  // already plain text — stored by admin
+          ai_provider:  ps.global_provider || 'claude',
+          ai_model:     ps.global_model    || 'claude-sonnet-4-5',
+          _usingGlobalKey: true,
+        }
+      }
+    }
+
+    // Starter: must have own API key
+    if (!tenantForAI.api_key_enc) {
+      const isPaidPlan = ['growth','enterprise'].includes(tenant.plan)
+      const noKeyMsg = isPaidPlan
+        ? "I'm not quite ready yet — the platform API key needs to be configured. Please contact support."
+        : "To enable AI chat, please add your API key in the dashboard under API & Usage."
       if (convoId) await supabaseAdmin.from('messages').insert({ conversation_id: convoId, tenant_id: tenantId, role: 'assistant', content: noKeyMsg })
       return NextResponse.json({ text: noKeyMsg, conversationId: convoId || null })
     }
 
     const { text: rawText, error: aiError } = await callAI({
-      tenant, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline,
+      tenant: tenantForAI, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline,
     })
 
     if (aiError) {

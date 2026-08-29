@@ -111,9 +111,19 @@ export default function ApiUsagePage() {
             <div className="form-row" style={{ marginBottom:0 }}>
               <label className="form-label">{provider==='claude'?'Anthropic':'OpenAI'} API Key</label>
               <div style={{ position:'relative' }}>
-                {hasKey && !apiKey && (
-                  <div style={{ fontSize:11, color:'var(--gr)', marginBottom:6 }}>✓ API key configured — enter a new key to replace it</div>
-                )}
+                {user?.plan === 'growth' || user?.plan === 'enterprise' ? (
+                <div style={{ fontSize:12, color:'#22D17A', padding:'10px 14px', background:'rgba(34,209,122,.08)', border:'0.5px solid rgba(34,209,122,.2)', borderRadius:8, marginBottom:12 }}>
+                  ✓ Your plan includes a shared AI key — no personal API key needed. You can still add your own key to override it.
+                </div>
+              ) : hasKey && !apiKey ? (
+                <div style={{ fontSize:11, color:'var(--gr)', marginBottom:6 }}>✓ API key configured — enter a new key to replace it</div>
+              ) : !hasKey ? (
+                <div style={{ fontSize:12, color:'#FBBF24', padding:'10px 14px', background:'rgba(251,191,36,.08)', border:'0.5px solid rgba(251,191,36,.2)', borderRadius:8, marginBottom:12 }}>
+                  ⚠ Starter plan requires your own API key to enable chat. Add your Claude or ChatGPT key below.
+                </div>
+              ) : (
+                <div style={{ fontSize:11, color:'var(--gr)', marginBottom:6 }}>✓ API key configured — enter a new key to replace it</div>
+              )}
                 <input className="form-input" type={keyVis?'text':'password'} value={apiKey} onChange={e=>setApiKey(e.target.value)}
                   placeholder={provider==='claude'?'sk-ant-...':'sk-...'} style={{ paddingRight:60 }} />
                 <button onClick={() => setKeyVis(v=>!v)} style={{ position:'absolute', right:10, top:'50%', transform:'translateY(-50%)', fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>

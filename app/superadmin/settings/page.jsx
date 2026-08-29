@@ -9,8 +9,34 @@ function saFetch(path, opts={}) {
 
 export default function SASettingsPage() {
   const [logoUrl,   setLogoUrl]   = useState('')
-  const [uploading, setUploading] = useState(false)
+  const [uploading, setUploading]       = useState(false)
+  const [globalKey, setGlobalKey]       = useState('')
+  const [globalProvider, setGlobalProvider] = useState('claude')
+  const [globalModel, setGlobalModel]   = useState('claude-sonnet-4-5')
+  const [hasGlobalKey, setHasGlobalKey] = useState(false)
+  const [globalSaving, setGlobalSaving] = useState(false)
+  const [globalMsg, setGlobalMsg]       = useState('')
   const logoRef = useRef(null)
+
+  useEffect(() => {
+    saFetch('/api/superadmin/settings').then(d => {
+      if (d?.settings?.hasGlobalKey) setHasGlobalKey(true)
+      if (d?.settings?.global_provider) setGlobalProvider(d.settings.global_provider)
+      if (d?.settings?.global_model) setGlobalModel(d.settings.global_model)
+    }).catch(() => {})
+  }, [])
+
+  async function saveGlobalKey() {
+    setGlobalSaving(true); setGlobalMsg('')
+    try {
+      await saFetch('/api/superadmin/settings', {
+        method: 'PATCH',
+        body: JSON.stringify({ globalApiKey: globalKey || undefined, globalProvider, globalModel }),
+      })
+      setGlobalMsg('Saved!'); if (globalKey) setHasGlobalKey(true)
+    } catch(e) { setGlobalMsg('Error: ' + e.message) }
+    finally { setGlobalSaving(false) }
+  }
 
   useEffect(() => {
     saFetch('/api/superadmin/settings').then(d => setLogoUrl(d.settings?.logo_url || ''))
@@ -39,6 +65,35 @@ export default function SASettingsPage() {
     await fetch('/api/platform-settings', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('sa_token')}` }, body: JSON.stringify({ logoUrl: '' }) })
     setLogoUrl('')
     showToast('Logo removed.')
+  }
+
+  const [globalKey, setGlobalKey] = useState('')
+  const [globalProvider, setGlobalProvider] = useState('claude')
+  const [globalModel, setGlobalModel] = useState('claude-sonnet-4-5')
+  const [hasGlobalKey, setHasGlobalKey] = useState(false)
+  const [globalSaving, setGlobalSaving] = useState(false)
+  const [globalMsg, setGlobalMsg] = useState('')
+
+  useEffect(() => {
+    saFetch('/api/superadmin/settings')
+      .then(d => {
+        if (d.settings?.hasGlobalKey) setHasGlobalKey(true)
+        if (d.settings?.global_provider) setGlobalProvider(d.settings.global_provider)
+        if (d.settings?.global_model) setGlobalModel(d.settings.global_model)
+      }).catch(() => {})
+  }, [])
+
+  async function saveGlobalKey() {
+    setGlobalSaving(true); setGlobalMsg('')
+    try {
+      await saFetch('/api/superadmin/settings', {
+        method: 'PATCH',
+        body: JSON.stringify({ globalApiKey: globalKey || undefined, globalProvider, globalModel }),
+      })
+      setGlobalMsg('Saved!')
+      if (globalKey) setHasGlobalKey(true)
+    } catch(e) { setGlobalMsg('Error: ' + e.message) }
+    finally { setGlobalSaving(false) }
   }
 
   return (
@@ -116,6 +171,50 @@ export default function SASettingsPage() {
             ⚠ To update env vars go to <strong style={{ color:'#FBBF24' }}>Vercel → Project → Settings → Environment Variables</strong> then redeploy.
           </div>
         </div>
+      {/* ── Global API Key ── */}
+      <div style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:12, padding:'22px 24px', marginTop:20 }}>
+        <div style={{ fontSize:14, fontWeight:600, color:'var(--tx)', marginBottom:4 }}>🌐 Global AI API Key</div>
+        <div style={{ fontSize:12, color:'var(--tm)', marginBottom:16 }}>
+          Growth &amp; Enterprise tenants use this key automatically — they don't need their own API key.
+        </div>
+        {hasGlobalKey && !globalKey && (
+          <div style={{ fontSize:12, color:'#22D17A', marginBottom:12 }}>✓ Global API key is configured</div>
+        )}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+          <div>
+            <label style={{ fontSize:11, color:'var(--tm)', display:'block', marginBottom:6 }}>Provider</label>
+            <select className="form-input" value={globalProvider} onChange={e=>setGlobalProvider(e.target.value)} style={{ appearance:'none' }}>
+              <option value="claude">Anthropic (Claude)</option>
+              <option value="chatgpt">OpenAI (ChatGPT)</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize:11, color:'var(--tm)', display:'block', marginBottom:6 }}>Model</label>
+            <select className="form-input" value={globalModel} onChange={e=>setGlobalModel(e.target.value)} style={{ appearance:'none' }}>
+              {globalProvider === 'claude'
+                ? <><option value="claude-sonnet-4-5">Claude Sonnet 4.5</option><option value="claude-haiku-4-5">Claude Haiku 4.5</option></>
+                : <><option value="gpt-4o-mini">GPT-4o Mini</option><option value="gpt-4o">GPT-4o</option></>
+              }
+            </select>
+          </div>
+        </div>
+        <div style={{ marginBottom:14 }}>
+          <label style={{ fontSize:11, color:'var(--tm)', display:'block', marginBottom:6 }}>
+            API Key {hasGlobalKey ? '— leave blank to keep existing' : ''}
+          </label>
+          <input className="form-input" type="password"
+            placeholder={globalProvider === 'claude' ? 'sk-ant-...' : 'sk-...'}
+            value={globalKey} onChange={e=>setGlobalKey(e.target.value)} />
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+          <button onClick={saveGlobalKey} disabled={globalSaving}
+            style={{ padding:'9px 20px', background:'var(--ac)', color:'#fff', border:'none', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer' }}>
+            {globalSaving ? 'Saving…' : 'Save Global Key'}
+          </button>
+          {globalMsg && <span style={{ fontSize:12, color: globalMsg.startsWith('Error') ? '#F87171' : '#22D17A' }}>{globalMsg}</span>}
+        </div>
+      </div>
+
       </div>
     </PageShell>
   )

@@ -33,6 +33,7 @@ export default function LandingPage() {
       {
         name: 'Growth', sub: 'Most popular', popular: true,
         price: isIndia ? '₹2,499' : '$25', period: '/ month',
+        annual: isIndia ? 'Billed annually — ₹29,988/yr' : 'Billed annually — $300/yr',
         cta: 'Start Free Trial', ctaHref: '/auth/register',
         highlight: ['Unlimited chats', '10 seats'],
         note: 'All features included',
@@ -58,10 +59,15 @@ export default function LandingPage() {
             <div style={{ fontSize:20, fontWeight:800, color:'#0F172A', marginBottom:2 }}>{p.name}</div>
             <div style={{ fontSize:12, color: p.popular ? '#2563EB' : '#64748B', fontWeight:600, marginBottom:20 }}>{p.sub}</div>
             {/* Price */}
-            <div style={{ marginBottom:24 }}>
+            <div style={{ marginBottom:p.annual ? 8 : 24 }}>
               <span style={{ fontSize:40, fontWeight:900, color:'#0F172A' }}>{p.price}</span>
               {p.period && <span style={{ fontSize:14, color:'#64748B', marginLeft:4 }}>{p.period}</span>}
             </div>
+            {p.annual && (
+              <div style={{ fontSize:12, color:'#2563EB', fontWeight:600, marginBottom:20, padding:'5px 12px', background:'#EFF6FF', borderRadius:8, display:'inline-block' }}>
+                {p.annual}
+              </div>
+            )}
             {/* Key highlights */}
             <div style={{ background: p.popular ? '#EFF6FF' : '#F8FAFC', borderRadius:10, padding:'14px 16px', marginBottom:20 }}>
               {p.highlight.map(h => (

@@ -8,7 +8,21 @@ export async function GET(request) {
   const { admin, error } = await requireSuperAdmin(request)
   if (error) return error
   const { data } = await supabaseAdmin.from('platform_settings').select('*').eq('id', 'singleton').single()
-  return NextResponse.json({ settings: data || {} })
+  // Never return the actual key — just indicate if one is set
+  const safe = { ...(data || {}), hasGlobalKey: !!(data?.global_api_key), global_api_key: undefined }
+  return NextResponse.json({ settings: safe })
+}
+
+export async function PATCH(request) {
+  const { admin, error } = await requireSuperAdmin(request, ['superadmin'])
+  if (error) return error
+  const body = await request.json()
+  const updates = { id: 'singleton', updated_at: new Date().toISOString() }
+  if (body.globalApiKey !== undefined) updates.global_api_key    = body.globalApiKey
+  if (body.globalProvider !== undefined) updates.global_provider = body.globalProvider
+  if (body.globalModel !== undefined) updates.global_model       = body.globalModel
+  await supabaseAdmin.from('platform_settings').upsert(updates)
+  return NextResponse.json({ ok: true })
 }
 
 export async function POST(request) {

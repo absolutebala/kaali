@@ -45,7 +45,7 @@ export async function POST(request) {
         ai_provider:        'claude',
         ai_model:           'claude-sonnet-4-5',
         conversations_used:  0,
-        conversations_limit: 100,
+        conversations_limit: 50,
         alert_email:        email.toLowerCase().trim(),
         alert_threshold:     80,
       })
