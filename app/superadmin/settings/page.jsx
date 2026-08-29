@@ -65,26 +65,6 @@ export default function SASettingsPage() {
     showToast('Logo removed.')
   }
 
-  const [globalKey, setGlobalKey] = useState('')
-  const [globalProvider, setGlobalProvider] = useState('claude')
-  const [globalModel, setGlobalModel] = useState('claude-sonnet-4-5')
-  const [hasGlobalKey, setHasGlobalKey] = useState(false)
-  const [globalSaving, setGlobalSaving] = useState(false)
-  const [globalMsg, setGlobalMsg] = useState('')
-
-  async function saveGlobalKey() {
-    setGlobalSaving(true); setGlobalMsg('')
-    try {
-      await saFetch('/api/superadmin/settings', {
-        method: 'PATCH',
-        body: JSON.stringify({ globalApiKey: globalKey || undefined, globalProvider, globalModel }),
-      })
-      setGlobalMsg('Saved!')
-      if (globalKey) setHasGlobalKey(true)
-    } catch(e) { setGlobalMsg('Error: ' + e.message) }
-    finally { setGlobalSaving(false) }
-  }
-
   return (
     <PageShell title="Platform Settings">
 
