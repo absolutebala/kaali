@@ -497,47 +497,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0' }}>
-        <div style={{ maxWidth:1100, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', maxWidth:600, margin:'0 auto 64px' }}>
-            <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>Simple, transparent pricing</h2>
-            <p style={{ fontSize:17, color:'#64748B' }}>Start free. Upgrade when you grow.</p>
-          </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:36, marginTop:4 }}>
-            {[
-              { name:'FREE', sub:'For getting started', price:'₹0', period:'/ month', cta:'Get Started Free', popular:false,
-                features:['100 messages / month','1 PDF upload','Lead dashboard','Claude or ChatGPT'] },
-              { name:'GROWTH', sub:'For growing businesses', price:'₹1,499', period:'/ month', cta:'Start 7-Day Free Trial', popular:true,
-                features:['2,000 messages / month','10 PDF uploads','Full analytics','HubSpot + Zapier','Usage alerts at 80%'] },
-              { name:'BUSINESS', sub:'For scaling teams', price:'₹4,999', period:'/ month', cta:'Start 7-Day Free Trial', popular:false,
-                features:['Unlimited messages','Unlimited PDFs','Priority support','All integrations','Live agent handoff'] },
-            ].map(p => (
-              <div key={p.name} className={`card${p.popular?' pricing-popular':''}`} style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? -16 : 0, zIndex: p.popular ? 2 : 1 }}>
-                {p.popular && (
-                  <div style={{ position:'absolute', top:-18, left:'50%', transform:'translateX(-50%)', background:'#2563EB', color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'1.5px', textTransform:'uppercase', padding:'6px 20px', borderRadius:99, boxShadow:'0 4px 12px rgba(37,99,235,0.35)', whiteSpace:'nowrap' }}>Most Popular</div>
-                )}
-                <div style={{ fontSize:18, fontWeight:800, color:'#0F172A', marginBottom:4 }}>{p.name}</div>
-                <div style={{ fontSize:12, color:'#64748B', marginBottom:24 }}>{p.sub}</div>
-                <div style={{ fontSize:36, fontWeight:900, color:'#0F172A', marginBottom:24, lineHeight:1 }}>
-                  {p.price} <span style={{ fontSize:14, fontWeight:400, color:'#64748B' }}>{p.period}</span>
-                </div>
-                <div style={{ marginBottom:28, display:'flex', flexDirection:'column', gap:10 }}>
-                  {p.features.map(f=>(
-                    <div key={f} style={{ display:'flex', alignItems:'center', gap:10, fontSize:13, color:'#475569' }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
-                      {f}
-                    </div>
-                  ))}
-                </div>
-                <Link href="/auth/register" style={{ display:'block', textAlign:'center', padding:'14px', borderRadius:12, fontWeight:700, fontSize:14, cursor:'pointer',
-                  background: p.popular ? '#2563EB' : '#fff', color: p.popular ? '#fff' : '#334155',
-                  border: p.popular ? 'none' : '1.5px solid #E2E8F0', boxShadow: p.popular ? '0 4px 16px rgba(37,99,235,0.28)' : 'none' }}>
-                  {p.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </section>
 
       {/* ── FOOTER (iDataOne style) ── */}
