@@ -131,18 +131,12 @@ export default function ApiUsagePage() {
                 </button>
               </div>
               <p style={{ fontSize:11, color:'var(--td)', marginTop:4 }}>Encrypted before storage. Never exposed to visitors.</p>
-              {provider === 'claude' && (
-                <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener"
-                  style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', display:'inline-block', marginTop:4 }}>
-                  → Get your Anthropic API key from console.anthropic.com
-                </a>
-              )}
-              {provider === 'openai' && (
-                <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener"
-                  style={{ fontSize:11, color:'var(--ac)', textDecoration:'none', display:'inline-block', marginTop:4 }}>
-                  → Get your OpenAI API key from platform.openai.com
-                </a>
-              )}
+              <a
+                href={provider === 'claude' ? 'https://console.anthropic.com/settings/keys' : 'https://platform.openai.com/api-keys'}
+                target="_blank" rel="noopener"
+                style={{ fontSize:13, fontWeight:700, color:'var(--ac)', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6, marginTop:8, padding:'8px 14px', background:'var(--acd)', borderRadius:8, border:'0.5px solid var(--ac)' }}>
+                🔑 Get your {provider === 'claude' ? 'Anthropic (Claude)' : 'OpenAI (ChatGPT)'} API key →
+              </a>
             </div>
             <div className="form-row" style={{ marginBottom:0 }}>
               <label className="form-label">Model</label>

@@ -19,13 +19,13 @@ export default function EmbedPage() {
 
   return (
     <PageShell title="Embed Code">
-      {user?.plan === 'starter' && !hasApiKey && (
+      {!hasApiKey && user?.plan === 'starter' && (
         <div style={{ background:'rgba(251,191,36,.08)', border:'1px solid rgba(251,191,36,.3)', borderRadius:12, padding:'20px 24px', marginBottom:20, display:'flex', alignItems:'flex-start', gap:16 }}>
           <div style={{ fontSize:28, flexShrink:0 }}>⚠️</div>
           <div>
             <div style={{ fontSize:15, fontWeight:700, color:'#FBBF24', marginBottom:6 }}>API Key Required</div>
             <div style={{ fontSize:13, color:'var(--tm)', lineHeight:1.7, marginBottom:12 }}>
-              You need to add your Claude or ChatGPT API key before embedding the chat widget. Without it, the chat won't respond to visitors.
+              Add your Claude or ChatGPT API key to enable AI responses. Your chat widget will load but visitors won't get answers until a key is configured.
             </div>
             <a href="/dashboard/api-usage" style={{ display:'inline-block', padding:'8px 18px', background:'var(--ac)', color:'#fff', borderRadius:8, fontSize:13, fontWeight:600, textDecoration:'none' }}>
               Add API Key →

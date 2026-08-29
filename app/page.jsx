@@ -59,8 +59,6 @@ export default function LandingPage() {
           'Custom integrations',
           'White-label option',
         ],
-        keyNote: '✅ AI included — no personal API key needed',
-        keyNoteColor: '#10B981',
       },
     ]
     return (
@@ -172,7 +170,12 @@ export default function LandingPage() {
             ))}
           </nav>
 
-          <div style={{ display:'flex', alignItems:'center', gap:20 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <a href="https://wa.me/916385155341" target="_blank" rel="noopener" className="hide-mobile"
+              style={{ display:'flex', alignItems:'center', gap:6, fontSize:13, color:'#25D366', fontWeight:600, textDecoration:'none' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.555 4.122 1.523 5.857L0 24l6.335-1.499A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.367l-.36-.214-3.722.979.996-3.636-.235-.374A9.775 9.775 0 012.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/></svg>
+              +91 63851 55341
+            </a>
             <Link href="/auth/login" className="hide-mobile" style={{ fontSize:14, fontWeight:500, color:'#475569' }}>Login</Link>
             <Link href="/auth/register" className="btn-primary" style={{ padding:'10px 22px', fontSize:14 }}>Start Free</Link>
           </div>
@@ -531,7 +534,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FOOTER (iDataOne style) ── */}
-      <footer style={{ background:'#0B1120', color:'#94A3B8', padding:'56px 24px 32px' }}>
+      <footer style={{ background:'#0B1120', color:'#CBD5E1', padding:'56px 24px 32px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto' }}>
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>
             {/* Brand */}
@@ -539,17 +542,21 @@ export default function LandingPage() {
               <div style={{ marginBottom:16 }}>
                 <img src="/logo.png" alt="NivoChat" style={{ height:52, width:'auto', objectFit:'contain' }} />
               </div>
-              <p style={{ fontSize:13, lineHeight:1.7, color:'#64748B', maxWidth:260 }}>
+              <p style={{ fontSize:13, lineHeight:1.7, color:'#94A3B8', maxWidth:260 }}>
                 AI-powered chat for your website. Answer questions, capture leads, and close more deals — 24/7.
               </p>
               <div style={{ marginTop:20, display:'flex', gap:12 }}>
-                <a href="https://idataone.com" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>iDataOne.com</a>
-                <span style={{ color:'#1E293B' }}>·</span>
-                <a href="mailto:info@idataone.com" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>info@idataone.com</a>
-                <span style={{ color:'#1E293B' }}>·</span>
-                <a href="https://wa.me/916385155341" target="_blank" rel="noopener" style={{ fontSize:12, color:'#25D366', fontWeight:600 }}>💬 WhatsApp</a>
-                <span style={{ color:'#1E293B' }}>·</span>
-                <a href="tel:+916385155341" style={{ fontSize:12, color:'#475569', fontWeight:500 }}>📞 +91 63851 55341</a>
+                <a href="https://idataone.com" style={{ fontSize:13, color:'#94A3B8', fontWeight:500 }}>iDataOne.com</a>
+                <span style={{ color:'#334155' }}>·</span>
+                <a href="mailto:info@idataone.com" style={{ fontSize:13, color:'#94A3B8', fontWeight:500 }}>info@idataone.com</a>
+              </div>
+              <div style={{ display:'flex', alignItems:'center', gap:16, marginTop:10 }}>
+                <a href="https://wa.me/916385155341" target="_blank" rel="noopener"
+                  style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'#25D366', fontWeight:600, textDecoration:'none', padding:'6px 14px', background:'rgba(37,211,102,.1)', borderRadius:8, border:'1px solid rgba(37,211,102,.25)' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.555 4.122 1.523 5.857L0 24l6.335-1.499A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.367l-.36-.214-3.722.979.996-3.636-.235-.374A9.775 9.775 0 012.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/></svg>
+                  WhatsApp Us
+                </a>
+                <a href="tel:+916385155341" style={{ fontSize:13, color:'#94A3B8', fontWeight:500, textDecoration:'none' }}>📞 +91 63851 55341</a>
               </div>
             </div>
 
@@ -557,8 +564,8 @@ export default function LandingPage() {
             <div>
               <div style={{ fontSize:12, fontWeight:700, color:'#fff', letterSpacing:'1px', textTransform:'uppercase', marginBottom:16 }}>Product</div>
               {['How It Works','Integrations','Pricing','Login'].map(l=>(
-                <a key={l} href={l==='Login'?'/auth/login':`#${l.toLowerCase().replace(/ /g,'-')}`} style={{ display:'block', fontSize:13, color:'#64748B', marginBottom:10, transition:'color .15s' }}
-                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#64748B'}>{l}</a>
+                <a key={l} href={l==='Login'?'/auth/login':`#${l.toLowerCase().replace(/ /g,'-')}`} style={{ display:'block', fontSize:13, color:'#94A3B8', marginBottom:10, transition:'color .15s' }}
+                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#94A3B8'}>{l}</a>
               ))}
             </div>
 
@@ -566,8 +573,8 @@ export default function LandingPage() {
             <div>
               <div style={{ fontSize:12, fontWeight:700, color:'#fff', letterSpacing:'1px', textTransform:'uppercase', marginBottom:16 }}>Company</div>
               {[['iDataOne','https://idataone.com'],['Case Studies','https://idataone.com/case-studies'],['Contact','https://idataone.com/contact'],['WhatsApp','https://wa.me/916385155341']].map(([l,h])=>(
-                <a key={l} href={h} target="_blank" rel="noopener" style={{ display:'block', fontSize:13, color:'#64748B', marginBottom:10 }}
-                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#64748B'}>{l}</a>
+                <a key={l} href={h} target="_blank" rel="noopener" style={{ display:'block', fontSize:13, color:'#94A3B8', marginBottom:10 }}
+                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#94A3B8'}>{l}</a>
               ))}
             </div>
 
@@ -575,8 +582,8 @@ export default function LandingPage() {
             <div>
               <div style={{ fontSize:12, fontWeight:700, color:'#fff', letterSpacing:'1px', textTransform:'uppercase', marginBottom:16 }}>Also by iDataOne</div>
               {[['Infra360 PMS','https://idataone.com/infra360PMS'],['iSportOne','https://idataone.com/isportone'],['DatInsights','https://idataone.com']].map(([l,h])=>(
-                <a key={l} href={h} target="_blank" rel="noopener" style={{ display:'block', fontSize:13, color:'#64748B', marginBottom:10 }}
-                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#64748B'}>{l}</a>
+                <a key={l} href={h} target="_blank" rel="noopener" style={{ display:'block', fontSize:13, color:'#94A3B8', marginBottom:10 }}
+                  onMouseOver={e=>e.target.style.color='#E2E8F0'} onMouseOut={e=>e.target.style.color='#94A3B8'}>{l}</a>
               ))}
             </div>
           </div>
