@@ -496,9 +496,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── PRICING ── */}
-
-      </section>
 
       {/* ── FOOTER (iDataOne style) ── */}
       <footer style={{ background:'#0B1120', color:'#94A3B8', padding:'56px 24px 32px' }}>
