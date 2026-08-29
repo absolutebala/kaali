@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
-import { PageShell } from '../dashboard/page'
+import { PageShell } from '../../dashboard/page'
 
 function saFetch(path, opts={}) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('sa_token') : ''
