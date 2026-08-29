@@ -1,7 +1,103 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function LandingPage() {
+  const [isIndia, setIsIndia] = useState(false)
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then(r => r.json())
+      .then(d => { if (d.country_code === 'IN') setIsIndia(true) })
+      .catch(() => {})
+  }, [])
+
+  function PricingCards() {
+    const ALL_FEATURES = [
+      'AI chat widget (embed anywhere)',
+      'Lead capture & dashboard',
+      'Knowledge base (PDF + URL)',
+      'Claude & ChatGPT support',
+      'HubSpot + Zapier + Calendly',
+      'Live agent handoff',
+      'Analytics dashboard',
+      'Visitor intelligence',
+    ]
+    const plans = [
+      {
+        name: 'Starter', sub: 'Free forever', popular: false,
+        price: 'Free', period: '',
+        cta: 'Get Started Free', ctaHref: '/auth/register',
+        highlight: ['50 chats / month', '1 seat'],
+        note: 'All features included',
+      },
+      {
+        name: 'Growth', sub: 'Most popular', popular: true,
+        price: isIndia ? '₹2,499' : '$25', period: '/ month',
+        cta: 'Start Free Trial', ctaHref: '/auth/register',
+        highlight: ['Unlimited chats', '10 seats'],
+        note: 'All features included',
+      },
+      {
+        name: 'Enterprise', sub: 'One-time payment', popular: false,
+        price: '$1,000', period: 'one-time',
+        cta: 'Contact Us', ctaHref: 'mailto:info@idataone.com',
+        highlight: ['Unlimited chats', 'Unlimited seats', 'On-Premise deployment'],
+        note: 'Everything in Growth +',
+        extra: ['Dedicated server setup', 'Priority SLA support', 'Custom integrations'],
+      },
+    ]
+    return (
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:36 }}>
+        {plans.map(p => (
+          <div key={p.name} className={`card${p.popular?' pricing-popular':''}`}
+            style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? -16 : 0, zIndex: p.popular ? 2 : 1 }}>
+            {p.popular && (
+              <div style={{ position:'absolute', top:-18, left:'50%', transform:'translateX(-50%)', background:'#2563EB', color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'1.5px', textTransform:'uppercase', padding:'6px 20px', borderRadius:99, boxShadow:'0 4px 12px rgba(37,99,235,0.35)', whiteSpace:'nowrap' }}>Most Popular</div>
+            )}
+            {/* Plan name */}
+            <div style={{ fontSize:20, fontWeight:800, color:'#0F172A', marginBottom:2 }}>{p.name}</div>
+            <div style={{ fontSize:12, color: p.popular ? '#2563EB' : '#64748B', fontWeight:600, marginBottom:20 }}>{p.sub}</div>
+            {/* Price */}
+            <div style={{ marginBottom:24 }}>
+              <span style={{ fontSize:40, fontWeight:900, color:'#0F172A' }}>{p.price}</span>
+              {p.period && <span style={{ fontSize:14, color:'#64748B', marginLeft:4 }}>{p.period}</span>}
+            </div>
+            {/* Key highlights */}
+            <div style={{ background: p.popular ? '#EFF6FF' : '#F8FAFC', borderRadius:10, padding:'14px 16px', marginBottom:20 }}>
+              {p.highlight.map(h => (
+                <div key={h} style={{ display:'flex', alignItems:'center', gap:8, fontSize:14, fontWeight:600, color: p.popular ? '#1D4ED8' : '#0F172A', marginBottom:6 }}>
+                  <span style={{ fontSize:16 }}>✦</span> {h}
+                </div>
+              ))}
+            </div>
+            {/* Features */}
+            <div style={{ fontSize:12, fontWeight:600, color:'#64748B', textTransform:'uppercase', letterSpacing:'0.8px', marginBottom:10 }}>{p.note}</div>
+            <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:28, flex:1 }}>
+              {ALL_FEATURES.map(f => (
+                <div key={f} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'#475569' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                  {f}
+                </div>
+              ))}
+              {(p.extra||[]).map(f => (
+                <div key={f} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'#475569' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366F1" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                  {f}
+                </div>
+              ))}
+            </div>
+            {/* CTA */}
+            <a href={p.ctaHref} style={{ display:'block', textAlign:'center', padding:'14px', borderRadius:12, fontWeight:700, fontSize:14, cursor:'pointer', textDecoration:'none',
+              background: p.popular ? '#2563EB' : '#fff', color: p.popular ? '#fff' : '#334155',
+              border: p.popular ? 'none' : '1.5px solid #E2E8F0', boxShadow: p.popular ? '0 4px 16px rgba(37,99,235,0.28)' : 'none' }}>
+              {p.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <>
       <style>{`
