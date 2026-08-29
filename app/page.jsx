@@ -497,6 +497,17 @@ export default function LandingPage() {
       </section>
 
 
+      {/* ── PRICING ── */}
+      <section id="pricing" style={{ padding:'100px 24px', background:'#F0F4FF', borderTop:'1px solid #E2E8F0', scrollMarginTop:72 }}>
+        <div style={{ maxWidth:1100, margin:'0 auto' }}>
+          <div style={{ textAlign:'center', maxWidth:600, margin:'0 auto 64px' }}>
+            <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>Simple, transparent pricing</h2>
+            <p style={{ fontSize:17, color:'#64748B' }}>Start free. Upgrade when you grow.</p>
+          </div>
+          <PricingCards />
+        </div>
+      </section>
+
       {/* ── FOOTER (iDataOne style) ── */}
       <footer style={{ background:'#0B1120', color:'#94A3B8', padding:'56px 24px 32px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto' }}>
