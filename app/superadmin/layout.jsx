@@ -48,7 +48,7 @@ export default function SuperAdminLayout({ children }) {
             <div style={{ width:30, height:30, background:'linear-gradient(145deg,#991B1B,#F87171)', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, flexShrink:0 }}>🔐</div>
             <div>
               <div style={{ fontFamily:'system-ui', fontSize:13, fontWeight:700, color:'#E5EBF8' }}>NivoChat</div>
-              <div style={{ fontSize:10, color:'#F87171' }}>Absolute App Labs</div>
+              <div style={{ fontSize:10, color:'#F87171' }}>NivoChat</div>
             </div>
           </div>
           {admin && <div style={{ fontSize:11, color:'#9AAAC8', marginTop:6, padding:'3px 8px', background:'rgba(248,113,113,.08)', border:'0.5px solid rgba(248,113,113,.2)', borderRadius:6, display:'inline-block' }}>{admin.role}</div>}

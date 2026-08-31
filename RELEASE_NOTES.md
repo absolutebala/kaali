@@ -1,4 +1,4 @@
-# Absolute AIChat — Release Notes
+# NivoChat — Release Notes
 
 ---
 
@@ -8,7 +8,7 @@
 - **Visitor Intelligence** — Widget now captures country, city, device, OS, browser, referrer, UTM source, pages visited, session count via IP geolocation (ipapi.co)
 - **Lead Profile Panel** — Click any lead to see full profile: contact details, company, role, location with country flag, session intelligence, pages visited, chat summary
 - **Company & Role Capture** — AI naturally asks for company name and job title during lead capture. Stored per lead
-- **Platform Logo Upload** — Super admin can upload company logo from Settings. Logo replaces "Absolute AIChat" text in dashboard sidebar
+- **Platform Logo Upload** — Super admin can upload company logo from Settings. Logo replaces "NivoChat" text in dashboard sidebar
 - **Avatar Upload** — Tenants can upload a bot avatar photo in Settings. Shows in widget header (not bubble)
 - **Bubble Color Picker** — Choose any color for the chat bubble. Color themes the entire widget (send button, visitor buttons)
 - **Widget Display Modes** — Three modes configurable from Settings: Floating Bubble, Always Open, Centre Popup
@@ -18,7 +18,7 @@
 - **AI Scope Control** — Bot now redirects off-topic questions back to company topics. No more answering unrelated questions
 - **Indexed Pages Fix** — Each scraped URL now gets its own document record. Multiple pages from same domain no longer overwrite each other
 - **Super Admin Restricted View** — When super admin uses "Login As", they only see Knowledge Base, Embed Code, and Settings. Leads and Chats are hidden
-- **Platform Rename** — System renamed from "Kaali" to "Absolute AIChat" across all platform UI. Bot name "Kaali" remains configurable per tenant
+- **Platform Rename** — System renamed from "Kaali" to "NivoChat" across all platform UI. Bot name "Kaali" remains configurable per tenant
 - **Design Refresh** — Improved typography (14px base), better contrast (#F0F4FF primary, #C8D4F0 secondary), more readable dark theme across all dashboard pages
 - **Labels Fixed** — "conversations" renamed to "Messages" in usage bars and CTAs throughout dashboard
 
@@ -97,7 +97,7 @@
 - 4 visitor types: Looking to Build, Existing Client, Investor, Just Exploring
 - Natural lead capture flow
 - Calendly booking link for qualified leads
-- "Powered by Absolute App Labs" attribution
+- "Powered by NivoChat" attribution
 - Live widget preview in dashboard for testing
 
 **Plans**

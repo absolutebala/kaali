@@ -34,7 +34,7 @@ export async function POST(request) {
     // Fetch the page
     const res = await fetch(parsedUrl.toString(), {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; KaaliBot/1.0; +https://kaali.absoluteapplabs.com)',
+        'User-Agent': 'Mozilla/5.0 (compatible; KaaliBot/1.0; +https://kaali.nivochat.idataone.com)',
         'Accept': 'text/html,application/xhtml+xml',
       },
       signal: AbortSignal.timeout(15000), // 15s timeout

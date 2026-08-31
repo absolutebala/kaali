@@ -320,7 +320,7 @@ export default function SettingsPage() {
       </div>
 
       <div style={{ textAlign:'center', fontSize:12, color:'var(--td)', marginTop:16 }}>
-        Powered by <a href="https://absoluteapplabs.com" target="_blank" rel="noopener" style={{ color:'var(--ac)' }}>NivoChat</a>
+        Powered by <a href="https://nivochat.idataone.com" target="_blank" rel="noopener" style={{ color:'var(--ac)' }}>NivoChat</a>
       </div>
     </PageShell>
   )

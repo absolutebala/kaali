@@ -1,6 +1,6 @@
 # Kaali — AI Chat Platform
 
-> Powered by Absolute App Labs
+> Powered by NivoChat
 
 A multi-tenant SaaS platform that lets any business embed an AI chat widget on their website in under 10 minutes. Built with Next.js 14, Supabase, and the Anthropic / OpenAI APIs.
 
@@ -179,7 +179,7 @@ vercel
 
 Set all `.env.local` variables in **Vercel Dashboard → Project → Settings → Environment Variables**.
 
-Update `NEXT_PUBLIC_APP_URL` to your Vercel domain (e.g. `https://kaali.absoluteapplabs.com`).
+Update `NEXT_PUBLIC_APP_URL` to your Vercel domain (e.g. `https://kaali.nivochat.idataone.com`).
 
 ---
 
@@ -188,7 +188,7 @@ Update `NEXT_PUBLIC_APP_URL` to your Vercel domain (e.g. `https://kaali.absolute
 Once deployed, each client gets a unique one-liner:
 
 ```html
-<script src="https://kaali.absoluteapplabs.com/widget.js?id=TENANT_ID" async></script>
+<script src="https://kaali.nivochat.idataone.com/widget.js?id=TENANT_ID" async></script>
 ```
 
 The widget fetches config from `/api/widget-config/:tenantId` and all chat goes through `/api/chat`.  
@@ -225,4 +225,4 @@ The widget fetches config from `/api/widget-config/:tenantId` and all chat goes 
 
 ---
 
-*Built by Absolute App Labs · [absoluteapplabs.com](https://absoluteapplabs.com)*
+*Built by NivoChat · [nivochat.idataone.com](https://nivochat.idataone.com)*

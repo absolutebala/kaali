@@ -1,6 +1,6 @@
 # Kaali — Complete Setup Guide
 
-> Phase 1 + Phase 2 · Built by Absolute App Labs
+> Phase 1 + Phase 2 · Built by NivoChat
 
 ---
 
@@ -121,7 +121,7 @@ Update `NEXT_PUBLIC_APP_URL` to your Vercel domain.
 Once deployed, every registered client gets:
 
 ```html
-<script src="https://kaali.absoluteapplabs.com/widget.js?id=THEIR_TENANT_ID" async></script>
+<script src="https://kaali.nivochat.idataone.com/widget.js?id=THEIR_TENANT_ID" async></script>
 ```
 
 - Bot fetches config from `/api/widget-config/:tenantId` (public, no auth)
@@ -180,4 +180,4 @@ Once deployed, every registered client gets:
 
 ---
 
-*Built by [Absolute App Labs](https://absoluteapplabs.com)*
+*Built by [NivoChat](https://nivochat.idataone.com)*

@@ -11,7 +11,7 @@ const TEST_TENANT = {
   lastName:    'Automation',
   name:        'Test Automation',
   company:     'Test Company Automation',
-  email:       `test-automation+${Date.now()}@absoluteapplabs.com`,
+  email:       `test-automation+${Date.now()}@nivochat.idataone.com`,
   password:    'TestPass123!',
 }
 
@@ -59,7 +59,7 @@ async function setupSuperAdmin() {
   const res = await api('/api/superadmin/auth/login', {
     method: 'POST',
     body: JSON.stringify({
-      email:    process.env.SUPERADMIN_EMAIL    || 'admin@absoluteapplabs.com',
+      email:    process.env.SUPERADMIN_EMAIL    || 'admin@nivochat.idataone.com',
       password: process.env.SUPERADMIN_PASSWORD || 'admin',
     }),
   })
