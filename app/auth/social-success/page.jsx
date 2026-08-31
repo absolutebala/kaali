@@ -1,8 +1,8 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function SocialSuccessPage() {
+function SocialSuccessInner() {
   const router = useRouter()
   const params = useSearchParams()
 
@@ -24,5 +24,17 @@ export default function SocialSuccessPage() {
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
       </div>
     </div>
+  )
+}
+
+export default function SocialSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#F8FAFC' }}>
+        <div style={{ fontSize:15, color:'#64748B' }}>Loading…</div>
+      </div>
+    }>
+      <SocialSuccessInner />
+    </Suspense>
   )
 }

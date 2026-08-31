@@ -1,7 +1,7 @@
 import { NextResponse }    from 'next/server'
 import { createClient }    from '@supabase/supabase-js'
 import { supabaseAdmin }   from '@/lib/supabase'
-import { generateToken }   from '@/lib/auth'
+import { signToken }       from '@/lib/auth'
 
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url)
@@ -61,7 +61,7 @@ export async function GET(request) {
     }
 
     // Generate JWT token for our app
-    const token = generateToken({ tenantId: tenant.id, email: tenant.email })
+    const token = signToken({ tenantId: tenant.id, email: tenant.email })
 
     // Redirect to dashboard with token in URL (client will store it)
     return NextResponse.redirect(`${origin}/auth/social-success?token=${token}`)
