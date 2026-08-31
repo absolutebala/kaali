@@ -41,7 +41,8 @@ function SocialSuccessInner() {
         if (!res.ok) throw new Error(data.error || 'Login failed')
 
         localStorage.setItem('kaali_token', data.token)
-        router.replace('/dashboard')
+        const isNew = data.isNew
+        router.replace(isNew ? '/dashboard/knowledge' : '/dashboard')
       } catch (err) {
         console.error('Social login error:', err.message)
         router.replace(`/auth/login?error=${encodeURIComponent(err.message)}`)

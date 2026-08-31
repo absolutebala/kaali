@@ -73,7 +73,7 @@ export default function RegisterPage() {
           body: JSON.stringify({ aiProvider: provider, apiKey: form.apiKey, aiModel: form.model }),
         })
       }
-      router.replace('/dashboard')
+      router.replace('/dashboard/knowledge')
     } catch (err) { setError(err.message) }
     finally { setLoading(false) }
   }

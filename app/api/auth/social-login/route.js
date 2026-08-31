@@ -5,6 +5,7 @@ import { signToken }     from '@/lib/auth'
 export async function POST(request) {
   try {
     const { email, name, provider, company } = await request.json()
+    let isNew = false
 
     if (!email) return NextResponse.json({ error: 'No email' }, { status: 400 })
 
@@ -37,10 +38,11 @@ export async function POST(request) {
 
       if (createErr) throw new Error(createErr.message)
       tenant = newTenant
+      isNew = true
     }
 
     const token = signToken({ tenantId: tenant.id, email: tenant.email })
-    return NextResponse.json({ token, tenant: { id: tenant.id, name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan } })
+    return NextResponse.json({ token, isNew, tenant: { id: tenant.id, name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan } })
   } catch (err) {
     console.error('[SocialLogin]', err.message)
     return NextResponse.json({ error: err.message }, { status: 500 })
