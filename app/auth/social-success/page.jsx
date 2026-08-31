@@ -1,19 +1,54 @@
 'use client'
 import { useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase'
 
 function SocialSuccessInner() {
   const router = useRouter()
-  const params = useSearchParams()
 
   useEffect(() => {
-    const token = params.get('token')
-    if (token) {
-      localStorage.setItem('kaali_token', token)
-      router.replace('/dashboard')
-    } else {
-      router.replace('/auth/login?error=social_login_failed')
+    async function handleOAuth() {
+      try {
+        // Supabase puts tokens in the URL hash — getSession reads them automatically
+        const { data: { session }, error } = await supabase.auth.getSession()
+
+        if (error || !session) {
+          console.error('No session:', error?.message)
+          router.replace('/auth/login?error=social_login_failed')
+          return
+        }
+
+        const oauthUser = session.user
+        const email     = oauthUser.email
+        const fullName  = oauthUser.user_metadata?.full_name || oauthUser.user_metadata?.name || email.split('@')[0]
+        const provider  = oauthUser.app_metadata?.provider || 'oauth'
+
+        // Call our API to create/fetch tenant and get our JWT
+        const res = await fetch('/api/auth/social-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            name: fullName,
+            provider,
+            accessToken: session.access_token,
+            company: oauthUser.user_metadata?.hd || email.split('@')[1]?.split('.')[0] || 'My Company',
+          }),
+        })
+
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Login failed')
+
+        localStorage.setItem('kaali_token', data.token)
+        router.replace('/dashboard')
+      } catch (err) {
+        console.error('Social login error:', err.message)
+        router.replace(`/auth/login?error=${encodeURIComponent(err.message)}`)
+      }
     }
+
+    handleOAuth()
   }, [])
 
   return (
