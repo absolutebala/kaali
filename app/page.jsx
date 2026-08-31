@@ -120,6 +120,8 @@ export default function LandingPage() {
 
   return (
     <>
+      {/* Google Tag Manager (noscript) */}
+      <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T998Q8V6" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
