@@ -62,10 +62,10 @@ export default function LandingPage() {
       },
     ]
     return (
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:36 }}>
+      <div className="pricing-grid" style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:24, alignItems:'start', paddingTop:36 }}>
         {plans.map(p => (
           <div key={p.name} className={`card${p.popular?' pricing-popular':''}`}
-            style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? -16 : 0, zIndex: p.popular ? 2 : 1 }}>
+            style={{ padding:36, display:'flex', flexDirection:'column', position:'relative', marginTop: p.popular ? -16 : 0, zIndex: p.popular ? 2 : 1 }} className={p.popular ? 'pricing-popular-card' : ''}>
             {p.popular && (
               <div style={{ position:'absolute', top:-18, left:'50%', transform:'translateX(-50%)', background:'#2563EB', color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'1.5px', textTransform:'uppercase', padding:'6px 20px', borderRadius:99, boxShadow:'0 4px 12px rgba(37,99,235,0.35)', whiteSpace:'nowrap' }}>Most Popular</div>
             )}
@@ -140,6 +140,49 @@ export default function LandingPage() {
         .pricing-popular { border:2px solid #2563EB !important; box-shadow:0 8px 40px rgba(37,99,235,0.18) !important; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
         .pulse { animation:pulse 2s ease-in-out infinite; }
+
+        /* ── Mobile Responsive ── */
+        @media (max-width: 768px) {
+          /* Hero */
+          .hero-section { padding: 100px 20px 60px !important; }
+          .hero-btns { flex-direction: column !important; }
+          .hero-btns a, .hero-btns button { width: 100% !important; text-align: center !important; justify-content: center !important; }
+          .browser-mockup { display: none !important; }
+          .hero-checks { flex-direction: column !important; gap: 8px !important; align-items: flex-start !important; padding-left: 20px !important; }
+
+          /* How it works - stack vertically */
+          .flow-grid { display: flex !important; flex-direction: column !important; gap: 32px !important; }
+          .flow-connector { display: none !important; }
+          .flow-step-card { width: 100% !important; }
+
+          /* Install section */
+          .install-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .code-panel { display: none !important; }
+
+          /* Integrations */
+          .integrations-grid { grid-template-columns: 1fr !important; }
+
+          /* Pricing */
+          .pricing-grid { grid-template-columns: 1fr !important; gap: 32px !important; padding-top: 48px !important; }
+          .pricing-popular-card { margin-top: 0 !important; }
+
+          /* Analytics table */
+          .analytics-card { overflow-x: auto !important; }
+
+          /* Footer */
+          .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+          .footer-brand { grid-column: 1 / -1 !important; }
+
+          /* Section padding */
+          .section-pad { padding: 60px 20px !important; }
+          .section-title { font-size: 28px !important; }
+          .section-sub { font-size: 15px !important; }
+        }
+
+        @media (max-width: 480px) {
+          .footer-grid { grid-template-columns: 1fr !important; }
+          .pricing-grid { padding-top: 32px !important; }
+        }
         @media (max-width:768px) { .hide-mobile { display:none!important; } }
 
         /* How it works visual */
@@ -185,7 +228,7 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="hero-gradient" style={{ padding:'80px 24px 120px', paddingTop:152, textAlign:'center', overflow:'hidden' }}>
+      <section className="hero-gradient hero-section" style={{ padding:'80px 24px 120px', paddingTop:152, textAlign:'center', overflow:'hidden' }}>
         <div style={{ maxWidth:860, margin:'0 auto' }}>
           <h1 style={{ fontSize:'clamp(36px,6vw,66px)', fontWeight:900, color:'#0F172A', lineHeight:1.1, letterSpacing:'-.03em', marginBottom:22 }}>
             Don't make your customers search.<br />
@@ -194,11 +237,11 @@ export default function LandingPage() {
           <p style={{ fontSize:18, color:'#64748B', maxWidth:560, margin:'0 auto 36px', lineHeight:1.7 }}>
             NivoChat gives your website an AI assistant trained on your business that answers questions, captures leads, and hands conversations to your team when needed.
           </p>
-          <div style={{ display:'flex', flexWrap:'wrap', gap:12, justifyContent:'center', marginBottom:32 }}>
+          <div className="hero-btns" style={{ display:'flex', flexWrap:'wrap', gap:12, justifyContent:'center', marginBottom:32 }}>
             <Link href="/auth/register" className="btn-primary">Start Free — No credit card →</Link>
             <a href="https://wa.me/916385155341" target="_blank" rel="noopener" className="btn-secondary" style={{ background:'#25D366', color:'#fff', border:'none' }}>💬 WhatsApp Us</a>
           </div>
-          <div style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:24, fontSize:13, color:'#64748B', fontWeight:500 }}>
+          <div className="hero-checks" style={{ display:'flex', flexWrap:'wrap', justifyContent:'center', gap:24, fontSize:13, color:'#64748B', fontWeight:500 }}>
             {['No credit card required','Set up in 5 minutes','Cancel anytime'].map(t => (
               <span key={t} style={{ display:'flex', alignItems:'center', gap:6 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5"><path d="M5 13l4 4L19 7"/></svg>
@@ -209,7 +252,7 @@ export default function LandingPage() {
         </div>
 
         {/* Browser mockup */}
-        <div style={{ maxWidth:960, margin:'56px auto 0', borderRadius:20, border:'1px solid rgba(226,232,240,0.8)', background:'#fff', boxShadow:'0 24px 80px rgba(0,0,0,0.10)', overflow:'hidden', textAlign:'left' }}>
+        <div className="browser-mockup" style={{ maxWidth:960, margin:'56px auto 0', borderRadius:20, border:'1px solid rgba(226,232,240,0.8)', background:'#fff', boxShadow:'0 24px 80px rgba(0,0,0,0.10)', overflow:'hidden', textAlign:'left' }}>
           <div style={{ padding:'14px 20px', background:'#F1F5F9', borderBottom:'1px solid #E2E8F0', display:'flex', alignItems:'center', gap:12 }}>
             <div style={{ display:'flex', gap:6 }}>
               {[0,1,2].map(i => <div key={i} style={{ width:11, height:11, borderRadius:'50%', background:'#CBD5E1' }} />)}
@@ -258,12 +301,12 @@ export default function LandingPage() {
       <section id="how-it-works" style={{ padding:'100px 24px 100px', background:'#F0F4FF' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ textAlign:'center', marginBottom:64 }}>
-            <h2 style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>How NivoChat works</h2>
+            <h2 className="section-title" style={{ fontSize:38, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:14 }}>How NivoChat works</h2>
             <p style={{ fontSize:17, color:'#64748B' }}>From visitor to valuable customer in four simple steps</p>
           </div>
 
           {/* Visual flow */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 40px 1fr 40px 1fr 40px 1fr', alignItems:'center', gap:0, marginBottom:0 }}>
+          <div className="flow-grid" style={{ display:'grid', gridTemplateColumns:'1fr 40px 1fr 40px 1fr 40px 1fr', alignItems:'center', gap:0, marginBottom:0 }}>
             {/* Step 1 */}
             <div style={{ textAlign:'center' }}>
               <div style={{ fontSize:42, fontWeight:900, color:'rgba(37,99,235,0.18)', marginBottom:12 }}>01</div>
@@ -288,7 +331,7 @@ export default function LandingPage() {
             </div>
 
             {/* Connector */}
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
+            <div className="flow-connector" style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
               <div style={{ height:2, width:'100%', background:'linear-gradient(90deg,#BFDBFE,#93C5FD)', borderRadius:1, position:'relative' }}>
                 <div style={{ position:'absolute', right:-5, top:'50%', transform:'translateY(-50%)', width:10, height:10, borderRadius:'50%', background:'#2563EB', boxShadow:'0 0 0 3px rgba(37,99,235,0.2)' }} />
               </div>
@@ -315,7 +358,7 @@ export default function LandingPage() {
             </div>
 
             {/* Connector */}
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
+            <div className="flow-connector" style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
               <div style={{ height:2, width:'100%', background:'linear-gradient(90deg,#93C5FD,#BFDBFE)', borderRadius:1, position:'relative' }}>
                 <div style={{ position:'absolute', right:-5, top:'50%', transform:'translateY(-50%)', width:10, height:10, borderRadius:'50%', background:'#2563EB', boxShadow:'0 0 0 3px rgba(37,99,235,0.2)' }} />
               </div>
@@ -345,7 +388,7 @@ export default function LandingPage() {
             </div>
 
             {/* Connector */}
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
+            <div className="flow-connector" style={{ display:'flex', alignItems:'center', justifyContent:'center', paddingBottom:80 }}>
               <div style={{ height:2, width:'100%', background:'linear-gradient(90deg,#BFDBFE,#93C5FD)', borderRadius:1, position:'relative' }}>
                 <div style={{ position:'absolute', right:-5, top:'50%', transform:'translateY(-50%)', width:10, height:10, borderRadius:'50%', background:'#2563EB', boxShadow:'0 0 0 3px rgba(37,99,235,0.2)' }} />
               </div>
@@ -381,7 +424,7 @@ export default function LandingPage() {
 
       {/* ── INSTALL IN 5 MINUTES ── */}
       <section id="integrations" style={{ padding:'100px 24px', background:'#fff', borderTop:'1px solid #E2E8F0' }}>
-        <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
+        <div className="install-grid" style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
           <div>
             <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'5px 14px', borderRadius:99, background:'#EFF6FF', color:'#2563EB', fontSize:12, fontWeight:700, marginBottom:20 }}>
               ⚡ Setup in 5 minutes
@@ -413,7 +456,7 @@ export default function LandingPage() {
 
           {/* Code snippet */}
           <div>
-            <div style={{ background:'#0F172A', borderRadius:18, overflow:'hidden', boxShadow:'0 24px 60px rgba(0,0,0,0.2)' }}>
+            <div className="code-panel" style={{ background:'#0F172A', borderRadius:18, overflow:'hidden', boxShadow:'0 24px 60px rgba(0,0,0,0.2)' }}>
               {/* Terminal bar */}
               <div style={{ padding:'14px 20px', background:'#1E293B', display:'flex', alignItems:'center', gap:8 }}>
                 <div style={{ display:'flex', gap:6 }}>
@@ -501,7 +544,7 @@ export default function LandingPage() {
           <div style={{ fontSize:12, fontWeight:700, color:'#64748B', letterSpacing:'2px', textTransform:'uppercase', marginBottom:16 }}>Works with your existing tools</div>
           <h2 style={{ fontSize:34, fontWeight:800, color:'#0F172A', letterSpacing:'-.02em', marginBottom:12 }}>Connect your favourite tools</h2>
           <p style={{ fontSize:16, color:'#64748B', maxWidth:520, margin:'0 auto 48px', lineHeight:1.7 }}>NivoChat connects with the tools you already use — no extra setup needed.</p>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:20, textAlign:'left' }}>
+          <div className="integrations-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:20, textAlign:'left' }}>
             {[
               { icon:'🟠', name:'HubSpot', desc:'Auto-create and update contacts in HubSpot when a lead is captured. Zero manual entry.', badge:'CRM' },
               { icon:'⚡', name:'Zapier', desc:'Connect to 6,000+ apps. Fire a Zap on every lead capture — Slack, Sheets, email, you name it.', badge:'Automation' },
@@ -538,9 +581,9 @@ export default function LandingPage() {
       {/* ── FOOTER (iDataOne style) ── */}
       <footer style={{ background:'#0B1120', color:'#CBD5E1', padding:'56px 24px 32px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto' }}>
-          <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>
+          <div className="footer-grid" style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>
             {/* Brand */}
-            <div>
+            <div className="footer-brand">
               <div style={{ marginBottom:16 }}>
                 <img src="/logo.png" alt="NivoChat" style={{ height:52, width:'auto', objectFit:'contain' }} />
               </div>
