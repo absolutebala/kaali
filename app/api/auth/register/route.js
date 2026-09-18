@@ -12,10 +12,12 @@ export async function POST(request) {
 
     // ── Validate ────────────────────────────────────────────
     if (!name || !company || !email || !password) {
-      return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
+      sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
+    return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
     }
     if (password.length < 8) {
-      return NextResponse.json({ error: 'Password must be at least 8 characters.' }, { status: 400 })
+      sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
+    return NextResponse.json({ error: 'Password must be at least 8 characters.' }, { status: 400 })
     }
 
     // ── Check if email already registered ───────────────────
@@ -26,7 +28,8 @@ export async function POST(request) {
       .single()
 
     if (existing) {
-      return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 409 })
+      sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
+    return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 409 })
     }
 
     // ── Create tenant ────────────────────────────────────────
@@ -54,7 +57,8 @@ export async function POST(request) {
 
     if (insertError) {
       console.error('[Register] DB error:', insertError)
-      return NextResponse.json({ error: 'Failed to create account. Please try again.' }, { status: 500 })
+      sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
+    return NextResponse.json({ error: 'Failed to create account. Please try again.' }, { status: 500 })
     }
 
     // ── Sign JWT ─────────────────────────────────────────────
@@ -64,6 +68,7 @@ export async function POST(request) {
       company:  tenant.company,
     })
 
+    sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
     return NextResponse.json({
       token,
       tenant: {
@@ -78,6 +83,7 @@ export async function POST(request) {
 
   } catch (err) {
     console.error('[Register] Unexpected error:', err)
+    sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: tenant.plan || 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
   }
 }

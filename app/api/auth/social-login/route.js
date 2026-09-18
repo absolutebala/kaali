@@ -1,6 +1,7 @@
 import { NextResponse }  from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { signToken }     from '@/lib/auth'
+import { signToken } from '@/lib/auth'
+import { sendNewTenantAlert } from '@/lib/email'     from '@/lib/auth'
 
 export async function POST(request) {
   try {
@@ -39,6 +40,7 @@ export async function POST(request) {
       if (createErr) throw new Error(createErr.message)
       tenant = newTenant
       isNew = true
+      sendNewTenantAlert({ name: tenant.name, email: tenant.email, company: tenant.company, plan: 'starter', createdAt: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' }) + ' IST' }).catch(() => {})
     }
 
     const token = signToken({ tenantId: tenant.id, email: tenant.email })
