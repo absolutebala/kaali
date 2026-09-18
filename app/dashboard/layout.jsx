@@ -49,6 +49,14 @@ export default function DashboardLayout({ children }) {
     if (typeof window !== 'undefined') {
       setIsImpersonating(!!localStorage.getItem('sa_impersonating'))
       fetch('/api/platform-settings?t=' + Date.now()).then(r=>r.json()).then(d=>{ if(d.logoUrl) setLogoUrl(d.logoUrl + '?t=' + Date.now()) }).catch(()=>{})
+      // Load sites for Growth/Enterprise
+      const tok = localStorage.getItem('kaali_token')
+      if (tok) {
+        fetch('/api/sites', { headers: { Authorization: `Bearer ${tok}` } })
+          .then(r=>r.json()).then(d=>{ if(d.sites?.length) setSites(d.sites) }).catch(()=>{})
+        const storedLabel = localStorage.getItem('kaali_site_label')
+        if (storedLabel) setActiveSiteLabel(storedLabel)
+      }
     }
   }, [loading, user, router])
 
