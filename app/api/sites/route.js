@@ -59,7 +59,7 @@ export async function POST(request) {
   const { data: newSite, error: createErr } = await supabaseAdmin
     .from('tenants').insert({
       name:                root.name,
-      email:               root.email,
+      email:               `site_${Date.now()}@internal.nivochat`,
       password_hash:       root.password_hash,
       company:             root.company,
       plan:                root.plan,
