@@ -121,7 +121,7 @@ export default function LandingPage() {
   return (
     <>
       {/* NivoChat widget */}
-      <script src="https://nivochat.idataone.com/widget.js?id=837d7fc7-cd93-437c-957d-9a7dbbab4214" async></script>
+      <script src="https://nivochat.idataone.com/widget.js?id=942ba6ca-ac99-4ea2-9d43-5297f3d3eeee" async></script>
 
       {/* Google Tag Manager (noscript) */}
       <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T998Q8V6" height="0" width="0" style="display:none;visibility:hidden"></iframe>` }} />
