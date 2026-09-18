@@ -11,6 +11,7 @@ const MODELS = {
 
 export default function ApiUsagePage() {
   const { user, refreshUser }   = useAuth()
+  const isChildSite = !!user?.parentTenantId
   const [usage,    setUsage]    = useState(null)
   const [provider, setProv]     = useState('claude')
   const [apiKey,   setApiKey]   = useState('')
@@ -89,6 +90,12 @@ export default function ApiUsagePage() {
       <div className="kb-card">
         <div className="kb-header"><span className="kb-title">AI Provider & API Key</span></div>
         <div className="card-body">
+          {isChildSite ? (
+            <div style={{ padding:'16px 20px', background:'rgba(34,209,122,.08)', border:'0.5px solid rgba(34,209,122,.2)', borderRadius:10, fontSize:13, color:'var(--ts)', lineHeight:1.7 }}>
+              ✅ <strong>Inherited from Main Site</strong> — this site uses the same AI key and provider as your main site. No separate configuration needed.<br/><br/>
+              To change provider or key, switch to your <strong>Main Site</strong> and update it there.
+            </div>
+          ) : <>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:16 }}>
             {[
               { id:'claude',  icon:'🤖', name:'Claude',  desc:'Anthropic — nuanced, conversational' },

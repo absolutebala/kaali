@@ -174,9 +174,18 @@ export async function POST(request) {
     }
 
     // ── CALL AI ───────────────────────────────────────────────
-    // Growth/Enterprise: use global API key if tenant has no personal key
+    // Child site: inherit API key from parent tenant
     let tenantForAI = tenant
-    if (!tenant.api_key_enc && ['growth','enterprise'].includes(tenant.plan)) {
+    if (!tenant.api_key_enc && tenant.parent_tenant_id) {
+      const { data: parentTenant } = await supabaseAdmin
+        .from('tenants').select('*').eq('id', tenant.parent_tenant_id).single()
+      if (parentTenant?.api_key_enc) {
+        tenantForAI = { ...tenant, api_key_enc: parentTenant.api_key_enc, ai_provider: parentTenant.ai_provider, ai_model: parentTenant.ai_model }
+      }
+    }
+
+    // Growth/Enterprise: use global API key if tenant has no personal key
+    if (!tenantForAI.api_key_enc && ['growth','enterprise'].includes(tenant.plan)) {
       // Fetch global key from platform_settings
       const { data: ps } = await supabaseAdmin.from('platform_settings').select('global_api_key,global_provider,global_model').eq('id','singleton').single().catch(()=>({ data: null }))
       if (ps?.global_api_key) {
