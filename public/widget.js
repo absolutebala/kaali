@@ -846,15 +846,20 @@
       console.warn('[Kaali] Could not load widget config:', e.message)
       // Use minimal fallback so widget still appears
       config = {
-        tenantId, botName: 'Kaali', company: 'us',
+        tenantId, botName: 'Assistant', company: 'us',
         apiUrl: `${API_BASE}/api/chat`,
         calendly: '', limited: false,
+        bubbleColor: '#4F8EF7', widgetMode: 'bubble',
+        visitorBtn1: 'I am looking to build a product',
+        visitorBtn2: 'I am your existing client',
+        visitorBtn3: 'I am an investor',
+        visitorBtn4: 'Just exploring',
       }
     }
 
     injectStyles()
     buildDOM(config)
-    setTimeout(() => applyTenantStyle(config), 150)
+    setTimeout(() => applyTenantStyle(config), 300)
 
     // Show unread badge after 15s
     setTimeout(() => {
