@@ -1,7 +1,7 @@
 import { NextResponse }  from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { signToken } from '@/lib/auth'
-import { sendNewTenantAlert } from '@/lib/email'     from '@/lib/auth'
+import { sendNewTenantAlert } from '@/lib/email'
 
 export async function POST(request) {
   try {
