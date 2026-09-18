@@ -38,6 +38,11 @@ export default function DashboardLayout({ children }) {
   const path   = usePathname()
   const [isImpersonating, setIsImpersonating] = useState(false)
   const [logoUrl, setLogoUrl] = useState('')
+  const [sites, setSites] = useState([])
+  const [activeSiteLabel, setActiveSiteLabel] = useState('Main Site')
+  const [showSiteMenu, setShowSiteMenu] = useState(false)
+  const [addingSite, setAddingSite] = useState(false)
+  const [newSiteLabel, setNewSiteLabel] = useState('')
 
   useEffect(() => {
     if (!loading && !user) router.replace('/auth/login')
@@ -75,6 +80,42 @@ export default function DashboardLayout({ children }) {
       })
     : NAV_FULL
 
+  async function createSite() {
+    if (!newSiteLabel.trim()) return
+    setAddingSite(true)
+    try {
+      const tok = localStorage.getItem('kaali_token')
+      const res = await fetch('/api/sites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok}` },
+        body: JSON.stringify({ label: newSiteLabel.trim() }),
+      })
+      const d = await res.json()
+      if (!res.ok) { alert(d.error); return }
+      // Switch to new site
+      localStorage.setItem('kaali_token', d.token)
+      localStorage.setItem('kaali_site_label', d.site.site_label)
+      window.location.href = '/dashboard/knowledge'
+    } catch(e) { alert(e.message) }
+    finally { setAddingSite(false) }
+  }
+
+  function switchSite(site) {
+    const tok = localStorage.getItem('kaali_token')
+    // Get token for this site
+    fetch('/api/sites/switch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok}` },
+      body: JSON.stringify({ siteId: site.id }),
+    }).then(r=>r.json()).then(d=>{
+      if (d.token) {
+        localStorage.setItem('kaali_token', d.token)
+        localStorage.setItem('kaali_site_label', site.site_label)
+        window.location.href = '/dashboard'
+      }
+    })
+  }
+
   function handleLogout() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('sa_token')
@@ -107,6 +148,45 @@ export default function DashboardLayout({ children }) {
             padding:'2px 10px', borderRadius:10 }}>
             {(user.plan||'starter').charAt(0).toUpperCase()+(user.plan||'starter').slice(1)}
           </div>
+
+          {/* Site switcher - Growth/Enterprise only */}
+          {['growth','enterprise'].includes(user.plan) && (
+            <div style={{ marginTop:12, position:'relative' }}>
+              <button onClick={()=>setShowSiteMenu(v=>!v)}
+                style={{ width:'100%', padding:'7px 10px', background:'rgba(255,255,255,.07)', border:'0.5px solid rgba(255,255,255,.15)', borderRadius:8, color:'rgba(255,255,255,.85)', fontSize:12, fontWeight:500, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                <span>🌐 {activeSiteLabel}</span>
+                <span style={{ opacity:.6 }}>▾</span>
+              </button>
+              {showSiteMenu && (
+                <div style={{ position:'absolute', top:'calc(100% + 4px)', left:0, right:0, background:'#2A2650', border:'0.5px solid rgba(255,255,255,.15)', borderRadius:10, zIndex:100, overflow:'hidden' }}>
+                  {sites.map(s => (
+                    <div key={s.id} onClick={()=>{ switchSite(s); setShowSiteMenu(false) }}
+                      style={{ padding:'9px 12px', fontSize:12, color:'rgba(255,255,255,.8)', cursor:'pointer', borderBottom:'0.5px solid rgba(255,255,255,.07)' }}
+                      onMouseOver={e=>e.currentTarget.style.background='rgba(255,255,255,.08)'}
+                      onMouseOut={e=>e.currentTarget.style.background='transparent'}>
+                      {s.site_label || 'Main Site'}
+                    </div>
+                  ))}
+                  <div style={{ padding:'8px 12px', borderTop:'0.5px solid rgba(255,255,255,.1)' }}>
+                    {!addingSite ? (
+                      <button onClick={()=>setAddingSite(true)}
+                        style={{ width:'100%', padding:'6px', background:'rgba(255,92,0,.2)', border:'0.5px solid rgba(255,92,0,.4)', borderRadius:6, color:'#FF8C42', fontSize:11, fontWeight:600, cursor:'pointer' }}>
+                        + Add New Site
+                      </button>
+                    ) : (
+                      <div style={{ display:'flex', gap:4 }}>
+                        <input autoFocus value={newSiteLabel} onChange={e=>setNewSiteLabel(e.target.value)}
+                          placeholder="Site name…" onKeyDown={e=>e.key==='Enter'&&createSite()}
+                          style={{ flex:1, padding:'5px 8px', background:'rgba(255,255,255,.08)', border:'0.5px solid rgba(255,255,255,.2)', borderRadius:6, color:'#fff', fontSize:11, outline:'none' }} />
+                        <button onClick={createSite} style={{ padding:'5px 8px', background:'var(--ac)', border:'none', borderRadius:6, color:'#fff', fontSize:11, cursor:'pointer', fontWeight:600 }}>✓</button>
+                        <button onClick={()=>setAddingSite(false)} style={{ padding:'5px 8px', background:'rgba(255,255,255,.08)', border:'none', borderRadius:6, color:'#fff', fontSize:11, cursor:'pointer' }}>✕</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Nav */}

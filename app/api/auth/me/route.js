@@ -21,6 +21,7 @@ export async function GET(request) {
       id: payload.tenantId, name: member.name, email: member.email,
       company: tenantData?.company || '', plan: tenantData?.plan || 'starter',
       botName: tenantData?.bot_name || 'Assistant', avatarUrl: tenantData?.avatar_url || '',
+      siteLabel: tenantData?.site_label || 'Main Site', parentTenantId: tenantData?.parent_tenant_id || null,
       bubbleColor: tenantData?.bubble_color || '#4F8EF7', widgetMode: tenantData?.widget_mode || 'bubble',
       isMember: true, memberRole: member.role, allowedPages: member.allowed_pages || [],
     }})
@@ -28,7 +29,7 @@ export async function GET(request) {
 
   const { data: tenant, error: dbErr } = await supabaseAdmin
     .from('tenants')
-    .select('id, name, company, email, plan, bot_name, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, zoho_token, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode, created_at')
+    .select('id, name, company, email, plan, bot_name, site_label, parent_tenant_id, description, tone, ai_provider, ai_model, calendly_url, conversations_used, conversations_limit, alert_email, alert_threshold, hubspot_token, zapier_webhook_url, zoho_token, avatar_url, bubble_color, widget_mode, visitor_btn_1, visitor_btn_2, visitor_btn_3, visitor_btn_4, b2b_mode, created_at')
     .eq('id', payload.tenantId)
     .single()
 
