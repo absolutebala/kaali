@@ -48,14 +48,30 @@ export default function DashboardLayout({ children }) {
     if (!loading && !user) router.replace('/auth/login')
     if (typeof window !== 'undefined') {
       setIsImpersonating(!!localStorage.getItem('sa_impersonating'))
+      // Clear bad stored label
+      if (localStorage.getItem('kaali_site_label') === 'null') {
+        localStorage.removeItem('kaali_site_label')
+      }
       fetch('/api/platform-settings?t=' + Date.now()).then(r=>r.json()).then(d=>{ if(d.logoUrl) setLogoUrl(d.logoUrl + '?t=' + Date.now()) }).catch(()=>{})
       // Load sites for Growth/Enterprise
       const tok = localStorage.getItem('kaali_token')
       if (tok) {
         fetch('/api/sites', { headers: { Authorization: `Bearer ${tok}` } })
-          .then(r=>r.json()).then(d=>{ if(d.sites?.length) setSites(d.sites) }).catch(()=>{})
+          .then(r=>r.json()).then(d=>{
+            if (d.sites?.length) {
+              setSites(d.sites)
+              // Auto-set label from current active site
+              const stored = localStorage.getItem('kaali_site_label')
+              if (!stored || stored === 'null') {
+                // Find which site matches current token by checking user
+                const currentSite = d.sites.find(s => s.id === user?.id)
+                if (currentSite) setActiveSiteLabel(currentSite.site_label || 'Main Site')
+                else setActiveSiteLabel(d.sites[0]?.site_label || 'Main Site')
+              }
+            }
+          }).catch(()=>{})
         const storedLabel = localStorage.getItem('kaali_site_label')
-        if (storedLabel) setActiveSiteLabel(storedLabel)
+        if (storedLabel && storedLabel !== 'null') setActiveSiteLabel(storedLabel)
       }
     }
   }, [loading, user, router])
@@ -118,7 +134,7 @@ export default function DashboardLayout({ children }) {
     }).then(r=>r.json()).then(d=>{
       if (d.token) {
         localStorage.setItem('kaali_token', d.token)
-        localStorage.setItem('kaali_site_label', site.site_label)
+        localStorage.setItem('kaali_site_label', site.site_label || 'Main Site')
         window.location.href = '/dashboard'
       }
     })
