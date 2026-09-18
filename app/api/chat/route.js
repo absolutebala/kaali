@@ -187,7 +187,8 @@ export async function POST(request) {
     // Growth/Enterprise: use global API key if tenant has no personal key
     if (!tenantForAI.api_key_enc && ['growth','enterprise'].includes(tenant.plan)) {
       // Fetch global key from platform_settings
-      const { data: ps } = await supabaseAdmin.from('platform_settings').select('global_api_key,global_provider,global_model').eq('id','singleton').single().catch(()=>({ data: null }))
+      const { data: ps, error: psErr } = await supabaseAdmin.from('platform_settings').select('global_api_key,global_provider,global_model').eq('id','singleton').single().catch((e) => ({ data: null, error: e }))
+      console.log('[GlobalKey] ps:', ps?.global_api_key ? 'SET' : 'NOT SET', 'err:', psErr?.message)
       if (ps?.global_api_key) {
         // Inject global key into tenant object for callAI
         tenantForAI = {
