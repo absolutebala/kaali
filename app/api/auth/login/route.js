@@ -42,15 +42,16 @@ export async function POST(request) {
       })
     }
 
-    // ── Fetch tenant ──────────────────────────────────────────
-    const { data: tenant, error } = await supabaseAdmin
+    // ── Fetch tenant (root only — ignore child sites) ────────
+    const { data: tenants } = await supabaseAdmin
       .from('tenants')
       .select('id, name, company, email, password_hash, plan, bot_name, tone, ai_provider, ai_model, calendly_url, alert_threshold')
       .eq('email', email.toLowerCase().trim())
-      .single()
+      .is('parent_tenant_id', null)
+      .order('created_at', { ascending: true })
 
-    if (error || !tenant) {
-      // Use generic message to prevent email enumeration
+    const tenant = tenants?.[0]
+    if (!tenant) {
       return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
     }
 

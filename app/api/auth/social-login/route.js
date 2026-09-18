@@ -10,12 +10,14 @@ export async function POST(request) {
 
     if (!email) return NextResponse.json({ error: 'No email' }, { status: 400 })
 
-    // Find or create tenant
-    let { data: tenant } = await supabaseAdmin
+    // Find root tenant only (ignore child sites with same email)
+    const { data: rootTenants } = await supabaseAdmin
       .from('tenants')
       .select('*')
       .eq('email', email)
-      .maybeSingle()
+      .is('parent_tenant_id', null)
+      .order('created_at', { ascending: true })
+    let tenant = rootTenants?.[0] || null
 
     if (!tenant) {
       const companyName = (company || email.split('@')[1]?.split('.')[0] || 'My Company')
