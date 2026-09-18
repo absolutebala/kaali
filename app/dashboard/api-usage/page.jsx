@@ -158,6 +158,8 @@ export default function ApiUsagePage() {
             <button className="btn-sec btn-sm" onClick={testConnection}>Test Connection</button>
             {testMsg && <span style={{ fontSize:12, color: testMsg.startsWith('✓') ? 'var(--gr)' : 'var(--tm)' }}>{testMsg}</span>}
           </div>
+        </>
+        }
         </div>
       </div>
 
