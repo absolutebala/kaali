@@ -55,6 +55,12 @@ export async function POST(request) {
     }
 
     // ── Verify password ───────────────────────────────────────
+    // OAuth accounts can't use email/password login
+    if (tenant.password_hash?.startsWith('oauth:')) {
+      const provider = tenant.password_hash.split(':')[1] || 'social'
+      const providerName = provider === 'google' ? 'Google' : provider === 'linkedin_oidc' ? 'LinkedIn' : 'social login'
+      return NextResponse.json({ error: `This account was created with ${providerName}. Please use the "${providerName === 'Google' ? 'Continue with Google' : 'Continue with LinkedIn'}" button to sign in.` }, { status: 401 })
+    }
     const valid = await verifyPassword(password, tenant.password_hash)
     if (!valid) {
       return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
