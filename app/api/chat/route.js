@@ -39,6 +39,7 @@ export async function POST(request) {
     const { data: tenant, error: tErr } = await supabaseAdmin
       .from('tenants').select('*').eq('id', tenantId).single()
     if (tErr || !tenant) return NextResponse.json({ error: 'Workspace not found.' }, { status: 404 })
+    console.log('[CHAT_DEBUG] id:', tenantId, 'company:', tenant.company, 'parent:', tenant.parent_tenant_id, 'desc:', tenant.description?.slice(0,60))
 
     const lastMsg = [...messages].reverse().find(m => m.role === 'user')?.content || ''
 
