@@ -117,6 +117,7 @@ export async function POST(request) {
       .select('id').eq('tenant_id', tenantId).eq('is_online', true)
       .gt('last_seen', new Date(Date.now() - 120000).toISOString())
     const agentsOnline = !!(onlineAgentsList?.length)
+    console.log('[CHAT_DEBUG2] docs:', documents?.length, 'services:', services?.length, 'training:', trainingPairs?.length, 'docNames:', documents?.map(d=>d.name).join(','))
 
     // ── LOAD KB ───────────────────────────────────────────────
     const [{ data: services }, { data: documents }, { data: trainingPairs }] = await Promise.all([
