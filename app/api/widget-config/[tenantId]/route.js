@@ -43,7 +43,7 @@ export async function GET(request, { params }) {
     visitorBtn4: tenant.visitor_btn_4 !== null ? (tenant.visitor_btn_4 || '') : 'Just exploring',
   }, {
     headers: {
-      'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
     },
   })
 }
