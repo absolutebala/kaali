@@ -380,12 +380,20 @@
       msgs.scrollTop = msgs.scrollTop + offset - 12
     }, 60)
   }
+  function renderMarkdown(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')               // *italic*
+      .replace(/`(.+?)`/g, '<code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:12px">$1</code>')  // `code`
+      .replace(/\n/g, '<br>')
+  }
+
   function addMsg(role, html) {
     const wrap = document.createElement('div')
     wrap.className = `kaali-msg ${role}`
     const bbl = document.createElement('div')
     bbl.className = 'kaali-bbl'
-    if (role === 'bot') bbl.innerHTML = html.replace(/\n/g, '<br>')
+    if (role === 'bot') bbl.innerHTML = renderMarkdown(html)
     else bbl.textContent = html
     const ts = document.createElement('div')
     ts.className = 'kaali-ts'; ts.textContent = fmtTime()
