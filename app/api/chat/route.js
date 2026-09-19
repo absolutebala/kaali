@@ -212,7 +212,7 @@ export async function POST(request) {
     }
 
     const { text: rawText, error: aiError } = await callAI({
-      tenant: tenantForAI, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline,
+      tenant: tenantForAI, messages, services: services||[], documents: documents||[], trainingPairs: trainingPairs||[], agentsOnline, visitorLabel: visitorLabel||null, visitorType: visitorType||'GENERAL',
     })
 
     if (aiError) {
