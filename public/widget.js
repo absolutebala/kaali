@@ -475,7 +475,7 @@
       fetch(config.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tenantId, conversationId: convId, messages: [{ role: 'user', content: txt }], visitorType, pageUrl: location.href, visitorData: {} })
+        body: JSON.stringify({ tenantId, conversationId: convId, messages: [{ role: 'user', content: txt }], visitorType, visitorLabel, pageUrl: location.href, visitorData: geoData || {} })
       }).catch(() => {})
       return
     }
@@ -497,7 +497,7 @@
         try {
           await fetch(config.apiUrl, {
             method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ tenantId, conversationId:convId, messages:[{role:'user',content:text}], visitorType, pageUrl:location.href, visitorData:{} })
+            body: JSON.stringify({ tenantId, conversationId:convId, messages:[{role:'user',content:text}], visitorType, visitorLabel, pageUrl:location.href, visitorData: geoData || {} })
           })
         } catch(e) { /* silent fail - message stored, agent will see it */ }
         isBusy = false
@@ -845,7 +845,23 @@
     }
   }
 
+  let geoData = {}
+  async function fetchGeo() {
+    try {
+      const r = await fetch('https://ipapi.co/json/')
+      const d = await r.json()
+      geoData = {
+        country: d.country_name || '',
+        city:    d.city || '',
+        region:  d.region || '',
+        device:  /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+        browser: navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/)?.[1] || 'Browser',
+      }
+    } catch(e) {}
+  }
+
   async function boot() {
+    fetchGeo() // non-blocking
     try {
       const res  = await fetch(`${API_BASE}/api/widget-config/${tenantId}`)
       if (!res.ok) throw new Error('Config not found')

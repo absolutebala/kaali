@@ -128,7 +128,7 @@ export async function POST(request) {
     let convoId = conversationId
     if (!convoId) {
       const { data: convo } = await supabaseAdmin.from('conversations').insert({
-        tenant_id: tenantId, visitor_type: visitorType || 'GENERAL', page_url: pageUrl || '',
+        tenant_id: tenantId, visitor_type: visitorLabel || visitorType || 'GENERAL', page_url: pageUrl || '',
         country: visitorData?.country||'', city: visitorData?.city||'', device: visitorData?.device||'',
         pages_visited: visitorData?.pagesVisited||[], org: (visitorData?.org||'').replace(/^AS\d+\s+/,''),
         browser: visitorData?.browser||'', os: visitorData?.os||'', referrer: visitorData?.referrer||'',
@@ -146,7 +146,7 @@ export async function POST(request) {
         sendNewChatAlert({
           to:           tenant.alert_email,
           companyName:  tenant.company,
-          visitorType:  visitorType || 'GENERAL',
+          visitorType:  visitorLabel || visitorType || 'GENERAL',
           visitorLabel: visitorLabel || null,
           pageUrl:      pageUrl || '',
           country:      visitorData?.country || '',
@@ -238,7 +238,7 @@ export async function POST(request) {
       const { data: saved } = await supabaseAdmin.from('leads').insert({
         tenant_id: tenantId, conversation_id: convoId,
         name: lead.name, email: lead.email,
-        visitor_type: lead.type || visitorType || 'GENERAL', summary, status: 'new',
+        visitor_type: lead.type || visitorLabel || visitorType || 'GENERAL', summary, status: 'new',
         company: lead.company||'', designation: lead.designation||'',
         country: visitorData?.country||'', city: visitorData?.city||'', device: visitorData?.device||'',
         pages_visited: visitorData?.pagesVisited||[], session_count: visitorData?.sessionCount||1,
@@ -248,7 +248,7 @@ export async function POST(request) {
         screen_width: visitorData?.screenWidth||0, utm_source: visitorData?.utmSource||'', utm_campaign: visitorData?.utmCampaign||'',
       }).select('id, name, email, visitor_type').single()
 
-      if (convoId) await supabaseAdmin.from('conversations').update({ lead_captured: true, visitor_type: lead.type || visitorType }).eq('id', convoId)
+      if (convoId) await supabaseAdmin.from('conversations').update({ lead_captured: true, visitor_type: lead.type || visitorLabel || visitorType }).eq('id', convoId)
       leadSaved = saved
 
       const integrations = []
