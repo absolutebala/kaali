@@ -34,7 +34,7 @@ export async function POST(request) {
     // Fetch the page
     const res = await fetch(parsedUrl.toString(), {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; KaaliBot/1.0; +https://kaali.nivochat.idataone.com)',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml',
       },
       signal: AbortSignal.timeout(15000), // 15s timeout
@@ -53,9 +53,19 @@ export async function POST(request) {
 
     // Extract clean text from HTML
     const text = extractText(html)
+    // Fallback: extract title + meta description if content is thin
+    const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i)
+    const metaDesc = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)/i)
+                  || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description/i)
+    const metaOg = html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)/i)
+    const fallback = [
+      titleMatch?.[1],
+      metaDesc?.[1] || metaOg?.[1],
+    ].filter(Boolean).join('\n\n')
 
-    if (!text || text.length < 100) {
-      return NextResponse.json({ error: 'Could not extract meaningful content from this URL.' }, { status: 400 })
+    const finalText = (text && text.length >= 50) ? text : (fallback || text)
+    if (!finalText || finalText.length < 30) {
+      return NextResponse.json({ error: 'Could not extract meaningful content from this URL. If this is a JavaScript app, try pasting the content manually instead.' }, { status: 400 })
     }
 
     // Cap at 50k chars
