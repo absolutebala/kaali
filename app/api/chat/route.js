@@ -39,7 +39,6 @@ export async function POST(request) {
     const { data: tenant, error: tErr } = await supabaseAdmin
       .from('tenants').select('*').eq('id', tenantId).single()
     if (tErr || !tenant) return NextResponse.json({ error: 'Workspace not found.' }, { status: 404 })
-    console.log('[CHAT_DEBUG] id:', tenantId, 'company:', tenant.company, 'parent:', tenant.parent_tenant_id, 'desc:', tenant.description?.slice(0,60))
 
     const lastMsg = [...messages].reverse().find(m => m.role === 'user')?.content || ''
 
@@ -117,7 +116,6 @@ export async function POST(request) {
       .select('id').eq('tenant_id', tenantId).eq('is_online', true)
       .gt('last_seen', new Date(Date.now() - 120000).toISOString())
     const agentsOnline = !!(onlineAgentsList?.length)
-    console.log('[CHAT_DEBUG2] docs:', documents?.length, 'services:', services?.length, 'training:', trainingPairs?.length, 'docNames:', documents?.map(d=>d.name).join(','))
 
     // ── LOAD KB ───────────────────────────────────────────────
     const [{ data: services }, { data: documents }, { data: trainingPairs }] = await Promise.all([
