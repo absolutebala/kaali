@@ -636,7 +636,29 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ borderTop:'1px solid #1E293B', paddingTop:28, display:'flex', justifyContent:'flex-end' }}>
+          {/* Badges */}
+          <div style={{ borderTop:'1px solid #1E293B', paddingTop:28, display:'flex', flexWrap:'wrap', alignItems:'center', justifyContent:'space-between', gap:20 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+              {/* Product Hunt */}
+              <a href="https://www.producthunt.com/products/nivochat?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-nivochat-free"
+                target="_blank" rel="noopener noreferrer"
+                style={{ display:'inline-block', border:'1px solid #2D3748', borderRadius:10, overflow:'hidden', lineHeight:0 }}>
+                <img alt="NivoChat on Product Hunt"
+                  width="200" height="44"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1257738&theme=dark&t=1790084744812"
+                  style={{ display:'block', width:200, height:44 }} />
+              </a>
+              {/* LaunchBuff */}
+              <a href="https://launchbuff.com/products/nivochat-free-gmeaz9"
+                target="_blank" rel="noopener noreferrer"
+                title="Featured on LaunchBuff"
+                style={{ display:'inline-block', border:'1px solid #2D3748', borderRadius:10, overflow:'hidden', lineHeight:0 }}>
+                <img src="https://launchbuff.com/badge-featured-dark.svg"
+                  alt="Featured on LaunchBuff"
+                  width="200" height="44"
+                  style={{ display:'block', width:200, height:44 }} />
+              </a>
+            </div>
             <p style={{ fontSize:12, color:'#334155' }}>
               <a href="https://idataone.com" style={{ color:'#475569' }}>Built by iDataOne</a> · Chennai, India 🇮🇳
             </p>
