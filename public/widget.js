@@ -295,7 +295,7 @@
         <div class="kaali-irow">
           <textarea id="kaali-inp" class="kaali-inp"
             placeholder="Type a message…" rows="1"
-            aria-label="Your message"></textarea>
+            maxlength="500" aria-label="Your message"></textarea>
           <button class="kaali-snd" id="kaali-snd" aria-label="Send">
             <svg viewBox="0 0 24 24" style="fill:#fff;width:18px;height:18px;display:block;flex-shrink:0"><path fill="#ffffff" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
@@ -846,18 +846,34 @@
   }
 
   let geoData = {}
+  function buildGeoData(d) {
+    return {
+      country:  d?.country_name || '',
+      city:     d?.city || '',
+      region:   d?.region || '',
+      timezone: d?.timezone || '',
+      device:   /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+      browser:  navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/)?.[1] || 'Browser',
+      os:       navigator.userAgent.match(/(Windows|Mac|Linux|Android|iOS)/)?.[1] || '',
+    }
+  }
   async function fetchGeo() {
     try {
+      // Use pre-fetched data if available
+      if (window.__kaali_geo) { geoData = buildGeoData(window.__kaali_geo); return }
       const r = await fetch('https://ipapi.co/json/')
       const d = await r.json()
+      window.__kaali_geo = d
+      geoData = buildGeoData(d)
+    } catch(e) {
+      // Fallback: basic device info only
       geoData = {
-        country: d.country_name || '',
-        city:    d.city || '',
-        region:  d.region || '',
+        country: '', city: '', region: '', timezone: '',
         device:  /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
         browser: navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/)?.[1] || 'Browser',
+        os:      navigator.userAgent.match(/(Windows|Mac OS X|Linux|Android)/)?.[1]?.replace('Mac OS X','Mac') || '',
       }
-    } catch(e) {}
+    }
   }
 
   async function boot() {
