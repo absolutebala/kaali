@@ -63,19 +63,21 @@ export default function OverviewPage() {
       {/* ── STAT CARDS ── */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:20 }}>
         {[
-          { label:'Total Chats',       value: data?.totalConversations || 0, sub:'All time',    icon:'💬', color:'var(--ac)' },
-          { label:'Leads Captured',    value: data?.totalLeads || 0,         sub:'With contact',icon:'👥', color:'#22D17A' },
-          { label:'Potential Clients', value: data?.clientLeads || 0,        sub:'In pipeline', icon:'🎯', color:'#A78BFA' },
-          { label:'Chats This Week',   value: data?.weekConversations || 0,  sub:'Last 7 days', icon:'📈', color:'#60A5FA' },
+          { label:'Total Chats',       value: data?.totalConversations || 0, sub:'All time',    icon:'💬', color:'var(--ac)',  href:'/dashboard/conversations' },
+          { label:'Leads Captured',    value: data?.totalLeads || 0,         sub:'With contact',icon:'👥', color:'#22D17A',  href:'/dashboard/leads' },
+          { label:'Potential Clients', value: data?.clientLeads || 0,        sub:'In pipeline', icon:'🎯', color:'#A78BFA',  href:'/dashboard/leads' },
+          { label:'Unread Chats',      value: data?.unreadConvos || 0,       sub:'Needs attention',icon:'🔔', color:'#F87171', href:'/dashboard/conversations' },
         ].map(c => (
-          <div key={c.label} style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:14, padding:'20px 22px' }}>
+          <Link key={c.label} href={c.href} style={{ background:'var(--s1)', border:'0.5px solid var(--b1)', borderRadius:14, padding:'20px 22px', textDecoration:'none', display:'block', transition:'border-color .15s' }}
+            onMouseOver={e=>e.currentTarget.style.borderColor='var(--ac)'}
+            onMouseOut={e=>e.currentTarget.style.borderColor='var(--b1)'}>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
               <div style={{ fontSize:11, fontWeight:700, color:'var(--tm)', letterSpacing:'1px', textTransform:'uppercase' }}>{c.label}</div>
               <div style={{ fontSize:20 }}>{c.icon}</div>
             </div>
             <div style={{ fontSize:38, fontWeight:800, color: c.color, lineHeight:1, marginBottom:6 }}>{c.value}</div>
             <div style={{ fontSize:12, color:'var(--ts)' }}>{c.sub}</div>
-          </div>
+          </Link>
         ))}
       </div>
 

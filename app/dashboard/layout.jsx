@@ -119,7 +119,7 @@ export default function DashboardLayout({ children }) {
       // Switch to new site
       localStorage.setItem('kaali_token', d.token)
       localStorage.setItem('kaali_site_label', d.site.site_label)
-      window.location.href = '/dashboard/knowledge'
+      window.location.href = '/dashboard/knowledge'  // new site always goes to KB
     } catch(e) { alert(e.message) }
     finally { setAddingSite(false) }
   }
@@ -135,7 +135,7 @@ export default function DashboardLayout({ children }) {
       if (d.token) {
         localStorage.setItem('kaali_token', d.token)
         localStorage.setItem('kaali_site_label', site.site_label || 'Main Site')
-        window.location.href = '/dashboard'
+        window.location.href = window.location.pathname
       }
     })
   }
@@ -229,9 +229,9 @@ export default function DashboardLayout({ children }) {
           ) : (
             <>
               <div style={{ fontSize:10, fontWeight:600, letterSpacing:'1.2px', textTransform:'uppercase', color: SB_LABEL, padding:'4px 10px 6px', marginTop:8 }}>Overview</div>
-              {NAV.slice(0, splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
+              {NAV.slice(0, splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} onNavigate={()=>setShowSiteMenu(false)} />)}
               <div style={{ fontSize:10, fontWeight:600, letterSpacing:'1.2px', textTransform:'uppercase', color: SB_LABEL, padding:'4px 10px 6px', marginTop:12 }}>Configuration</div>
-              {NAV.slice(splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} />)}
+              {NAV.slice(splitAt).map(n => <NavItem key={n.href} {...n} active={path===n.href} onNavigate={()=>setShowSiteMenu(false)} />)}
             </>
           )}
         </nav>
@@ -244,7 +244,9 @@ export default function DashboardLayout({ children }) {
             </div>
             <div style={{ minWidth:0 }}>
               <div style={{ fontSize:13, color:'rgba(255,255,255,.88)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{user.name}</div>
-              <div style={{ fontSize:11, color: SB_LABEL, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{user.email}</div>
+              <div style={{ fontSize:11, color: SB_LABEL, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                {user.email?.startsWith('site_') ? (user.alertEmail || user.email) : user.email}
+              </div>
             </div>
           </div>
           <button onClick={handleLogout}
@@ -260,9 +262,9 @@ export default function DashboardLayout({ children }) {
   )
 }
 
-function NavItem({ href, icon, label, active }) {
+function NavItem({ href, icon, label, active, onNavigate }) {
   return (
-    <Link href={href} style={{
+    <Link href={href} onClick={onNavigate} style={{
       display:'flex', alignItems:'center', gap:9,
       padding:'8px 10px', borderRadius:8, fontSize:13,
       color:      active ? SB_ACTIVE_C : SB_TEXT,

@@ -20,6 +20,7 @@ export async function GET(request) {
     { count: clientLeads },
     { count: weekConvos  },
     { data:  tenantData  },
+    { count: unreadConvos },
   ] = await Promise.all([
     supabaseAdmin.from('conversations').select('*', { count:'exact', head:true }).eq('tenant_id', tid),
     supabaseAdmin.from('leads').select('*', { count:'exact', head:true }).eq('tenant_id', tid),
@@ -28,6 +29,8 @@ export async function GET(request) {
       .eq('tenant_id', tid)
       .gte('started_at', new Date(Date.now() - 7 * 86400000).toISOString()),
     supabaseAdmin.from('tenants').select('conversations_used, conversations_limit, plan').eq('id', tid).single(),
+    supabaseAdmin.from('conversations').select('*', { count:'exact', head:true })
+      .eq('tenant_id', tid).eq('is_read', false),
   ])
 
   const used  = tenantData?.conversations_used  || 0
@@ -35,6 +38,7 @@ export async function GET(request) {
   const pct   = limit > 0 ? Math.min(Math.round(used / limit * 100), 100) : 0
 
   return NextResponse.json({
+    unreadConvos: unreadConvos || 0,
     totalConversations: totalConvos  || 0,
     totalLeads:         totalLeads   || 0,
     clientLeads:        clientLeads  || 0,

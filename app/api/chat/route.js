@@ -1,7 +1,7 @@
 import { NextResponse }                  from 'next/server'
 import { supabaseAdmin }                 from '@/lib/supabase'
 import { callAI, extractLead }           from '@/lib/ai'
-import { sendUsageAlert, sendLeadAlert, sendHandoffAlert, sendNewChatAlert } from '@/lib/email'
+import { sendUsageAlert, sendLeadAlert, sendHandoffAlert, sendChatEndedSummary } from '@/lib/email'
 import { pushLeadToHubSpot }             from '@/lib/hubspot'
 import { pushLeadToZoho }               from '@/lib/zoho'
 import { fireZapierWebhook }            from '@/lib/zapier'
@@ -141,21 +141,7 @@ export async function POST(request) {
       await supabaseAdmin.from('messages').insert({ conversation_id: convoId,
             tenant_id: tenantId, role: 'user', content: lastMsg })
 
-      // ── NEW CHAT EMAIL (first message only — no conversationId in request) ──
-      if (!conversationId && tenant.alert_email) {
-        sendNewChatAlert({
-          to:           tenant.alert_email,
-          companyName:  tenant.company,
-          visitorType:  visitorLabel || visitorType || 'GENERAL',
-          visitorLabel: visitorLabel || null,
-          pageUrl:      pageUrl || '',
-          country:      visitorData?.country || '',
-          city:         visitorData?.city || '',
-          device:       visitorData?.device || '',
-          browser:      visitorData?.browser || '',
-          conversationId: convoId,
-        }).catch(e => console.error('[NewChatEmail]', e.message))
-      }
+
     }
 
     // ── HANDOFF DETECTION ─────────────────────────────────────
