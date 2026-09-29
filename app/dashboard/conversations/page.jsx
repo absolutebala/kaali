@@ -41,21 +41,28 @@ function groupByType(convos) {
 
 export default function ConversationsPage() {
   const params          = useSearchParams()
+  const filterUnread    = params.get('unread') === 'true'
   const [list,  setList]  = useState([])
   const [msgs,  setMsgs]  = useState([])
   const [selId, setSelId] = useState(params.get('id') || null)
 
-  // Sync selId when URL param changes (e.g. navigating from leads page)
+  // Sync selId and unread filter when URL param changes
   useEffect(() => {
     const id = params.get('id')
     if (id && id !== selId) setSelId(id)
+    setShowUnreadOnly(params.get('unread') === 'true')
   }, [params])
   const [meta,  setMeta]  = useState(null)
   const [loading, setL]   = useState(true)
   const [view,  setView]  = useState('timeline') // timeline | category
+  const [unreadOnly, setUnreadOnly] = useState(false)
 
   useEffect(() => {
     convApi.list({ limit: 100 }).then(r => { setList(r.conversations || []); setL(false) }).catch(() => setL(false))
+    // Check URL for unread filter
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('unread') === 'true') {
+      setUnreadOnly(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -63,8 +70,9 @@ export default function ConversationsPage() {
     convApi.messages(selId).then(r => { setMsgs(r.messages || []); setMeta(r.conversation) })
   }, [selId])
 
-  const timeGroups = groupByTime(list)
-  const typeGroups = groupByType(list)
+  const filteredList = unreadOnly ? list.filter(c => !c.is_read) : list
+  const timeGroups = groupByTime(filteredList)
+  const typeGroups = groupByType(filteredList)
 
   return (
     <PageShell title="Chats">
@@ -72,6 +80,15 @@ export default function ConversationsPage() {
 
         {/* Left panel */}
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+
+          {/* Unread filter banner */}
+          {unreadOnly && (
+            <div style={{ padding:'8px 12px', background:'rgba(248,113,113,.1)', border:'0.5px solid rgba(248,113,113,.3)', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <span style={{ fontSize:12, color:'#F87171', fontWeight:500 }}>🔔 Unread only ({filteredList.length})</span>
+              <button onClick={()=>{ setUnreadOnly(false); window.history.replaceState({},'','/dashboard/conversations') }}
+                style={{ fontSize:11, color:'var(--tm)', background:'none', border:'none', cursor:'pointer' }}>Show all</button>
+            </div>
+          )}
 
           {/* View toggle */}
           <div style={{ display:'flex', background:'var(--s2)', borderRadius:9, padding:3, gap:2 }}>
