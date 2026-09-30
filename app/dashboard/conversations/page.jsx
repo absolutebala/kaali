@@ -50,7 +50,7 @@ export default function ConversationsPage() {
   useEffect(() => {
     const id = params.get('id')
     if (id && id !== selId) setSelId(id)
-    setShowUnreadOnly(params.get('unread') === 'true')
+    setUnreadOnly(params.get('unread') === 'true')
   }, [params])
   const [meta,  setMeta]  = useState(null)
   const [loading, setL]   = useState(true)
