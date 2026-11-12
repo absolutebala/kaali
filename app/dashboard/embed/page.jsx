@@ -68,7 +68,7 @@ export default function EmbedPage() {
               },
               {
                 title: "You're live — no re-embed needed ever",
-                desc:  'NivoChat appears immediately. Any changes you make here (bot name, knowledge base, tone) take effect in real time. No code changes required.',
+                desc:  'Your chat widget appears immediately. Any changes you make here (bot name, knowledge base, tone) take effect in real time. No code changes required.',
                 code:  null,
               },
             ].map((step, i) => (
