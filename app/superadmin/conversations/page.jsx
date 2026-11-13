@@ -4,7 +4,7 @@ import { PageShell, fmtDate }  from '../dashboard/page'
 
 function saFetch(path) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('sa_token') : ''
-  return fetch(path, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json())
+  return fetch(path, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (r.status === 401 && typeof window !== 'undefined') { localStorage.removeItem('sa_token'); localStorage.removeItem('sa_admin'); window.location.replace('/superadmin/login') } return r.json() })
 }
 
 export default function SAConversations() {
