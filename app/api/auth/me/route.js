@@ -34,7 +34,8 @@ export async function GET(request) {
     .single()
 
   if (dbErr || !tenant) {
-    return NextResponse.json({ error: 'Tenant not found.' }, { status: 404 })
+    console.error('[me] tenant lookup failed:', dbErr?.message, payload.tenantId)
+    return NextResponse.json({ error: 'Tenant not found.', detail: dbErr?.message || null }, { status: 404 })
   }
 
   // Fetch services
