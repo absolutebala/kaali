@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 function saFetch(path) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('sa_token') : ''
-  return fetch(path, { headers: { Authorization: `Bearer ${token}` } }).then(r => { if (r.status === 401 && typeof window !== 'undefined') { localStorage.removeItem('sa_token'); localStorage.removeItem('sa_admin'); window.location.replace('/superadmin/login') } return r.json() })
+  return fetch(path, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json())
 }
 
 export function fmtDate(d) { try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) } catch { return d||'' } }

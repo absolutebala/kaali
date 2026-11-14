@@ -4,7 +4,7 @@ import { PageShell } from '../../dashboard/page'
 
 function saFetch(path, opts={}) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('sa_token') : ''
-  return fetch(path, { ...opts, headers: { Authorization: `Bearer ${token}`, ...(opts.headers||{}) } }).then(r => { if (r.status === 401 && typeof window !== 'undefined') { localStorage.removeItem('sa_token'); localStorage.removeItem('sa_admin'); window.location.replace('/superadmin/login') } return r.json() })
+  return fetch(path, { ...opts, headers: { Authorization: `Bearer ${token}`, ...(opts.headers||{}) } }).then(r => r.json())
 }
 
 export default function SASettingsPage() {
